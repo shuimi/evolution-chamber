@@ -3,17 +3,27 @@
 //
 #include <functional>
 
+#include "../../Entities/headers/BinaryChromosome.h"
+#include "../../Entities/headers/Population.h"
+
 #ifndef GENETIC_ALGS_GENETICSTRAINER_H
 #define GENETIC_ALGS_GENETICSTRAINER_H
 
+//TODO:
 
 class GeneticsTrainer{
 private:
+
     std::function<double(double)> fitnessFunction;
+
+    Population* initialPopulation;
+
+    Population* currentPopulation;
 
 public:
 
-    GeneticsTrainer(const std::function<double(double)> &fitnessFunction) : fitnessFunction(fitnessFunction) {}
+    GeneticsTrainer(const std::function<double(double)> &fitnessFunction) :
+    fitnessFunction(fitnessFunction) {}
 
     GeneticsTrainer() {}
 
@@ -22,17 +32,6 @@ public:
     void setFitnessFunction(std::function<double(double)> fitnessFunction);
 
     const double executeFitnessFunction(double arg);
-
-};
-
-
-
-
-class Population{
-private:
-
-public:
-
 
 };
 

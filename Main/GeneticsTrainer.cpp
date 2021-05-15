@@ -2,7 +2,7 @@
 // Created by Vladimir on 15.05.2021.
 //
 
-#include "GeneticsTrainer.h"
+#include "headers/GeneticsTrainer.h"
 
 void GeneticsTrainer::setFitnessFunction(std::function<double(double)> fitnessFunction) {
     GeneticsTrainer::fitnessFunction = fitnessFunction;
