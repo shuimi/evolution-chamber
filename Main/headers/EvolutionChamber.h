@@ -9,7 +9,6 @@
 #ifndef GENETIC_ALGS_GENETICSTRAINER_H
 #define GENETIC_ALGS_GENETICSTRAINER_H
 
-//TODO:
 
 class EvolutionChamber{
 private:
@@ -32,6 +31,20 @@ public:
     void setFitnessFunction(std::function<double(double)> fitnessFunction);
 
     const double executeFitnessFunction(double arg);
+
+    //TODO: microevolution
+
+    //TODO: move selection operators to external Selection class
+    //TODO: move breeding operators to external Breeding class
+
+    static Population*
+            selectionElite(Population* population);
+
+    static Population*
+            breedingRandom(Population* population);
+
+    static Population*
+            breedingInbreeding(Population* population);
 
 };
 

@@ -26,9 +26,10 @@ public:
 
     int getDecimal();
     void setDecimal(int genSetDec);
-    std::string getDecimalString();
 
     std::string getBinaryString();
+
+    void invert();
 
     int getUniqueIdentifier() const;
 };

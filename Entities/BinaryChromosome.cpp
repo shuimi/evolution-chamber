@@ -43,14 +43,10 @@ BinaryChromosome::~BinaryChromosome() {
 std::string BinaryChromosome::getBinaryString() {
     std::string output;
     for(bool gen : BinaryChromosome::genes){
-        output += static_cast<char>(gen);
+        output += std::to_string(gen);
     }
     std::reverse(output.begin(), output.end());
     return output;
-}
-
-std::string BinaryChromosome::getDecimalString() {
-    return BinaryChromosome::getDecimal() + "";
 }
 
 int BinaryChromosome::getUniqueIdentifier() const {
@@ -63,4 +59,10 @@ void BinaryChromosome::set(const std::vector<bool> &genSet) {
 
 const std::vector<bool> &BinaryChromosome::get() const {
     return BinaryChromosome::genes;
+}
+
+void BinaryChromosome::invert() {
+    for(bool gen : BinaryChromosome::genes){
+        gen = !gen;
+    }
 };

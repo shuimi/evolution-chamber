@@ -17,8 +17,8 @@ int main() {
 
 
     Population* testPopulation = new Population(1);
-    testPopulation->addIndividual(chroma);
-    testPopulation->addIndividual(new BinaryChromosome(10));
+    testPopulation->addIndividual(new BinaryChromosome(501));
+    for(int i = 0; i < 5; i++){testPopulation->addIndividual(new BinaryChromosome(501 + i));}
     testPopulation->addIndividual(new BinaryChromosome(13));
     testPopulation->printout();
 

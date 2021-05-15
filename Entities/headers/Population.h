@@ -33,8 +33,8 @@ public:
     int getIndex() const;
     void setIndex(int index);
 
-    const std::string getIndividualsAsDecimalsString();
-    const std::string getIndividualsAsBinariesString();
+    std::string getIndividualsAsDecimalsString();
+    std::string getIndividualsAsBinariesString();
 
     void printout();
 
@@ -43,6 +43,7 @@ public:
 
     bool operator==(const Population &rhs) const;
     bool operator!=(const Population &rhs) const;
+
 };
 
 

@@ -37,21 +37,23 @@ bool Population::operator!=(const Population &rhs) const {
     return !(rhs == *this);
 }
 
-const std::string Population::getIndividualsAsDecimalsString() {
-    std::string output = "[";
+std::string Population::getIndividualsAsDecimalsString() {
+    std::string output = "[ ";
     for(BinaryChromosome* ind : Population::individuals){
-        output += ind->getDecimalString() + " ";
+        output.append(std::to_string(ind->getDecimal()));
+        output.append(" ");
     }
-    output += "]";
+    output.append("]");
     return output;
 }
 
-const std::string Population::getIndividualsAsBinariesString() {
-    std::string output = "[";
+std::string Population::getIndividualsAsBinariesString() {
+    std::string output = "[ ";
     for(BinaryChromosome* ind : Population::individuals){
-        output += ind->getBinaryString() + " ";
+        output.append(std::string(ind->getBinaryString()));
+        output.append(" ");
     }
-    output += "]";
+    output.append("]");
     return output;
 }
 
