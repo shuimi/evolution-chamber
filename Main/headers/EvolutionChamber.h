@@ -11,7 +11,7 @@
 
 //TODO:
 
-class GeneticsTrainer{
+class EvolutionChamber{
 private:
 
     std::function<double(double)> fitnessFunction;
@@ -22,12 +22,12 @@ private:
 
 public:
 
-    GeneticsTrainer(const std::function<double(double)> &fitnessFunction) :
+    EvolutionChamber(const std::function<double(double)> &fitnessFunction) :
     fitnessFunction(fitnessFunction) {}
 
-    GeneticsTrainer() {}
+    EvolutionChamber() {}
 
-    virtual ~GeneticsTrainer() {}
+    virtual ~EvolutionChamber() {}
 
     void setFitnessFunction(std::function<double(double)> fitnessFunction);
 

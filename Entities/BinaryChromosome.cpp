@@ -23,17 +23,17 @@ void BinaryChromosome::setDecimal(int genSetDec){
 }
 
 BinaryChromosome::BinaryChromosome(const std::vector<bool> &genesVector) : genes(genesVector) {
-    BinaryChromosome::uniqueIndex = reinterpret_cast<int>(this);
+    BinaryChromosome::uniqueIdentifier = reinterpret_cast<int>(this);
 };
 
 BinaryChromosome::BinaryChromosome(int genesDec){
     BinaryChromosome::setDecimal(genesDec);
-    BinaryChromosome::uniqueIndex = reinterpret_cast<int>(this);
+    BinaryChromosome::uniqueIdentifier = reinterpret_cast<int>(this);
 }
 
 BinaryChromosome::BinaryChromosome() {
     BinaryChromosome::setDecimal(0);
-    BinaryChromosome::uniqueIndex = reinterpret_cast<int>(this);
+    BinaryChromosome::uniqueIdentifier = reinterpret_cast<int>(this);
 };
 
 BinaryChromosome::~BinaryChromosome() {
@@ -49,15 +49,18 @@ std::string BinaryChromosome::getBinaryString() {
     return output;
 }
 
-std::ostream &operator<<(std::ostream &os, const BinaryChromosome &chromosome) {
-    os << "genes: " << chromosome.genes;
-    return os;
+std::string BinaryChromosome::getDecimalString() {
+    return BinaryChromosome::getDecimal() + "";
 }
 
-int BinaryChromosome::getUniqueIndex() const {
-    return uniqueIndex;
+int BinaryChromosome::getUniqueIdentifier() const {
+    return uniqueIdentifier;
 }
 
-void BinaryChromosome::setUniqueIndex(int uniqueIndex) {
-    BinaryChromosome::uniqueIndex = uniqueIndex;
+void BinaryChromosome::set(const std::vector<bool> &genSet) {
+    BinaryChromosome::genes = genSet;
+}
+
+const std::vector<bool> &BinaryChromosome::get() const {
+    return BinaryChromosome::genes;
 };

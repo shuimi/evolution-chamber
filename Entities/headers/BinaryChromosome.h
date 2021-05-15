@@ -11,33 +11,26 @@
 
 class BinaryChromosome{
 private:
-    int uniqueIndex;
+    int uniqueIdentifier;
     std::vector<bool> genes;
 public:
 
-    BinaryChromosome(const std::vector<bool> &genesVector);
-
-    BinaryChromosome(int genesDec);
-
     BinaryChromosome();
+    BinaryChromosome(int genesDec);
+    BinaryChromosome(const std::vector<bool> &genesVector);
 
     virtual ~BinaryChromosome();
 
     const std::vector<bool> &get() const;
-
     void set(const std::vector<bool> &genSet);
 
     int getDecimal();
-
     void setDecimal(int genSetDec);
+    std::string getDecimalString();
 
     std::string getBinaryString();
 
-    int getUniqueIndex() const;
-
-    void setUniqueIndex(int uniqueIndex);
-
-    friend std::ostream &operator<<(std::ostream &os, const BinaryChromosome &chromosome);
+    int getUniqueIdentifier() const;
 };
 
 

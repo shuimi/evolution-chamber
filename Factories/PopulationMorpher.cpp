@@ -2,18 +2,18 @@
 // Created by Vladimir on 15.05.2021.
 //
 
-#include "headers/PopulationFactory.h"
+#include "headers/PopulationMorpher.h"
 
 //TODO: Shotgun Sequencing, Focusing
 
-//Population *PopulationFactory::getPopulationUsingShotgun() {
+//Population *PopulationMorpher::getPopulationUsingShotgun() {
 //
 //    Population* population = new Population();
 //
 //
 //}
 //
-//Population *PopulationFactory::getPopulationUsingFocusing() {
+//Population *PopulationMorpher::getPopulationUsingFocusing() {
 //
 //    Population* population = new Population();
 //

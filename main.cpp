@@ -1,24 +1,26 @@
 #include <iostream>
-#include "Main/headers/GeneticsTrainer.h"
+#include "Main/headers/EvolutionChamber.h"
 
 int main() {
 
-    GeneticsTrainer* geneticsTrainer = new GeneticsTrainer();
+    EvolutionChamber* evo = new EvolutionChamber();
 
-    geneticsTrainer->setFitnessFunction([](double x){
+    evo->setFitnessFunction([](double x){
         return x * x + 0.1 * x - 23;
     });
+    std::cout << evo->executeFitnessFunction(5) << "\n";
 
-//    std::cout << geneticsTrainer->executeFitnessFunction(5) << "\n";
 
-    BinaryChromosome* testCh = new BinaryChromosome(6);
-    std::cout << testCh->getDecimal() << "\n";
-//    std::cout << testCh->getBinaryString() << "\n";
+    BinaryChromosome* chroma = new BinaryChromosome(6);
+    std::cout << chroma->getDecimal() << "\n";
+    std::cout << chroma->getBinaryString() << "\n";
 
-    Population* testPopulation = new Population();
 
-    testPopulation->addIndividual(testCh);
+    Population* testPopulation = new Population(1);
+    testPopulation->addIndividual(chroma);
+    testPopulation->addIndividual(new BinaryChromosome(10));
+    testPopulation->addIndividual(new BinaryChromosome(13));
+    testPopulation->printout();
 
-    std::cout << *testPopulation;
 
 }

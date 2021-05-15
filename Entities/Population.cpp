@@ -2,17 +2,18 @@
 // Created by Vladimir on 15.05.2021.
 //
 
+#include <iostream>
 #include "headers/Population.h"
 
 Population::Population(const std::vector<BinaryChromosome *> &individuals) : individuals(individuals) {
-    Population::uniqueIndex = reinterpret_cast<int>(this);
+    Population::uniqueIdentifier = reinterpret_cast<int>(this);
 }
 
 Population::~Population() {
 
 }
 
-const std::vector<BinaryChromosome *> &Population::getIndividuals() const {
+std::vector<BinaryChromosome *> &Population::getIndividuals() {
     return individuals;
 }
 
@@ -24,34 +25,70 @@ void Population::addIndividual(BinaryChromosome *ind) {
     Population::individuals.push_back(ind);
 }
 
-Population::Population() {
-    Population::uniqueIndex = reinterpret_cast<int>(this);
-}
-
-std::ostream &operator<<(std::ostream &os, const Population &population) {
-
-    std::string output = "[";
-    for(BinaryChromosome* ind : population.individuals){
-        output += ind->getDecimal() + " ";
-    }
-    output += "]";
-
-    os << "individuals: " << output;
-    return os;
-}
-
-int Population::getIndex() const {
-    return uniqueIndex;
-}
-
-void Population::setIndex(int index) {
-    Population::uniqueIndex = index;
+int Population::getUniqueIdentifier() const {
+    return uniqueIdentifier;
 }
 
 bool Population::operator==(const Population &rhs) const {
-    return uniqueIndex == rhs.uniqueIndex;
+    return uniqueIdentifier == rhs.uniqueIdentifier;
 }
 
 bool Population::operator!=(const Population &rhs) const {
     return !(rhs == *this);
+}
+
+const std::string Population::getIndividualsAsDecimalsString() {
+    std::string output = "[";
+    for(BinaryChromosome* ind : Population::individuals){
+        output += ind->getDecimalString() + " ";
+    }
+    output += "]";
+    return output;
+}
+
+const std::string Population::getIndividualsAsBinariesString() {
+    std::string output = "[";
+    for(BinaryChromosome* ind : Population::individuals){
+        output += ind->getBinaryString() + " ";
+    }
+    output += "]";
+    return output;
+}
+
+void Population::printout() {
+    std::cout
+    << "----------------------------------------------------------" << "\n"
+    << "Population #" << Population::getIndex() << "\n"
+    << "Unique Identifier: " << Population::getUniqueIdentifier() << "\n"
+    << "----------------------------------------------------------" << "\n"
+    << "Decimals: " << Population::getIndividualsAsDecimalsString() << "\n"
+    << "Binaries: " << Population::getIndividualsAsBinariesString() << "\n"
+    << "----------------------------------------------------------" << "\n";
+}
+
+int Population::getIndex() const {
+    return index;
+}
+
+void Population::setIndex(int index) {
+    Population::index = index;
+}
+
+Population::Population(int index) {
+    Population::setIndex(index);
+    Population::uniqueIdentifier = reinterpret_cast<int>(this);
+}
+
+Population::Population(Population *anotherPopulation) {
+    Population::uniqueIdentifier = anotherPopulation->getUniqueIdentifier();
+    Population::individuals = anotherPopulation->getIndividuals();
+    Population::index = anotherPopulation->getIndex();
+}
+
+BinaryChromosome *Population::get(int index) {
+    return Population::getIndividuals().at(index);
+}
+
+void Population::set(int index, BinaryChromosome *chromosome) {
+    Population::getIndividuals().at(index) = chromosome;
 }

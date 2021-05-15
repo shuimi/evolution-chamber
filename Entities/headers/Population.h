@@ -11,31 +11,37 @@
 
 class Population {
 private:
-    int uniqueIndex;
+    int uniqueIdentifier;
+    int index;
     std::vector<BinaryChromosome*> individuals;
 
 public:
 
-    Population();
-
+    Population(Population* anotherPopulation);
+    Population(int index);
     Population(const std::vector<BinaryChromosome *> &individuals);
 
     virtual ~Population();
 
-    const std::vector<BinaryChromosome *> &getIndividuals() const;
-
+    std::vector<BinaryChromosome *> &getIndividuals();
     void setIndividuals(const std::vector<BinaryChromosome *> &individuals);
 
     void addIndividual(BinaryChromosome* ind);
 
-    friend std::ostream &operator<<(std::ostream &os, const Population &population);
+    int getUniqueIdentifier() const;
 
     int getIndex() const;
-
     void setIndex(int index);
 
-    bool operator==(const Population &rhs) const;
+    const std::string getIndividualsAsDecimalsString();
+    const std::string getIndividualsAsBinariesString();
 
+    void printout();
+
+    BinaryChromosome* get(int index);
+    void set(int index, BinaryChromosome* chromosome);
+
+    bool operator==(const Population &rhs) const;
     bool operator!=(const Population &rhs) const;
 };
 

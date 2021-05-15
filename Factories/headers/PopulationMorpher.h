@@ -2,12 +2,12 @@
 // Created by Vladimir on 15.05.2021.
 //
 
-#ifndef GENETIC_ALGS_POPULATIONFACTORY_H
-#define GENETIC_ALGS_POPULATIONFACTORY_H
+#ifndef GENETIC_ALGS_POPULATIONMORPHER_H
+#define GENETIC_ALGS_POPULATIONMORPHER_H
 
 #include "../../Entities/headers/Population.h"
 
-class PopulationFactory {
+class PopulationMorpher {
 public:
     static Population* getPopulationUsingShotgun();
 
@@ -15,4 +15,4 @@ public:
 };
 
 
-#endif //GENETIC_ALGS_POPULATIONFACTORY_H
+#endif //GENETIC_ALGS_POPULATIONMORPHER_H
