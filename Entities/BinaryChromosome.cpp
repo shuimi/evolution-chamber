@@ -71,5 +71,5 @@ void BinaryChromosome::invert() {
 void BinaryChromosome::printout() {
     std::cout << "C_" << BinaryChromosome::getUniqueIdentifier() << ":{DEC:";
     std::cout << BinaryChromosome::getDecimal() << ",BIN:";
-    std::cout << BinaryChromosome::getBinaryString() << "}\n\n";
+    std::cout << BinaryChromosome::getBinaryString() << "}";
 }

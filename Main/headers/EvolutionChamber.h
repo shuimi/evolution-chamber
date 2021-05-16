@@ -3,8 +3,7 @@
 //
 #include <functional>
 
-#include "../../Entities/headers/BinaryChromosome.h"
-#include "../../Entities/headers/Population.h"
+#include "../../Morphers/headers/PopulationFactory.h"
 
 #ifndef GENETIC_ALGS_GENETICSTRAINER_H
 #define GENETIC_ALGS_GENETICSTRAINER_H
@@ -31,6 +30,8 @@ public:
 
     virtual ~EvolutionChamber() {}
 
+    const std::function<double(double)> &getFitnessFunction() const;
+
     void setFitnessFunction(std::function<double(double)> fitnessFunction);
 
     const double executeFitnessFunction(double arg);
@@ -40,8 +41,14 @@ public:
     //TODO: move selection operators to external Selection class
     //TODO: move breeding operators to external Breeding class
 
+    Population*
+    selectionElite(Population* population,
+                   std::function<bool(int)> selectionCondition);
+
     static Population*
-            selectionElite(Population* population);
+            selectionElite(Population* population,
+                           std::function<double(double)> fitnessFunction,
+                           std::function<bool(int)> selectionCondition);
 
     static Population*
             breedingRandom(Population* population);

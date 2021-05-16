@@ -2,16 +2,16 @@
 // Created by Vladimir on 15.05.2021.
 //
 
-#ifndef GENETIC_ALGS_POPULATIONMORPHER_H
-#define GENETIC_ALGS_POPULATIONMORPHER_H
+#ifndef GENETIC_ALGS_POPULATIONFACTORY_H
+#define GENETIC_ALGS_POPULATIONFACTORY_H
 
 #include "../../Entities/headers/Population.h"
 #include <random>
 
-class PopulationMorpher {
+class PopulationFactory {
 public:
     //TODO: think about to rename class to PopulationFactory
-    //TODO: or add all classes with responsibility to morph populations to PopulationMorpher as fields
+    //TODO: or add all classes with responsibility to morph populations to PopulationFactory as fields
     //TODO: and implement common scenarios
 
     static Population* getPopulationUsingShotgun(int leftBound, int rightBound);
@@ -26,4 +26,4 @@ public:
 };
 
 
-#endif //GENETIC_ALGS_POPULATIONMORPHER_H
+#endif //GENETIC_ALGS_POPULATIONFACTORY_H

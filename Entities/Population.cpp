@@ -108,3 +108,38 @@ void Population::statPrintout() {
     }
     std::cout << "\n";
 }
+
+BinaryChromosome *Population::eject(int index) {
+    BinaryChromosome* ret = Population::individuals.at(index);
+    Population::individuals.erase(Population::individuals.begin() + index);
+    return ret;
+}
+
+void Population::foreach(std::function<int(int)> decimalTransformation) {
+    for(BinaryChromosome* individual : Population::individuals){
+        individual->setDecimal(decimalTransformation(individual->getDecimal()));
+    }
+}
+
+void Population::estimate(std::function<double(double)> fitnessFunction) {
+    for(BinaryChromosome* individual : Population::individuals){
+        Population::individualsEstimation.push_back((int)fitnessFunction(std::round(individual->getDecimal())));
+    }
+}
+
+void Population::printoutEstimation() {
+    std::cout << "Estimation:{\n";
+    for(int i = 0; i < Population::individuals.size(); i++){
+        std::cout << "\tf("; Population::getIndividuals().at(i)->printout();
+        std::cout << ") = " << Population::individualsEstimation.at(i) << ",\n";
+    }
+    std::cout << "}\n\n";
+}
+
+const std::vector<int> &Population::getIndividualsEstimation() const {
+    return individualsEstimation;
+}
+
+void Population::setIndividualsEstimation(const std::vector<int> &individualsEstimation) {
+    Population::individualsEstimation = individualsEstimation;
+}

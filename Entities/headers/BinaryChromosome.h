@@ -31,7 +31,6 @@ public:
     std::string getBinaryString();
 
     void invert();
-
     void printout();
 
     int getUniqueIdentifier() const;

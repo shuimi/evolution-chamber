@@ -2,22 +2,20 @@
 // Created by Vladimir on 15.05.2021.
 //
 
-#include "headers/PopulationMorpher.h"
-
-//TODO: Shotgun Sequencing, Focusing
+#include "headers/PopulationFactory.h"
 
 
-Population *PopulationMorpher::getPopulationUsingShotgun(int leftBound, int rightBound) {
+Population *PopulationFactory::getPopulationUsingShotgun(int leftBound, int rightBound) {
     return getPopulationUsingShotgun(leftBound, rightBound, 0);
 }
 
 
-Population *PopulationMorpher::getPopulationUsingFocusing(int focusPoint, int range) {
+Population *PopulationFactory::getPopulationUsingFocusing(int focusPoint, int range) {
     return getPopulationUsingFocusing(focusPoint, range, 0);
 }
 
 
-Population *PopulationMorpher::getPopulationUsingShotgun(int leftBound, int rightBound, int initPopulationIndex) {
+Population *PopulationFactory::getPopulationUsingShotgun(int leftBound, int rightBound, int initPopulationIndex) {
     std::random_device randomDevice;
     std::mt19937 generator(randomDevice());
 
@@ -41,7 +39,7 @@ Population *PopulationMorpher::getPopulationUsingShotgun(int leftBound, int righ
 }
 
 
-Population *PopulationMorpher::getPopulationUsingFocusing(int focusPoint, int range, int initPopulationIndex) {
+Population *PopulationFactory::getPopulationUsingFocusing(int focusPoint, int range, int initPopulationIndex) {
     std::random_device randomDevice{};
     std::mt19937 generator{randomDevice()};
     std::normal_distribution<> normalDistribution{(double)focusPoint, (double)range};

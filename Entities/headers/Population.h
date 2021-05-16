@@ -8,6 +8,7 @@
 #include <vector>
 #include <map>
 #include <ostream>
+#include <functional>
 #include "BinaryChromosome.h"
 
 class Population {
@@ -15,6 +16,7 @@ private:
     int uniqueIdentifier;
     int index;
     std::vector<BinaryChromosome*> individuals;
+    std::vector<int> individualsEstimation;
 
 public:
 
@@ -41,11 +43,22 @@ public:
 
     BinaryChromosome* get(int index);
     void set(int index, BinaryChromosome* chromosome);
+    BinaryChromosome* eject(int index);
 
     bool operator==(const Population &rhs) const;
     bool operator!=(const Population &rhs) const;
 
     void statPrintout();
+
+    void foreach(std::function<int(int)> decimalTransformation);
+
+    void estimate(std::function<double(double)> fitnessFunction);
+
+    void printoutEstimation();
+
+    const std::vector<int> &getIndividualsEstimation() const;
+
+    void setIndividualsEstimation(const std::vector<int> &individualsEstimation);
 
 };
 

@@ -1,6 +1,5 @@
 #include <iostream>
 #include "Main/headers/EvolutionChamber.h"
-#include "Morphers/headers/PopulationMorpher.h"
 
 int main() {
 
@@ -25,14 +24,25 @@ int main() {
     testPopulation->printout();
 
     Population* testPopulationShotgun =
-            PopulationMorpher::getPopulationUsingShotgun(9, 14);
+            PopulationFactory::getPopulationUsingShotgun(9, 14);
     Population* testPopulationFocus =
-            PopulationMorpher::getPopulationUsingFocusing(11, 3);
+            PopulationFactory::getPopulationUsingFocusing(11, 3);
 
     testPopulationShotgun->printout();
     testPopulationShotgun->statPrintout();
     testPopulationFocus->printout();
     testPopulationFocus->statPrintout();
 
+    testPopulationFocus->eject(1);
+    testPopulationFocus->printout();
+    testPopulationFocus->statPrintout();
+
+
+    evo->selectionElite(testPopulationFocus, [evo](int estimationValue){
+        return (estimationValue > evo->executeFitnessFunction(10));
+    });
+
+    testPopulationFocus->printout();
+    testPopulationFocus->statPrintout();
 
 }

@@ -8,7 +8,7 @@
 //TODO:
 
 #include "../../Entities/headers/BinaryChromosome.h"
-#include "../service/MutationFactor.h"
+#include "../service/MorphingFactor.h"
 
 class ChromosomeMorpher {
 public:
@@ -23,10 +23,10 @@ public:
             crossoverFibonacci(BinaryChromosome* parentA, BinaryChromosome* parentB);
 
     static BinaryChromosome*
-            mutateSwapFibonacci(BinaryChromosome* parentA, MutationFactor* factor);
+            mutateSwapFibonacci(BinaryChromosome* parentA, MorphingFactor* factor);
 
     static BinaryChromosome*
-            mutateInversion(BinaryChromosome* parentA, MutationFactor* factor);
+            mutateInversion(BinaryChromosome* parentA, MorphingFactor* factor);
 
 };
 
