@@ -33,11 +33,22 @@ public:
     void invert();
     void printout();
 
+    void setGen(int index, bool gen);
+    bool getGen(int index);
+    void addGen(bool gen);
+    void swap(int startIndex, int endIndex);
+
     int getUniqueIdentifier() const;
 
     static int getHammingDistance(BinaryChromosome* A, BinaryChromosome* B);
 
     static double normalizedDistance(BinaryChromosome* A, BinaryChromosome* B);
+
+    int getSize();
+
+    BinaryChromosome* getCopy();
+
+    static BinaryChromosome* concatenate(BinaryChromosome* a, BinaryChromosome* b);
 
 };
 

@@ -28,11 +28,13 @@ public:
     static std::function
             <Generation*(BinaryChromosome*, BinaryChromosome*)> crossoverFibonacci;
 
-    static std::function
-            <BinaryChromosome*(BinaryChromosome* individual)> mutateSwapFibonacci;
+    static BinaryChromosome* mutateSwapFibonacci (BinaryChromosome* individual);
 
-    static std::function
-            <BinaryChromosome*(BinaryChromosome* individual)> mutateInversion;
+    static BinaryChromosome* mutateInversion (BinaryChromosome* individual);
+
+    static BinaryChromosome* mutateSimple (BinaryChromosome* individual);
+
+    static BinaryChromosome* mutateTranspose (BinaryChromosome* individual);
 
 };
 

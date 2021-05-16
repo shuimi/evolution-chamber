@@ -106,3 +106,38 @@ double BinaryChromosome::normalizedDistance(BinaryChromosome *A, BinaryChromosom
 
     return (double)hammingDist / (double)maxSize;
 }
+
+int BinaryChromosome::getSize() {
+    return BinaryChromosome::genes.size();
+}
+
+void BinaryChromosome::setGen(int index, bool gen) {
+    BinaryChromosome::genes.at(index) = gen;
+}
+
+bool BinaryChromosome::getGen(int index) {
+    return BinaryChromosome::genes.at(index);
+}
+
+void BinaryChromosome::swap(int startIndex, int endIndex) {
+    std::reverse(BinaryChromosome::genes.begin() + startIndex, BinaryChromosome::genes.begin() + endIndex);
+}
+
+BinaryChromosome *BinaryChromosome::concatenate(BinaryChromosome *a, BinaryChromosome *b) {
+    BinaryChromosome* out = a->getCopy();
+    for(bool gen : b->get()){
+        out->addGen(gen);
+    }
+    return out;
+}
+
+BinaryChromosome *BinaryChromosome::getCopy() {
+    BinaryChromosome* chromosome = new BinaryChromosome();
+    chromosome->setDecimal(this->getDecimal());
+    return chromosome;
+}
+
+void BinaryChromosome::addGen(bool gen) {
+    BinaryChromosome::genes.push_back(gen);
+}
+
