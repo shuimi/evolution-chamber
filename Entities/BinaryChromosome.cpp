@@ -2,6 +2,7 @@
 // Created by Vladimir on 15.05.2021.
 //
 
+#include <iostream>
 #include "headers/BinaryChromosome.h"
 
 int BinaryChromosome::getDecimal(){
@@ -62,7 +63,13 @@ const std::vector<bool> &BinaryChromosome::get() const {
 }
 
 void BinaryChromosome::invert() {
-    for(bool gen : BinaryChromosome::genes){
-        gen = !gen;
+    for(int i = 0; i < BinaryChromosome::genes.size(); i++){
+        BinaryChromosome::genes.at(i) = !BinaryChromosome::genes.at(i);
     }
-};
+}
+
+void BinaryChromosome::printout() {
+    std::cout << "C_" << BinaryChromosome::getUniqueIdentifier() << ":{DEC:";
+    std::cout << BinaryChromosome::getDecimal() << ",BIN:";
+    std::cout << BinaryChromosome::getBinaryString() << "}\n\n";
+}

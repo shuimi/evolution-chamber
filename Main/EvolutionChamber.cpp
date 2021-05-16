@@ -11,7 +11,3 @@ void EvolutionChamber::setFitnessFunction(std::function<double(double)> fitnessF
 const double EvolutionChamber::executeFitnessFunction(double arg){
     return fitnessFunction.operator()(arg);
 }
-
-double getGenSetDecimal();
-
-void setGenSetDecimal(double genSet);

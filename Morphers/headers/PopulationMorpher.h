@@ -6,6 +6,7 @@
 #define GENETIC_ALGS_POPULATIONMORPHER_H
 
 #include "../../Entities/headers/Population.h"
+#include <random>
 
 class PopulationMorpher {
 public:
@@ -13,9 +14,14 @@ public:
     //TODO: or add all classes with responsibility to morph populations to PopulationMorpher as fields
     //TODO: and implement common scenarios
 
-    static Population* getPopulationUsingShotgun();
+    static Population* getPopulationUsingShotgun(int leftBound, int rightBound);
 
-    static Population* getPopulationUsingFocusing();
+    static Population* getPopulationUsingFocusing(int focusPoint, int range);
+
+    static Population* getPopulationUsingShotgun(int leftBound, int rightBound, int initPopulationIndex);
+
+    static Population* getPopulationUsingFocusing(int focusPoint, int range, int initPopulationIndex);
+
 
 };
 

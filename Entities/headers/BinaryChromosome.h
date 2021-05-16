@@ -8,6 +8,7 @@
 #include <vector>
 #include <string>
 #include <ostream>
+#include <iomanip>
 
 class BinaryChromosome{
 private:
@@ -30,6 +31,8 @@ public:
     std::string getBinaryString();
 
     void invert();
+
+    void printout();
 
     int getUniqueIdentifier() const;
 };

@@ -38,34 +38,37 @@ bool Population::operator!=(const Population &rhs) const {
 }
 
 std::string Population::getIndividualsAsDecimalsString() {
-    std::string output = "[ ";
-    for(BinaryChromosome* ind : Population::individuals){
-        output.append(std::to_string(ind->getDecimal()));
-        output.append(" ");
+    if(individuals.empty()) return "-1";
+
+    std::string output = "[";
+    for(int i = 0; i < Population::individuals.size() - 1; i++){
+        output.append(std::to_string(Population::individuals.at(i)->getDecimal()));
+        output.append(", ");
     }
+    output.append(std::to_string(Population::individuals.at(Population::individuals.size() - 1)->getDecimal()));
     output.append("]");
     return output;
 }
 
 std::string Population::getIndividualsAsBinariesString() {
-    std::string output = "[ ";
-    for(BinaryChromosome* ind : Population::individuals){
-        output.append(std::string(ind->getBinaryString()));
-        output.append(" ");
+    if(individuals.empty()) return "-1";
+
+    std::string output = "[";
+    for(int i = 0; i < Population::individuals.size() - 1; i++){
+        output.append(Population::individuals.at(i)->getBinaryString());
+        output.append(", ");
     }
+    output.append(Population::individuals.at(Population::individuals.size() - 1)->getBinaryString());
     output.append("]");
     return output;
 }
 
 void Population::printout() {
     std::cout
-    << "----------------------------------------------------------" << "\n"
     << "Population #" << Population::getIndex() << "\n"
     << "Unique Identifier: " << Population::getUniqueIdentifier() << "\n"
-    << "----------------------------------------------------------" << "\n"
     << "Decimals: " << Population::getIndividualsAsDecimalsString() << "\n"
-    << "Binaries: " << Population::getIndividualsAsBinariesString() << "\n"
-    << "----------------------------------------------------------" << "\n";
+    << "Binaries: " << Population::getIndividualsAsBinariesString() << "\n\n";
 }
 
 int Population::getIndex() const {
@@ -93,4 +96,15 @@ BinaryChromosome *Population::get(int index) {
 
 void Population::set(int index, BinaryChromosome *chromosome) {
     Population::getIndividuals().at(index) = chromosome;
+}
+
+void Population::statPrintout() {
+    std::map<int, int> stat{};
+    for(BinaryChromosome* individual : Population::individuals){
+        ++stat[individual->getDecimal()];
+    }
+    for(auto p : stat) {
+        std::cout << std::setw(2) << p.first << ' ' << std::string(p.second, '*') << '\n';
+    }
+    std::cout << "\n";
 }

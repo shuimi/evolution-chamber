@@ -19,6 +19,9 @@ private:
 
     Population* currentPopulation;
 
+    int populationSize;
+    int generationsAmount;
+
 public:
 
     EvolutionChamber(const std::function<double(double)> &fitnessFunction) :

@@ -6,6 +6,7 @@
 #define GENETIC_ALGS_POPULATION_H
 
 #include <vector>
+#include <map>
 #include <ostream>
 #include "BinaryChromosome.h"
 
@@ -43,6 +44,8 @@ public:
 
     bool operator==(const Population &rhs) const;
     bool operator!=(const Population &rhs) const;
+
+    void statPrintout();
 
 };
 
