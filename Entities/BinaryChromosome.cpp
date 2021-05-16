@@ -119,7 +119,7 @@ bool BinaryChromosome::getGen(int index) {
     return BinaryChromosome::genes.at(index);
 }
 
-void BinaryChromosome::swap(int startIndex, int endIndex) {
+void BinaryChromosome::reverse(int startIndex, int endIndex) {
     std::reverse(BinaryChromosome::genes.begin() + startIndex, BinaryChromosome::genes.begin() + endIndex);
 }
 
@@ -139,5 +139,11 @@ BinaryChromosome *BinaryChromosome::getCopy() {
 
 void BinaryChromosome::addGen(bool gen) {
     BinaryChromosome::genes.push_back(gen);
+}
+
+void BinaryChromosome::swap(int aIndex, int bIndex) {
+    bool savedGen = BinaryChromosome::getGen(aIndex);
+    BinaryChromosome::setGen(aIndex, BinaryChromosome::getGen(bIndex));
+    BinaryChromosome::setGen(bIndex, savedGen);
 }
 

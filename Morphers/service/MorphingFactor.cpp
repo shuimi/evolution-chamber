@@ -21,6 +21,14 @@ BinaryChromosome *MorphingFactor::mutateSimple(BinaryChromosome *individual) {
 BinaryChromosome *MorphingFactor::mutateInversion(BinaryChromosome *individual) {
     int startIndex = std::rand() % individual->getSize();
     int endIndex = std::rand() % individual->getSize();
-    individual->swap(startIndex, endIndex);
+    individual->reverse(startIndex, endIndex);
+    return individual;
+}
+
+BinaryChromosome *MorphingFactor::mutateSwapFibonacci(BinaryChromosome *individual) {
+    int a = MorphingFactor::fibonacci(std::rand());
+    int b = MorphingFactor::fibonacci(std::rand());
+    while (b == a) b = MorphingFactor::fibonacci(std::rand());
+    individual->swap(a, b);
     return individual;
 }

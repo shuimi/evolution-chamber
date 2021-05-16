@@ -36,7 +36,8 @@ public:
     void setGen(int index, bool gen);
     bool getGen(int index);
     void addGen(bool gen);
-    void swap(int startIndex, int endIndex);
+    void reverse(int startIndex, int endIndex);
+    void swap(int aIndex, int bIndex);
 
     int getUniqueIdentifier() const;
 
