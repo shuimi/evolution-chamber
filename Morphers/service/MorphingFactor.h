@@ -13,35 +13,38 @@ private:
     double crossProbability;
     double mutationProbability;
 
-    static int fibonacci(int number) {
-        if (number == 0) return 0;
-        if (number == 1) return 1;
-        return fibonacci(number - 1) + fibonacci(number - 2);
-    }
-
 public:
 
     MorphingFactor(double crossProbability, double mutationProbability);
 
-    Generation* morph(Generation* generation);
+    Generation *morph(Generation *generation);
 
-    static std::function
-            <Generation*(BinaryChromosome*, BinaryChromosome*)> crossoverTwoPoint;
+    static Generation *crossoverTwoPoint(BinaryChromosome *, BinaryChromosome *);
 
-    static std::function
-            <Generation*(BinaryChromosome*, BinaryChromosome*)> crossoverCycle;
+    static Generation *crossoverCycle(BinaryChromosome *, BinaryChromosome *);
 
-    static std::function
-            <Generation*(BinaryChromosome*, BinaryChromosome*)> crossoverFibonacci;
+    static Generation *crossoverFibonacci(BinaryChromosome *, BinaryChromosome *);
 
-    static BinaryChromosome* mutateSwapFibonacci (BinaryChromosome* individual);
+    static Generation *crossoverPartlyOrdered(BinaryChromosome *, BinaryChromosome *);
 
-    static BinaryChromosome* mutateInversion (BinaryChromosome* individual);
+    static Generation *crossoverOrdered(BinaryChromosome *, BinaryChromosome *);
 
-    static BinaryChromosome* mutateSimple (BinaryChromosome* individual);
+    static Generation *GoldenRatio(BinaryChromosome *, BinaryChromosome *);
 
-    static BinaryChromosome* mutateTranspose (BinaryChromosome* individual);
+    static Generation *mutateSwapFibonacci(BinaryChromosome *);
 
+    static Generation *mutateInversion(BinaryChromosome *);
+
+    static Generation *mutateSimple(BinaryChromosome *);
+
+    static Generation *mutateTransposition(BinaryChromosome *);
+
+    static std::vector<int> fibbonachi(int n);
+
+    //has 0 and last rows
+    static std::vector<std::vector<bool>> makeBinaryNumbersTable(int n);
+
+    static std::vector<BinaryChromosome *> makeParentParts(BinaryChromosome *parentA, int n);
 };
 
 
