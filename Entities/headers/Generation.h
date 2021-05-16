@@ -61,6 +61,8 @@ public:
 
     void setIndividualsEstimation(const std::vector<double> &individualsEstimation);
 
+    BinaryChromosome* getRandomIndividual();
+
 };
 
 

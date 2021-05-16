@@ -157,3 +157,7 @@ void Generation::eject(BinaryChromosome *individual) {
     }
 }
 
+BinaryChromosome* Generation::getRandomIndividual() {
+    return get(std::rand() % Generation::individuals.size());
+}
+

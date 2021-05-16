@@ -4,6 +4,8 @@
 #include <functional>
 
 #include "../../Morphers/headers/GenerationFactory.h"
+#include "../../Entities/headers/Population.h"
+#include "../../Morphers/service/MorphingFactor.h"
 
 #ifndef GENETIC_ALGS_GENETICSTRAINER_H
 #define GENETIC_ALGS_GENETICSTRAINER_H
@@ -11,35 +13,24 @@
 
 class EvolutionChamber{
 private:
-
     std::function<double(double)> fitnessFunction;
-
-    Generation* initialPopulation;
-
-    Generation* currentPopulation;
-
-    int populationSize;
+    Population* population;
+    Generation* initialGeneration;
+    MorphingFactor* morphingFactor;
     int generationsAmount;
 
 public:
 
-    EvolutionChamber(const std::function<double(double)> &fitnessFunction) :
-    fitnessFunction(fitnessFunction) {}
+    EvolutionChamber(std::function<double(double)> fitnessFunction,
+                     Generation *initialGeneration,
+                     MorphingFactor *morphingFactor,
+                     int generationsAmount);
 
-    EvolutionChamber() {}
-
-    virtual ~EvolutionChamber() {}
+    virtual ~EvolutionChamber();
 
     const std::function<double(double)> &getFitnessFunction() const;
-
     void setFitnessFunction(std::function<double(double)> fitnessFunction);
-
     const double executeFitnessFunction(double arg);
-
-    //TODO: microevolution
-
-    //TODO: move selection operators to external Selection class
-    //TODO: move breeding operators to external Breeding class
 
     Generation*
     selectionElite(Generation* population,
@@ -54,10 +45,12 @@ public:
             breedingRandom(Generation* population);
 
     static std::tuple<BinaryChromosome*, BinaryChromosome*>
-            breedingInbreedingGenSimilarityDriven(Generation* population);
+            breedingInbreedingGenSimilarityDriven(Generation* generation);
 
     static Generation*
-            breedingInbreedingElite(Generation* population);
+            breedingInbreedingElite(Generation* generation);
+
+    Generation* getNextGeneration();
 
 };
 

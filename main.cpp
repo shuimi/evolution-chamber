@@ -3,25 +3,29 @@
 
 int main() {
 
-    EvolutionChamber* evo = new EvolutionChamber();
+    EvolutionChamber* evolution = new EvolutionChamber([](double x){
+            return x * x + 0.1 * x - 23;
+        },
+        GenerationFactory::getUsingShotgun(
+            9,
+            14,
+            10
+        ),
+        new MorphingFactor(),
+        50
+    );
 
-    evo->setFitnessFunction([](double x){
-        return x * x + 0.1 * x - 23;
-    });
-
-    Generation* testPopulationShotgun =
-            GenerationFactory::getPopulationUsingShotgun(9, 14, 10);
     Generation* testPopulationFocus =
-            GenerationFactory::getPopulationUsingFocusing(11, 3, 10);
+            GenerationFactory::getUsingFocusing(11, 3, 10);
 
     testPopulationFocus->printout();
     testPopulationFocus->statPrintout();
-    testPopulationFocus->estimate(evo->getFitnessFunction());
+    testPopulationFocus->estimate(evolution->getFitnessFunction());
     testPopulationFocus->printoutEstimation();
-    std::cout << evo->executeFitnessFunction(10) << "\n\n";
+    std::cout << evolution->executeFitnessFunction(10) << "\n\n";
 
-    evo->selectionElite(testPopulationFocus, [evo](double estimationValue){
-        return (estimationValue >= evo->executeFitnessFunction(11));
+    evolution->selectionElite(testPopulationFocus, [evolution](double estimationValue){
+        return (estimationValue >= evolution->executeFitnessFunction(11));
     });
 
     testPopulationFocus->printout();

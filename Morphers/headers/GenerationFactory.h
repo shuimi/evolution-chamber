@@ -10,21 +10,15 @@
 
 class GenerationFactory {
 public:
-    //TODO: think about to rename class to GenerationFactory
-    //TODO: or add all classes with responsibility to morph populations to GenerationFactory as fields
-    //TODO: and implement common scenarios
+    static Generation* getUsingShotgun(int leftBound, int rightBound, int individualsAmount);
 
-    static Generation* getPopulationUsingShotgun(int leftBound, int rightBound, int individualsAmount);
+    static Generation* getUsingFocusing(int focusPoint, int range, int individualsAmount);
 
-    static Generation* getPopulationUsingFocusing(int focusPoint, int range, int individualsAmount);
+    static Generation* getUsingShotgun(int leftBound, int rightBound,
+                                       int individualsAmount, int initPopulationIndex);
 
-    static Generation* getPopulationUsingShotgun(int leftBound, int rightBound,
-                                                 int individualsAmount, int initPopulationIndex);
-
-    static Generation* getPopulationUsingFocusing(int focusPoint, int range, int individualsAmount,
-                                                  int initPopulationIndex);
-
-
+    static Generation* getUsingFocusing(int focusPoint, int range,
+                                        int individualsAmount, int initPopulationIndex);
 };
 
 

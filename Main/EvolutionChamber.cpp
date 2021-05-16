@@ -4,6 +4,8 @@
 
 #include "headers/EvolutionChamber.h"
 
+#include <utility>
+
 void EvolutionChamber::setFitnessFunction(std::function<double(double)> fitnessFunction) {
     EvolutionChamber::fitnessFunction = fitnessFunction;
 }
@@ -41,4 +43,30 @@ Generation *EvolutionChamber::selectionElite(Generation *population, std::functi
         else i++;
     }
     return population;
+}
+
+std::tuple<BinaryChromosome*, BinaryChromosome*> EvolutionChamber::breedingRandom(Generation *generation) {
+    BinaryChromosome *A, *B;
+    A = generation->getRandomIndividual();
+    B = generation->getRandomIndividual();
+    while(A == B){
+        B = generation->getRandomIndividual();
+    }
+    return std::make_tuple(A, B);
+}
+
+EvolutionChamber::EvolutionChamber(
+    std::function<double(double)> fitnessFunction,
+    Generation *initialGeneration,
+    MorphingFactor *morphingFactor,
+    int generationsAmount
+) : fitnessFunction(std::move(fitnessFunction)),
+initialGeneration(initialGeneration),
+morphingFactor(morphingFactor),
+generationsAmount(generationsAmount) {
+
+}
+
+EvolutionChamber::~EvolutionChamber() {
+
 }

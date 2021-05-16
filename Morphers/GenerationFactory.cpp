@@ -5,18 +5,18 @@
 #include "headers/GenerationFactory.h"
 
 
-Generation *GenerationFactory::getPopulationUsingShotgun(int leftBound, int rightBound, int individualsAmount) {
-    return getPopulationUsingShotgun(leftBound, rightBound, individualsAmount, 0);
+Generation *GenerationFactory::getUsingShotgun(int leftBound, int rightBound, int individualsAmount) {
+    return getUsingShotgun(leftBound, rightBound, individualsAmount, 0);
 }
 
 
-Generation *GenerationFactory::getPopulationUsingFocusing(int focusPoint, int range, int individualsAmount) {
-    return getPopulationUsingFocusing(focusPoint, range, individualsAmount, 0);
+Generation *GenerationFactory::getUsingFocusing(int focusPoint, int range, int individualsAmount) {
+    return getUsingFocusing(focusPoint, range, individualsAmount, 0);
 }
 
 
-Generation *GenerationFactory::getPopulationUsingShotgun(int leftBound, int rightBound,
-                                                         int individualsAmount, int initPopulationIndex) {
+Generation *GenerationFactory::getUsingShotgun(int leftBound, int rightBound,
+                                               int individualsAmount, int initPopulationIndex) {
     std::random_device randomDevice;
     std::mt19937 generator(randomDevice());
 
@@ -38,8 +38,8 @@ Generation *GenerationFactory::getPopulationUsingShotgun(int leftBound, int righ
 }
 
 
-Generation *GenerationFactory::getPopulationUsingFocusing(int focusPoint, int range,
-                                                          int individualsAmount, int initPopulationIndex) {
+Generation *GenerationFactory::getUsingFocusing(int focusPoint, int range,
+                                                int individualsAmount, int initPopulationIndex) {
     std::random_device randomDevice{};
     std::mt19937 generator{randomDevice()};
     std::normal_distribution<> normalDistribution{(double)focusPoint, (double)range};
