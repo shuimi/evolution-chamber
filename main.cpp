@@ -11,7 +11,10 @@ int main() {
             14,
             10
         ),
-        new MorphingFactor(),
+        new MorphingFactor(
+            0.7,
+            0.3
+        ),
         50
     );
 
@@ -35,4 +38,5 @@ int main() {
     BinaryChromosome* b = new BinaryChromosome(12);
 
     std::cout << BinaryChromosome::normalizedDistance(a, b);
+
 }

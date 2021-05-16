@@ -3,3 +3,11 @@
 //
 
 #include "MorphingFactor.h"
+
+
+Generation *MorphingFactor::morph(Generation *generation) {
+    return nullptr;
+}
+
+MorphingFactor::MorphingFactor(double crossProbability, double mutationProbability) :
+crossProbability(crossProbability), mutationProbability(mutationProbability) {}
