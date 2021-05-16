@@ -1,64 +1,35 @@
 //
-// Created by Vladimir on 15.05.2021.
+// Created by Vladimir on 16.05.2021.
 //
 
 #ifndef GENETIC_ALGS_POPULATION_H
 #define GENETIC_ALGS_POPULATION_H
 
-#include <vector>
-#include <map>
-#include <ostream>
-#include <functional>
-#include "BinaryChromosome.h"
+
+#include "Generation.h"
 
 class Population {
 private:
-    int uniqueIdentifier;
-    int index;
-    std::vector<BinaryChromosome*> individuals;
-    std::vector<double> individualsEstimation;
-
+    std::vector<Generation*> generations;
 public:
-
-    Population(Population* anotherPopulation);
-    Population(int index);
-    Population(const std::vector<BinaryChromosome *> &individuals);
+    Population();
+    Population(const std::vector<Generation *> &generations);
 
     virtual ~Population();
 
-    std::vector<BinaryChromosome *> &getIndividuals();
-    void setIndividuals(const std::vector<BinaryChromosome *> &individuals);
+    std::vector<Generation *> &getGenerations();
+    void setGenerations(const std::vector<Generation *> &generations);
 
-    void addIndividual(BinaryChromosome* ind);
-
-    int getUniqueIdentifier() const;
-
-    int getIndex() const;
-    void setIndex(int index);
-
-    std::string getIndividualsAsDecimalsString();
-    std::string getIndividualsAsBinariesString();
+    void foreach(std::function<void (Generation*)> decimalTransformation);
 
     void printout();
 
-    BinaryChromosome* get(int index);
-    void set(int index, BinaryChromosome* chromosome);
-    BinaryChromosome* eject(int index);
+    Generation* get(int index);
+    void set(int index, Generation* generation);
+    void add(Generation* generation);
+    Generation* eject(int index);
+    void eject(Generation* generation);
 
-    bool operator==(const Population &rhs) const;
-    bool operator!=(const Population &rhs) const;
-
-    void statPrintout();
-
-    void foreach(std::function<int(int)> decimalTransformation);
-
-    void estimate(std::function<double(double)> fitnessFunction);
-
-    void printoutEstimation();
-
-    const std::vector<double> &getIndividualsEstimation() const;
-
-    void setIndividualsEstimation(const std::vector<double> &individualsEstimation);
 
 };
 

@@ -5,15 +5,14 @@ int main() {
 
     EvolutionChamber* evo = new EvolutionChamber();
 
-
     evo->setFitnessFunction([](double x){
         return x * x + 0.1 * x - 23;
     });
 
-    Population* testPopulationShotgun =
-            PopulationFactory::getPopulationUsingShotgun(9, 14, 10);
-    Population* testPopulationFocus =
-            PopulationFactory::getPopulationUsingFocusing(11, 3, 10);
+    Generation* testPopulationShotgun =
+            GenerationFactory::getPopulationUsingShotgun(9, 14, 10);
+    Generation* testPopulationFocus =
+            GenerationFactory::getPopulationUsingFocusing(11, 3, 10);
 
     testPopulationFocus->printout();
     testPopulationFocus->statPrintout();
@@ -28,4 +27,8 @@ int main() {
     testPopulationFocus->printout();
     testPopulationFocus->statPrintout();
 
+    BinaryChromosome* a = new BinaryChromosome(17);
+    BinaryChromosome* b = new BinaryChromosome(12);
+
+    std::cout << BinaryChromosome::normalizedDistance(a, b);
 }

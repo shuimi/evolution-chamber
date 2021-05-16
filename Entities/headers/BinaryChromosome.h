@@ -34,6 +34,11 @@ public:
     void printout();
 
     int getUniqueIdentifier() const;
+
+    static int getHammingDistance(BinaryChromosome* A, BinaryChromosome* B);
+
+    static double normalizedDistance(BinaryChromosome* A, BinaryChromosome* B);
+
 };
 
 

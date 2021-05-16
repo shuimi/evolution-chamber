@@ -17,7 +17,7 @@ const std::function<double(double)> &EvolutionChamber::getFitnessFunction() cons
 }
 
 
-Population *EvolutionChamber::selectionElite(Population *population, std::function<bool(double)> selectionCondition) {
+Generation *EvolutionChamber::selectionElite(Generation *population, std::function<bool(double)> selectionCondition) {
 
     population->estimate(EvolutionChamber::getFitnessFunction());
 
@@ -31,7 +31,7 @@ Population *EvolutionChamber::selectionElite(Population *population, std::functi
     return population;
 }
 
-Population *EvolutionChamber::selectionElite(Population *population, std::function<double(double)> fitnessFunction,
+Generation *EvolutionChamber::selectionElite(Generation *population, std::function<double(double)> fitnessFunction,
                                              std::function<bool(double)> selectionCondition) {
     population->estimate(fitnessFunction);
     for(int i = 0; i < population->getIndividuals().size();){

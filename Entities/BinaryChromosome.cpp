@@ -73,3 +73,36 @@ void BinaryChromosome::printout() {
     std::cout << BinaryChromosome::getDecimal() << ",BIN:";
     std::cout << BinaryChromosome::getBinaryString() << "}";
 }
+
+int BinaryChromosome::getHammingDistance(BinaryChromosome *A, BinaryChromosome *B) {
+
+    int maxSize, minSize, amountOfEqualPositions = 0;
+
+    A->get().size() > B->get().size() ? maxSize = A->get().size() : maxSize = B->get().size();
+    A->get().size() < B->get().size() ? minSize = A->get().size() : minSize = B->get().size();
+
+    for(int i = 0; i < minSize; i++){
+        A->get().at(i) != B->get().at(i) ? amountOfEqualPositions++ : 0;
+    }
+
+    if (A->get().size() > B->get().size())
+        for(int i = minSize; i < maxSize; i++){
+            A->get().at(i) != false ? amountOfEqualPositions++ : 0;
+        }
+    else
+        for(int i = minSize; i < maxSize; i++){
+            B->get().at(i) != false ? amountOfEqualPositions++ : 0;
+        }
+
+    return amountOfEqualPositions;
+}
+
+double BinaryChromosome::normalizedDistance(BinaryChromosome *A, BinaryChromosome *B) {
+
+    int hammingDist = BinaryChromosome::getHammingDistance(A, B);
+    int maxSize;
+
+    A->get().size() > B->get().size() ? maxSize = A->get().size() : maxSize = B->get().size();
+
+    return (double)hammingDist / (double)maxSize;
+}

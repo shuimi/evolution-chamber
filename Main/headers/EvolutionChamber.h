@@ -3,7 +3,7 @@
 //
 #include <functional>
 
-#include "../../Morphers/headers/PopulationFactory.h"
+#include "../../Morphers/headers/GenerationFactory.h"
 
 #ifndef GENETIC_ALGS_GENETICSTRAINER_H
 #define GENETIC_ALGS_GENETICSTRAINER_H
@@ -14,9 +14,9 @@ private:
 
     std::function<double(double)> fitnessFunction;
 
-    Population* initialPopulation;
+    Generation* initialPopulation;
 
-    Population* currentPopulation;
+    Generation* currentPopulation;
 
     int populationSize;
     int generationsAmount;
@@ -41,20 +41,23 @@ public:
     //TODO: move selection operators to external Selection class
     //TODO: move breeding operators to external Breeding class
 
-    Population*
-    selectionElite(Population* population,
+    Generation*
+    selectionElite(Generation* population,
                    std::function<bool(double)> selectionCondition);
 
-    static Population*
-            selectionElite(Population* population,
+    static Generation*
+            selectionElite(Generation* population,
                            std::function<double(double)> fitnessFunction,
                            std::function<bool(double)> selectionCondition);
 
-    static Population*
-            breedingRandom(Population* population);
+    static std::tuple<BinaryChromosome*, BinaryChromosome*>
+            breedingRandom(Generation* population);
 
-    static Population*
-            breedingInbreeding(Population* population);
+    static std::tuple<BinaryChromosome*, BinaryChromosome*>
+            breedingInbreedingGenSimilarityDriven(Generation* population);
+
+    static Generation*
+            breedingInbreedingElite(Generation* population);
 
 };
 

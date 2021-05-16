@@ -23,10 +23,10 @@ public:
             crossoverFibonacci(BinaryChromosome* parentA, BinaryChromosome* parentB);
 
     static BinaryChromosome*
-            mutateSwapFibonacci(BinaryChromosome* parentA, MorphingFactor* factor);
+            mutateSwapFibonacci(BinaryChromosome* parentA);
 
     static BinaryChromosome*
-            mutateInversion(BinaryChromosome* parentA, MorphingFactor* factor);
+            mutateInversion(BinaryChromosome* parentA);
 
 };
 
