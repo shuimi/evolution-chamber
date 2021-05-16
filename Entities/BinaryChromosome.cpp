@@ -58,7 +58,7 @@ void BinaryChromosome::set(const std::vector<bool> &genSet) {
     BinaryChromosome::genes = genSet;
 }
 
-const std::vector<bool> &BinaryChromosome::get() const {
+std::vector<bool> &BinaryChromosome::get() {
     return BinaryChromosome::genes;
 }
 
@@ -145,5 +145,34 @@ void BinaryChromosome::swap(int aIndex, int bIndex) {
     bool savedGen = BinaryChromosome::getGen(aIndex);
     BinaryChromosome::setGen(aIndex, BinaryChromosome::getGen(bIndex));
     BinaryChromosome::setGen(bIndex, savedGen);
+}
+
+BinaryChromosome *BinaryChromosome::getSubsequence(int startIndex, int endIndex) {
+    BinaryChromosome* chromosome = new BinaryChromosome();
+    for(int i = startIndex; i <= endIndex; i++){
+        chromosome->addGen(BinaryChromosome::getGen(i));
+    }
+    return chromosome;
+}
+
+BinaryChromosome* BinaryChromosome::erase(int startIndex, int endIndex) {
+    BinaryChromosome* ret = BinaryChromosome::getSubsequence(startIndex, endIndex);
+    BinaryChromosome::genes.erase(
+        BinaryChromosome::genes.begin() + startIndex,
+        BinaryChromosome::genes.begin() + endIndex
+    );
+    return ret;
+}
+
+void BinaryChromosome::glue(BinaryChromosome *anotherChromosome) {
+    for(bool gen : anotherChromosome->get()){
+        BinaryChromosome::addGen(gen);
+    }
+}
+
+void BinaryChromosome::insert(int startIndex, BinaryChromosome *anotherChromosome) {
+    for (bool gen : anotherChromosome->get()) {
+        BinaryChromosome::get().insert(BinaryChromosome::get().begin() + startIndex, gen);
+    }
 }
 

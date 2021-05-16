@@ -22,7 +22,7 @@ public:
 
     virtual ~BinaryChromosome();
 
-    const std::vector<bool> &get() const;
+    std::vector<bool> &get();
     void set(const std::vector<bool> &genSet);
 
     int getDecimal();
@@ -36,11 +36,15 @@ public:
     void setGen(int index, bool gen);
     bool getGen(int index);
     void addGen(bool gen);
+    void glue(BinaryChromosome* anotherChromosome);
     void reverse(int startIndex, int endIndex);
+    BinaryChromosome* erase(int startIndex, int endIndex);
     void swap(int aIndex, int bIndex);
+    static BinaryChromosome* concatenate(BinaryChromosome* a, BinaryChromosome* b);
+    BinaryChromosome* getSubsequence(int startIndex, int endIndex);
+    void insert(int startIndex, BinaryChromosome* anotherChromosome);
 
     int getUniqueIdentifier() const;
-
     static int getHammingDistance(BinaryChromosome* A, BinaryChromosome* B);
 
     static double normalizedDistance(BinaryChromosome* A, BinaryChromosome* B);
@@ -48,8 +52,6 @@ public:
     int getSize();
 
     BinaryChromosome* getCopy();
-
-    static BinaryChromosome* concatenate(BinaryChromosome* a, BinaryChromosome* b);
 
 };
 
