@@ -9,37 +9,20 @@ int main() {
     evo->setFitnessFunction([](double x){
         return x * x + 0.1 * x - 23;
     });
-    std::cout << evo->executeFitnessFunction(5) << "\n\n";
-
-
-    BinaryChromosome* chroma = new BinaryChromosome(131);
-    chroma->printout();
-    chroma->invert();
-    chroma->printout();
-
-
-    Population* testPopulation = new Population(1);
-    testPopulation->addIndividual(new BinaryChromosome(51));
-    testPopulation->addIndividual(new BinaryChromosome(13));
-    testPopulation->printout();
 
     Population* testPopulationShotgun =
-            PopulationFactory::getPopulationUsingShotgun(9, 14);
+            PopulationFactory::getPopulationUsingShotgun(9, 14, 10);
     Population* testPopulationFocus =
-            PopulationFactory::getPopulationUsingFocusing(11, 3);
+            PopulationFactory::getPopulationUsingFocusing(11, 3, 10);
 
-    testPopulationShotgun->printout();
-    testPopulationShotgun->statPrintout();
     testPopulationFocus->printout();
     testPopulationFocus->statPrintout();
+    testPopulationFocus->estimate(evo->getFitnessFunction());
+    testPopulationFocus->printoutEstimation();
+    std::cout << evo->executeFitnessFunction(10) << "\n\n";
 
-    testPopulationFocus->eject(1);
-    testPopulationFocus->printout();
-    testPopulationFocus->statPrintout();
-
-
-    evo->selectionElite(testPopulationFocus, [evo](int estimationValue){
-        return (estimationValue > evo->executeFitnessFunction(10));
+    evo->selectionElite(testPopulationFocus, [evo](double estimationValue){
+        return (estimationValue >= evo->executeFitnessFunction(11));
     });
 
     testPopulationFocus->printout();

@@ -16,7 +16,7 @@ private:
     int uniqueIdentifier;
     int index;
     std::vector<BinaryChromosome*> individuals;
-    std::vector<int> individualsEstimation;
+    std::vector<double> individualsEstimation;
 
 public:
 
@@ -56,9 +56,9 @@ public:
 
     void printoutEstimation();
 
-    const std::vector<int> &getIndividualsEstimation() const;
+    const std::vector<double> &getIndividualsEstimation() const;
 
-    void setIndividualsEstimation(const std::vector<int> &individualsEstimation);
+    void setIndividualsEstimation(const std::vector<double> &individualsEstimation);
 
 };
 

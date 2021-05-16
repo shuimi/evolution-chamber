@@ -43,12 +43,12 @@ public:
 
     Population*
     selectionElite(Population* population,
-                   std::function<bool(int)> selectionCondition);
+                   std::function<bool(double)> selectionCondition);
 
     static Population*
             selectionElite(Population* population,
                            std::function<double(double)> fitnessFunction,
-                           std::function<bool(int)> selectionCondition);
+                           std::function<bool(double)> selectionCondition);
 
     static Population*
             breedingRandom(Population* population);

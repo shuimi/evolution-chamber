@@ -17,25 +17,28 @@ const std::function<double(double)> &EvolutionChamber::getFitnessFunction() cons
 }
 
 
-Population *EvolutionChamber::selectionElite(Population *population, std::function<bool(int)> selectionCondition) {
+Population *EvolutionChamber::selectionElite(Population *population, std::function<bool(double)> selectionCondition) {
+
     population->estimate(EvolutionChamber::getFitnessFunction());
-    for(int i = 0; i < population->getIndividuals().size(); i++){
+
+    for(int i = 0; i < population->getIndividuals().size();){
         if(!selectionCondition(population->getIndividualsEstimation().at(i))) {
             population->eject(i);
-            i--;
         }
+        else i++;
     }
+
     return population;
 }
 
 Population *EvolutionChamber::selectionElite(Population *population, std::function<double(double)> fitnessFunction,
-                                             std::function<bool(int)> selectionCondition) {
+                                             std::function<bool(double)> selectionCondition) {
     population->estimate(fitnessFunction);
-    for(int i = 0; i < population->getIndividuals().size(); i++){
+    for(int i = 0; i < population->getIndividuals().size();){
         if(!selectionCondition(population->getIndividualsEstimation().at(i))) {
             population->eject(i);
-            i--;
         }
+        else i++;
     }
     return population;
 }

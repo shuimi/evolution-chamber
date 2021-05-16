@@ -112,6 +112,7 @@ void Population::statPrintout() {
 BinaryChromosome *Population::eject(int index) {
     BinaryChromosome* ret = Population::individuals.at(index);
     Population::individuals.erase(Population::individuals.begin() + index);
+    Population::individualsEstimation.erase(Population::individualsEstimation.begin() + index);
     return ret;
 }
 
@@ -122,24 +123,25 @@ void Population::foreach(std::function<int(int)> decimalTransformation) {
 }
 
 void Population::estimate(std::function<double(double)> fitnessFunction) {
+    Population::individualsEstimation.clear();
     for(BinaryChromosome* individual : Population::individuals){
-        Population::individualsEstimation.push_back((int)fitnessFunction(std::round(individual->getDecimal())));
+        Population::individualsEstimation.push_back(fitnessFunction(std::round(individual->getDecimal())));
     }
 }
 
 void Population::printoutEstimation() {
     std::cout << "Estimation:{\n";
     for(int i = 0; i < Population::individuals.size(); i++){
-        std::cout << "\tf("; Population::getIndividuals().at(i)->printout();
+        std::cout << "  f(" << Population::getIndividuals().at(i)->getDecimal();
         std::cout << ") = " << Population::individualsEstimation.at(i) << ",\n";
     }
     std::cout << "}\n\n";
 }
 
-const std::vector<int> &Population::getIndividualsEstimation() const {
+const std::vector<double> &Population::getIndividualsEstimation() const {
     return individualsEstimation;
 }
 
-void Population::setIndividualsEstimation(const std::vector<int> &individualsEstimation) {
+void Population::setIndividualsEstimation(const std::vector<double> &individualsEstimation) {
     Population::individualsEstimation = individualsEstimation;
 }
