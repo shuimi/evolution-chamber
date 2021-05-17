@@ -46,7 +46,7 @@ std::string BinaryChromosome::getBinaryString() {
     for (bool gen : BinaryChromosome::genes) {
         output += std::to_string(gen);
     }
-    std::reverse(output.begin(), output.end());
+    //std::reverse(output.begin(), output.end());
     return output;
 }
 
@@ -108,7 +108,7 @@ double BinaryChromosome::normalizedDistance(BinaryChromosome *A, BinaryChromosom
 }
 
 BinaryChromosome BinaryChromosome::addZeroes(BinaryChromosome *A, int n) {
-    BinaryChromosome T = *A;
+    BinaryChromosome &T = *A;
     for (int i = 0; i < n; i++)
         T.get().push_back(0);
     return T;
@@ -137,15 +137,15 @@ void BinaryChromosome::reverse(int startIndex, int endIndex) {
 }
 
 BinaryChromosome *BinaryChromosome::concatenate(BinaryChromosome *a, BinaryChromosome *b) {
-    BinaryChromosome* out = a->getCopy();
-    for(bool gen : b->get()){
+    BinaryChromosome *out = a->getCopy();
+    for (bool gen : b->get()) {
         out->addGen(gen);
     }
     return out;
 }
 
 BinaryChromosome *BinaryChromosome::getCopy() {
-    BinaryChromosome* chromosome = new BinaryChromosome();
+    BinaryChromosome *chromosome = new BinaryChromosome();
     chromosome->setDecimal(this->getDecimal());
     return chromosome;
 }
@@ -161,24 +161,24 @@ void BinaryChromosome::swap(int aIndex, int bIndex) {
 }
 
 BinaryChromosome *BinaryChromosome::getSubsequence(int startIndex, int endIndex) {
-    BinaryChromosome* chromosome = new BinaryChromosome();
-    for(int i = startIndex; i <= endIndex; i++){
+    BinaryChromosome *chromosome = new BinaryChromosome();
+    for (int i = startIndex; i <= endIndex; i++) {
         chromosome->addGen(BinaryChromosome::getGen(i));
     }
     return chromosome;
 }
 
-BinaryChromosome* BinaryChromosome::erase(int startIndex, int endIndex) {
-    BinaryChromosome* ret = BinaryChromosome::getSubsequence(startIndex, endIndex);
+BinaryChromosome *BinaryChromosome::erase(int startIndex, int endIndex) {
+    BinaryChromosome *ret = BinaryChromosome::getSubsequence(startIndex, endIndex);
     BinaryChromosome::genes.erase(
-        BinaryChromosome::genes.begin() + startIndex,
-        BinaryChromosome::genes.begin() + endIndex
+            BinaryChromosome::genes.begin() + startIndex,
+            BinaryChromosome::genes.begin() + endIndex
     );
     return ret;
 }
 
 void BinaryChromosome::glue(BinaryChromosome *anotherChromosome) {
-    for(bool gen : anotherChromosome->get()){
+    for (bool gen : anotherChromosome->get()) {
         BinaryChromosome::addGen(gen);
     }
 }

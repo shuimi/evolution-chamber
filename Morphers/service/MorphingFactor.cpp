@@ -64,34 +64,61 @@ Generation *MorphingFactor::crossoverTwoPoint(BinaryChromosome *parentA, BinaryC
 
 Generation *MorphingFactor::crossoverFibonacci(BinaryChromosome *parentA, BinaryChromosome *parentB) {
     BinaryChromosome::complementChromosome(parentA, parentB);
-    std::vector<int> fibNumbers = fibbonachi(parentA->get().size());
+
+    std::vector<int> fibNumbers = fibbonachi(parentA->getSize());
+    std::vector<std::vector<bool>> binaryTable = makeBinaryNumbersTable(parentA->getSize()); //A->0, B->1
+
     std::vector<BinaryChromosome *> partsParentA = makeParentParts(parentA, fibNumbers.size());
     std::vector<BinaryChromosome *> partsParentB = makeParentParts(parentB, fibNumbers.size());
 
-    //make confornity of parts and binary table without 0 and last rows
     std::vector<BinaryChromosome *> children;
-    for (int i = 0; i < fibNumbers.size(); i++) {
+    for (int i = 1; i < binaryTable.size() - 1; i++) {
         BinaryChromosome *child = new BinaryChromosome();
-        for (int j = 0; j < parentA->get().size(); j++) {
 
+        //making a child from binary-table row: A->0, B->1
+        for (int j = 0; j < parentA->getSize() - 1; j++) {
+
+            if (binaryTable[i][j] == 0)
+                child->glue(partsParentA.at(j));
+            else child->glue(partsParentB.at(j));
         }
-        children.push_back();
+        if (children.empty())
+            children.push_back(child);
+        bool childAdded= 0;
+        for (int k = 0; k < children.size(); k++) {
+            for (int j = 0; j < child->getSize(); j++)
+                if (children.at(k)->getGen(j) != child->getGen(j)) {
+                    children.push_back(child);
+                    childAdded = 1;
+                    break;
+                }
+        if (childAdded) break;
+        }
     }
-
+    return new Generation(children);
 }
 
-std::vector<int> MorphingFactor::fibbonachi(int n) {
+std::vector<int> MorphingFactor::fibbonachi(int howMuchNumbers) {
     int a1 = 1, a2 = 1;
     std::vector<int> fib;
     fib.push_back(a1);
-    while (a2 < n) {
+    while (fib.size() < howMuchNumbers) {
         int t = a2;
         a2 += a1;
         a1 = t;
-        fib.push_back(a1);
         fib.push_back(a2);
     }
     return fib;
+}
+
+int MorphingFactor::getSingleFibonacci(int numberToCover) {
+    int a1 = 1, a2 = 1;
+    while (a2 < numberToCover) {
+        int temp = a2;
+        a2 += a1;
+        a1 = temp;
+    }
+    return a2;
 }
 
 std::vector<std::vector<bool>> MorphingFactor::makeBinaryNumbersTable(int n) {
@@ -100,10 +127,14 @@ std::vector<std::vector<bool>> MorphingFactor::makeBinaryNumbersTable(int n) {
     for (int i = 0; i < rowsAmount; i++) {
         std::vector<bool> row;
         int temp_i = i;
-        for (int j = 0; j < n; j++) {
+        do {
             row.push_back(temp_i % 2);
-            temp_i / 2;
-        }
+            temp_i /= 2;
+        } while (temp_i > 0);
+
+        while (row.size() < n)
+            row.push_back(0);
+
         std::reverse(row.begin(), row.end());
         table.push_back(row);
     }
@@ -111,24 +142,25 @@ std::vector<std::vector<bool>> MorphingFactor::makeBinaryNumbersTable(int n) {
 }
 
 std::vector<BinaryChromosome *> MorphingFactor::makeParentParts(BinaryChromosome *parent, int n) {
-    std::vector<int> fibNumbers = fibbonachi(n);
+    int t = 1;
+    while (n > getSingleFibonacci(t)) { t++; }
+    std::vector<int> fibNumbers = fibbonachi(t);
     std::vector<BinaryChromosome *> parentParts;
-    parentParts.push_back(new BinaryChromosome(std::vector<bool>(1, 1)));
+
+    //separately push first(left) part
+    parentParts.push_back(new BinaryChromosome(std::vector<bool>(1, parent->get().at(0))));
+
     for (int i = 0; i < fibNumbers.size() - 1; i++) {
-        std::vector<bool> tempGen;
-        for (int j = fibNumbers.at(i); j < fibNumbers.at(i + 1); j++) {
-            tempGen.push_back(parent->get().at(j));
-        }
-        parentParts.push_back(new BinaryChromosome(tempGen));
+        BinaryChromosome *tempChromosome = parent->getSubsequence(fibNumbers.at(i), fibNumbers.at(i + 1) - 1);
+        parentParts.push_back(tempChromosome);
     }
 
-    std::vector<bool> tempGen;
-    for (int i = fibNumbers.at(fibNumbers.size()); i < parent->get().size(); i++) {
-        tempGen.push_back(parent->get().at(i));
-    }
-    parentParts.push_back(new BinaryChromosome(tempGen));
+    //separately push last(right) part
+    BinaryChromosome *tempChromosome = parent->getSubsequence(fibNumbers.back(), parent->get().size() - 1);
+    if (!tempChromosome->get().empty()) parentParts.push_back(tempChromosome);
 
     return parentParts;
 }
+
 
 

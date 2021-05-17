@@ -40,6 +40,7 @@ public:
     static Generation *mutateTransposition(BinaryChromosome *);
 
     static std::vector<int> fibbonachi(int n);
+    static int getSingleFibonacci(int n);
 
     //has 0 and last rows
     static std::vector<std::vector<bool>> makeBinaryNumbersTable(int n);
