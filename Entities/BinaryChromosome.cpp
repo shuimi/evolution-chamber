@@ -5,18 +5,18 @@
 #include <iostream>
 #include "headers/BinaryChromosome.h"
 
-int BinaryChromosome::getDecimal(){
+int BinaryChromosome::getDecimal() {
     int rank = 1, result = 0;
-    for(bool gen : BinaryChromosome::genes){
-        if(gen) result += rank;
+    for (bool gen : BinaryChromosome::genes) {
+        if (gen) result += rank;
         rank *= 2;
     }
     return result;
 };
 
-void BinaryChromosome::setDecimal(int genSetDec){
+void BinaryChromosome::setDecimal(int genSetDec) {
     std::vector<bool> genSetBin;
-    while(genSetDec != 0){
+    while (genSetDec != 0) {
         genSetBin.push_back(genSetDec % 2);
         genSetDec /= 2;
     }
@@ -27,7 +27,7 @@ BinaryChromosome::BinaryChromosome(const std::vector<bool> &genesVector) : genes
     BinaryChromosome::uniqueIdentifier = reinterpret_cast<int>(this);
 };
 
-BinaryChromosome::BinaryChromosome(int genesDec){
+BinaryChromosome::BinaryChromosome(int genesDec) {
     BinaryChromosome::setDecimal(genesDec);
     BinaryChromosome::uniqueIdentifier = reinterpret_cast<int>(this);
 }
@@ -43,10 +43,10 @@ BinaryChromosome::~BinaryChromosome() {
 
 std::string BinaryChromosome::getBinaryString() {
     std::string output;
-    for(bool gen : BinaryChromosome::genes){
+    for (bool gen : BinaryChromosome::genes) {
         output += std::to_string(gen);
     }
-    std::reverse(output.begin(), output.end());
+    //std::reverse(output.begin(), output.end());
     return output;
 }
 
@@ -63,7 +63,7 @@ std::vector<bool> &BinaryChromosome::get() {
 }
 
 void BinaryChromosome::invert() {
-    for(int i = 0; i < BinaryChromosome::genes.size(); i++){
+    for (int i = 0; i < BinaryChromosome::genes.size(); i++) {
         BinaryChromosome::genes.at(i) = !BinaryChromosome::genes.at(i);
     }
 }
@@ -81,16 +81,16 @@ int BinaryChromosome::getHammingDistance(BinaryChromosome *A, BinaryChromosome *
     A->get().size() > B->get().size() ? maxSize = A->get().size() : maxSize = B->get().size();
     A->get().size() < B->get().size() ? minSize = A->get().size() : minSize = B->get().size();
 
-    for(int i = 0; i < minSize; i++){
+    for (int i = 0; i < minSize; i++) {
         A->get().at(i) != B->get().at(i) ? amountOfEqualPositions++ : 0;
     }
 
     if (A->get().size() > B->get().size())
-        for(int i = minSize; i < maxSize; i++){
+        for (int i = minSize; i < maxSize; i++) {
             A->get().at(i) != false ? amountOfEqualPositions++ : 0;
         }
     else
-        for(int i = minSize; i < maxSize; i++){
+        for (int i = minSize; i < maxSize; i++) {
             B->get().at(i) != false ? amountOfEqualPositions++ : 0;
         }
 
@@ -104,7 +104,20 @@ double BinaryChromosome::normalizedDistance(BinaryChromosome *A, BinaryChromosom
 
     A->get().size() > B->get().size() ? maxSize = A->get().size() : maxSize = B->get().size();
 
-    return (double)hammingDist / (double)maxSize;
+    return (double) hammingDist / (double) maxSize;
+}
+
+BinaryChromosome BinaryChromosome::addZeroes(BinaryChromosome *A, int n) {
+    BinaryChromosome &T = *A;
+    for (int i = 0; i < n; i++)
+        T.get().push_back(0);
+    return T;
+}
+
+void BinaryChromosome::complementChromosome(BinaryChromosome *A, BinaryChromosome *B) {
+    int n = A->get().size() - B->get().size();
+    if (n > 0) addZeroes(B, n);
+    else addZeroes(A, abs(n));
 }
 
 int BinaryChromosome::getSize() {
@@ -124,15 +137,15 @@ void BinaryChromosome::reverse(int startIndex, int endIndex) {
 }
 
 BinaryChromosome *BinaryChromosome::concatenate(BinaryChromosome *a, BinaryChromosome *b) {
-    BinaryChromosome* out = a->getCopy();
-    for(bool gen : b->get()){
+    BinaryChromosome *out = a->getCopy();
+    for (bool gen : b->get()) {
         out->addGen(gen);
     }
     return out;
 }
 
 BinaryChromosome *BinaryChromosome::getCopy() {
-    BinaryChromosome* chromosome = new BinaryChromosome();
+    BinaryChromosome *chromosome = new BinaryChromosome();
     chromosome->setDecimal(this->getDecimal());
     return chromosome;
 }
@@ -148,24 +161,24 @@ void BinaryChromosome::swap(int aIndex, int bIndex) {
 }
 
 BinaryChromosome *BinaryChromosome::getSubsequence(int startIndex, int endIndex) {
-    BinaryChromosome* chromosome = new BinaryChromosome();
-    for(int i = startIndex; i <= endIndex; i++){
+    BinaryChromosome *chromosome = new BinaryChromosome();
+    for (int i = startIndex; i <= endIndex; i++) {
         chromosome->addGen(BinaryChromosome::getGen(i));
     }
     return chromosome;
 }
 
-BinaryChromosome* BinaryChromosome::erase(int startIndex, int endIndex) {
-    BinaryChromosome* ret = BinaryChromosome::getSubsequence(startIndex, endIndex);
+BinaryChromosome *BinaryChromosome::erase(int startIndex, int endIndex) {
+    BinaryChromosome *ret = BinaryChromosome::getSubsequence(startIndex, endIndex);
     BinaryChromosome::genes.erase(
-        BinaryChromosome::genes.begin() + startIndex,
-        BinaryChromosome::genes.begin() + endIndex
+            BinaryChromosome::genes.begin() + startIndex,
+            BinaryChromosome::genes.begin() + endIndex
     );
     return ret;
 }
 
 void BinaryChromosome::glue(BinaryChromosome *anotherChromosome) {
-    for(bool gen : anotherChromosome->get()){
+    for (bool gen : anotherChromosome->get()) {
         BinaryChromosome::addGen(gen);
     }
 }

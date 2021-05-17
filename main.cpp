@@ -16,14 +16,15 @@ int main() {
             return x * x + 0.1 * x - 23;
         },
         GenerationFactory::getUsingShotgun(
-            leftBound,
-            rightBound,
-            initialIndividualsAmount
+            9,
+            14,
+            10
         ),
         new MorphingFactor(
-            crossingProbability,
-            mutationProbability
-        )
+            0.7,
+            0.3
+        ),
+        50
     );
 
     evolution->getInitialGeneration()->printout();

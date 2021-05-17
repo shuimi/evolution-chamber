@@ -53,6 +53,9 @@ public:
 
     BinaryChromosome* getCopy();
 
+    static BinaryChromosome addZeroes(BinaryChromosome *A, int n);
+    static void complementChromosome(BinaryChromosome *A, BinaryChromosome *B);
+
 };
 
 
