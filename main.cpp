@@ -2,7 +2,6 @@
 #include "Main/headers/EvolutionChamber.h"
 
 int main() {
-
     EvolutionChamber* evolution = new EvolutionChamber([](double x){
             return x * x + 0.1 * x - 23;
         },
