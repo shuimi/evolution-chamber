@@ -16,7 +16,7 @@ Generation *GenerationFactory::getUsingFocusing(int focusPoint, int range, int i
 
 
 Generation *GenerationFactory::getUsingShotgun(int leftBound, int rightBound,
-                                               int individualsAmount, int initPopulationIndex) {
+                                               int individualsAmount, int initIndex) {
     std::random_device randomDevice;
     std::mt19937 generator(randomDevice());
 
@@ -24,7 +24,7 @@ Generation *GenerationFactory::getUsingShotgun(int leftBound, int rightBound,
     std::vector<double> w{  1,  0,  1};
     std::piecewise_constant_distribution<> constantDistribution(i.begin(), i.end(), w.begin());
 
-    Generation* population = new Generation(initPopulationIndex);
+    Generation* population = new Generation(initIndex);
 
     for(int i = 0; i < individualsAmount + 1; i++){
         population->addIndividual(
@@ -39,12 +39,12 @@ Generation *GenerationFactory::getUsingShotgun(int leftBound, int rightBound,
 
 
 Generation *GenerationFactory::getUsingFocusing(int focusPoint, int range,
-                                                int individualsAmount, int initPopulationIndex) {
+                                                int individualsAmount, int initIndex) {
     std::random_device randomDevice{};
     std::mt19937 generator{randomDevice()};
     std::normal_distribution<> normalDistribution{(double)focusPoint, (double)range};
 
-    Generation* population = new Generation(initPopulationIndex);
+    Generation* population = new Generation(initIndex);
 
     for (int i = 0; i < individualsAmount; i++) {
         population->addIndividual(
@@ -56,4 +56,16 @@ Generation *GenerationFactory::getUsingFocusing(int focusPoint, int range,
     population->addIndividual(new BinaryChromosome(focusPoint));
 
     return population;
+}
+
+Generation *GenerationFactory::getUsingCovering(int leftBound, int rightBound, int initIndex) {
+    Generation* generation = new Generation(initIndex);
+    for(int i = leftBound; i <= rightBound; i++){
+        generation->addIndividual(new BinaryChromosome(i));
+    }
+    return generation;
+}
+
+Generation *GenerationFactory::getUsingCovering(int leftBound, int rightBound) {
+    return GenerationFactory::getUsingCovering(leftBound, rightBound, 0);
 }

@@ -60,3 +60,11 @@ void Population::eject(Generation *generation) {
         }
     }
 }
+
+Generation *Population::getAsGeneration() {
+    Generation* out = new Generation(0);
+    Population::foreach([out](Generation* generation){
+        out->add(generation);
+    });
+    return out;
+}

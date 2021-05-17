@@ -22,7 +22,7 @@ public:
 
     Generation(Generation* anotherPopulation);
     Generation(int index);
-    Generation(const std::vector<BinaryChromosome *> &individuals);
+    Generation(std::vector<BinaryChromosome *> &individuals);
 
     virtual ~Generation();
 
@@ -41,6 +41,8 @@ public:
 
     void printout();
 
+    void add(Generation* generation);
+
     BinaryChromosome* get(int index);
     void set(int index, BinaryChromosome* chromosome);
     BinaryChromosome* eject(int index);
@@ -52,6 +54,8 @@ public:
     void statPrintout();
 
     void foreach(std::function<int(int)> decimalTransformation);
+    void Generation::foreach(std::function<BinaryChromosome*(BinaryChromosome*)> transformation);
+    void Generation::foreach(std::function<void(BinaryChromosome*)> transformation);
 
     void estimate(std::function<double(double)> fitnessFunction);
 

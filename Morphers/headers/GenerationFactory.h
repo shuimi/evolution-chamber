@@ -10,15 +10,19 @@
 
 class GenerationFactory {
 public:
+    static Generation* getUsingCovering(int leftBound, int rightBound, int initIndex);
+
+    static Generation* getUsingCovering(int leftBound, int rightBound);
+
     static Generation* getUsingShotgun(int leftBound, int rightBound, int individualsAmount);
 
     static Generation* getUsingFocusing(int focusPoint, int range, int individualsAmount);
 
     static Generation* getUsingShotgun(int leftBound, int rightBound,
-                                       int individualsAmount, int initPopulationIndex);
+                                       int individualsAmount, int initIndex);
 
     static Generation* getUsingFocusing(int focusPoint, int range,
-                                        int individualsAmount, int initPopulationIndex);
+                                        int individualsAmount, int initIndex);
 };
 
 

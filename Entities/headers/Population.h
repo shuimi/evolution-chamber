@@ -30,6 +30,7 @@ public:
     Generation* eject(int index);
     void eject(Generation* generation);
 
+    Generation* getAsGeneration();
 
 };
 

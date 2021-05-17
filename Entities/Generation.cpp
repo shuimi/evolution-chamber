@@ -5,7 +5,7 @@
 #include <iostream>
 #include "headers/Generation.h"
 
-Generation::Generation(const std::vector<BinaryChromosome *> &individuals) : individuals(individuals) {
+Generation::Generation(std::vector<BinaryChromosome *> &individuals) : individuals(individuals) {
     Generation::uniqueIdentifier = reinterpret_cast<int>(this);
 }
 
@@ -122,6 +122,18 @@ void Generation::foreach(std::function<int(int)> decimalTransformation) {
     }
 }
 
+void Generation::foreach(std::function<BinaryChromosome*(BinaryChromosome*)> transformation) {
+    for(BinaryChromosome* individual : Generation::individuals){
+        individual = transformation(individual);
+    }
+}
+
+void Generation::foreach(std::function<void(BinaryChromosome *)> transformation) {
+    for(BinaryChromosome* individual : Generation::individuals){
+        transformation(individual);
+    }
+}
+
 void Generation::estimate(std::function<double(double)> fitnessFunction) {
     Generation::individualsEstimation.clear();
     for(BinaryChromosome* individual : Generation::individuals){
@@ -160,4 +172,12 @@ void Generation::eject(BinaryChromosome *individual) {
 BinaryChromosome* Generation::getRandomIndividual() {
     return get(std::rand() % Generation::individuals.size());
 }
+
+void Generation::add(Generation* generation) {
+    generation->foreach([this](BinaryChromosome* c){
+        this->addIndividual(c);
+    });
+}
+
+
 

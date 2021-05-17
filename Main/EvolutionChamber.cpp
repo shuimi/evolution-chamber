@@ -45,28 +45,50 @@ Generation *EvolutionChamber::selectionElite(Generation *population, std::functi
     return population;
 }
 
-std::tuple<BinaryChromosome*, BinaryChromosome*> EvolutionChamber::breedingRandom(Generation *generation) {
+std::tuple<BinaryChromosome*, BinaryChromosome*> EvolutionChamber::selectRandomPair(Generation *population) {
     BinaryChromosome *A, *B;
-    A = generation->getRandomIndividual();
-    B = generation->getRandomIndividual();
+    A = population->getRandomIndividual();
+    B = population->getRandomIndividual();
     while(A == B){
-        B = generation->getRandomIndividual();
+        B = population->getRandomIndividual();
     }
     return std::make_tuple(A, B);
 }
 
 EvolutionChamber::EvolutionChamber(
-    std::function<double(double)> fitnessFunction,
-    Generation *initialGeneration,
-    MorphingFactor *morphingFactor,
-    int generationsAmount
-) : fitnessFunction(std::move(fitnessFunction)),
-initialGeneration(initialGeneration),
-morphingFactor(morphingFactor),
-generationsAmount(generationsAmount) {
+    std::function<double(double)> fitnessFunction, Generation *initialGeneration, MorphingFactor *morphingFactor
+) : fitnessFunction(std::move(fitnessFunction)), initialGeneration(initialGeneration), morphingFactor(morphingFactor) {
 
 }
 
 EvolutionChamber::~EvolutionChamber() {
 
+}
+
+Population *EvolutionChamber::getPopulation() const {
+    return population;
+}
+
+void EvolutionChamber::setPopulation(Population *population) {
+    EvolutionChamber::population = population;
+}
+
+Generation *EvolutionChamber::getInitialGeneration() const {
+    return initialGeneration;
+}
+
+void EvolutionChamber::setInitialGeneration(Generation *initialGeneration) {
+    EvolutionChamber::initialGeneration = initialGeneration;
+}
+
+MorphingFactor *EvolutionChamber::getMorphingFactor() const {
+    return morphingFactor;
+}
+
+void EvolutionChamber::setMorphingFactor(MorphingFactor *morphingFactor) {
+    EvolutionChamber::morphingFactor = morphingFactor;
+}
+
+Generation *EvolutionChamber::getNextGeneration() {
+    return new Generation(0);
 }

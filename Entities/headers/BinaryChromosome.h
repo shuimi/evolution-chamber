@@ -43,13 +43,13 @@ public:
     static BinaryChromosome* concatenate(BinaryChromosome* a, BinaryChromosome* b);
     BinaryChromosome* getSubsequence(int startIndex, int endIndex);
     void insert(int startIndex, BinaryChromosome* anotherChromosome);
+    int getSize();
 
     int getUniqueIdentifier() const;
+
     static int getHammingDistance(BinaryChromosome* A, BinaryChromosome* B);
 
     static double normalizedDistance(BinaryChromosome* A, BinaryChromosome* B);
-
-    int getSize();
 
     BinaryChromosome* getCopy();
 

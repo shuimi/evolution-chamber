@@ -17,38 +17,43 @@ private:
     Population* population;
     Generation* initialGeneration;
     MorphingFactor* morphingFactor;
-    int generationsAmount;
 
 public:
 
     EvolutionChamber(std::function<double(double)> fitnessFunction,
                      Generation *initialGeneration,
-                     MorphingFactor *morphingFactor,
-                     int generationsAmount);
+                     MorphingFactor *morphingFactor);
 
     virtual ~EvolutionChamber();
 
     const std::function<double(double)> &getFitnessFunction() const;
     void setFitnessFunction(std::function<double(double)> fitnessFunction);
+
     const double executeFitnessFunction(double arg);
 
-    Generation*
-    selectionElite(Generation* population,
-                   std::function<bool(double)> selectionCondition);
+    Generation* selectionElite(Generation* population, std::function<bool(double)> selectionCondition);
 
-    static Generation*
-            selectionElite(Generation* population,
+    static Generation* selectionElite(Generation* population,
                            std::function<double(double)> fitnessFunction,
                            std::function<bool(double)> selectionCondition);
 
     static std::tuple<BinaryChromosome*, BinaryChromosome*>
-            breedingRandom(Generation* population);
+            selectRandomPair(Generation* population);
 
-    static std::tuple<BinaryChromosome*, BinaryChromosome*>
-            breedingInbreedingGenSimilarityDriven(Generation* generation);
+    Population *getPopulation() const;
+    void setPopulation(Population *population);
 
-    static Generation*
-            breedingInbreedingElite(Generation* generation);
+    Generation *getInitialGeneration() const;
+    void setInitialGeneration(Generation *initialGeneration);
+
+    MorphingFactor *getMorphingFactor() const;
+    void setMorphingFactor(MorphingFactor *morphingFactor);
+
+    static Generation* breedingRandom(Generation* generation);
+
+    static Generation* breedingInbreedingGenSimilarityDriven(Generation* generation);
+
+    static Generation* breedingInbreedingElite(Generation* generation);
 
     Generation* getNextGeneration();
 
