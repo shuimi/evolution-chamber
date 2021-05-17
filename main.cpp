@@ -28,9 +28,6 @@ int main() {
             mutationProbability
         )
     );
-//
-//    evolution->getInitialGeneration()->printout();
-
 
     Generation* a = GenerationFactory::getUsingShotgun(
             leftBound,
@@ -45,9 +42,11 @@ int main() {
             1
     );
     a->printout();
-    b->printout();
+//    b->printout();
 
-    evolution->breedingInbreedingGenSimilarityDriven(a, b)->printout();
+    evolution->breedingWithEstimation(a, 0.5)->printout();
+
+//    evolution->breedingInbreedingGenSimilarityDriven(a, b)->printout();
 
 //    evolution->breedingInbreedingElite(a, b)->printout();
 //
@@ -85,7 +84,7 @@ int main() {
 //    testPopulationFocus->printoutEstimation();
 //    std::cout << evolution->executeFitnessFunction(10) << "\n\n";
 //
-//    evolution->selectionElite(testPopulationFocus, [evolution](double estimationValue){
+//    evolution->selection(testPopulationFocus, [evolution](double estimationValue){
 //        return (estimationValue >= evolution->executeFitnessFunction(11));
 //    });
 //

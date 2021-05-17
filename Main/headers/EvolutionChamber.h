@@ -33,13 +33,11 @@ public:
 
 
 
-    Generation* selectionElite(Generation* population, std::function<bool(double)> selectionCondition);
+    Generation* selection(Generation* population, std::function<bool(double)> selectionCondition);
 
-    template<typename T> Generation* selection(Generation* population, std::function<bool(T)> selectionCondition);
-
-    static Generation* selectionElite(Generation* population,
-                           std::function<double(double)> fitnessFunction,
-                           std::function<bool(double)> selectionCondition);
+    static Generation* selection(Generation* population,
+                                 std::function<double(double)> fitnessFunction,
+                                 std::function<bool(double)> selectionCondition);
 
 
 
@@ -70,12 +68,15 @@ public:
 
     Generation* breedingInbreedingElite(Generation* parents, Generation* descendants);
 
-    Generation* executeHybridization(Generation* generation);
+    Generation* breedingWithEstimation(Generation* generation, double normalizedEstimationThreshold);
+
+    Generation* executeBreeding(Generation* generation);
 
 
 
     Generation* getNextGeneration();
 
+    Generation *selectionCustomEstimation(Generation *population, std::function<bool(double)> selectionCondition);
 };
 
 

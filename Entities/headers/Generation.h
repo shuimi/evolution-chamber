@@ -16,7 +16,7 @@ private:
     int uniqueIdentifier;
     int index;
     std::vector<BinaryChromosome*> individuals;
-    std::vector<double> individualsEstimation;
+    std::vector<double> estimations;
 
 public:
 
@@ -59,7 +59,7 @@ public:
     void Generation::foreach(std::function<BinaryChromosome*(BinaryChromosome*)> transformation);
     void Generation::foreach(std::function<void(BinaryChromosome*)> transformation);
 
-    void estimate(std::function<double(double)> fitnessFunction);
+    void estimate(std::function<double(double)> estimationFunction);
 
     void printoutEstimation();
 
@@ -76,6 +76,7 @@ public:
 
     BinaryChromosome* getFirst();
     BinaryChromosome* getLast();
+    BinaryChromosome* getWithMaxEstimation(std::function<double(double)> estimationFunction);
 
     bool contains(BinaryChromosome* chromosome);
 

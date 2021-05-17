@@ -19,7 +19,7 @@ const std::function<double(double)> &EvolutionChamber::getFitnessFunction() cons
 }
 
 
-Generation *EvolutionChamber::selectionElite(Generation *population, std::function<bool(double)> selectionCondition) {
+Generation *EvolutionChamber::selection(Generation *population, std::function<bool(double)> selectionCondition) {
 
     population->estimate(EvolutionChamber::getFitnessFunction());
 
@@ -33,8 +33,22 @@ Generation *EvolutionChamber::selectionElite(Generation *population, std::functi
     return population;
 }
 
-Generation *EvolutionChamber::selectionElite(Generation *population, std::function<double(double)> fitnessFunction,
-                                             std::function<bool(double)> selectionCondition) {
+Generation *EvolutionChamber::selectionCustomEstimation(
+        Generation *population, std::function<bool(double)> selectionCondition) {
+
+    for(int i = 0; i < population->getIndividuals().size();){
+        if(!selectionCondition(population->getIndividualsEstimation().at(i))) {
+            population->eject(i);
+        }
+        else i++;
+    }
+
+    return population;
+}
+
+
+Generation *EvolutionChamber::selection(Generation *population, std::function<double(double)> fitnessFunction,
+                                        std::function<bool(double)> selectionCondition) {
     population->estimate(fitnessFunction);
     for(int i = 0; i < population->getIndividuals().size();){
         if(!selectionCondition(population->getIndividualsEstimation().at(i))) {
@@ -42,21 +56,6 @@ Generation *EvolutionChamber::selectionElite(Generation *population, std::functi
         }
         else i++;
     }
-    return population;
-}
-
-template<typename T>
-Generation *EvolutionChamber::selection(Generation *population, std::function<bool(T)> selectionCondition) {
-
-    population->estimate(EvolutionChamber::getFitnessFunction());
-
-    for(int i = 0; i < population->getIndividuals().size();){
-        if(!selectionCondition(population->getIndividuals().at(i))) {
-            population->eject(i);
-        }
-        else i++;
-    }
-
     return population;
 }
 
@@ -141,12 +140,12 @@ Generation *EvolutionChamber::breedingInbreedingElite(Generation *parents, Gener
 
     Generation* newGeneration = new Generation(descendants->getIndex() + 1);
 
-    newGeneration->add(selectionElite(parentsCopy, [this](double estimationValue){
+    newGeneration->add(selection(parentsCopy, [this](double estimationValue) {
         return (estimationValue >= EvolutionChamber::executeFitnessFunction(
                 EvolutionChamber::getConstraints()->getMean())
         );
     }));
-    newGeneration->add(selectionElite(descendantsCopy, [this](double estimationValue){
+    newGeneration->add(selection(descendantsCopy, [this](double estimationValue) {
         return (estimationValue >= EvolutionChamber::executeFitnessFunction(
                 EvolutionChamber::getConstraints()->getMean())
         );
@@ -189,6 +188,28 @@ Generation *EvolutionChamber::breedingInbreedingGenSimilarityDriven(Generation *
     return newGeneration;
 }
 
+Generation *EvolutionChamber::breedingWithEstimation(Generation *generation, double normalizedEstimationThreshold) {
+    Generation* generationCopy = generation->getCopy();
+    Generation* newGeneration = new Generation(generation->getIndex() + 1);
+
+    double maxEstimation = EvolutionChamber::executeFitnessFunction(
+            generationCopy->getWithMaxEstimation(
+                    EvolutionChamber::getFitnessFunction())->getDecimal());
+
+    generationCopy->estimate([this, maxEstimation](int decimal){
+        return (double)EvolutionChamber::executeFitnessFunction(decimal) / maxEstimation;
+    });
+
+    newGeneration->add(
+        selectionCustomEstimation(generationCopy,
+        [normalizedEstimationThreshold](double estimationValue) {
+            return (estimationValue > normalizedEstimationThreshold);
+        })
+    );
+
+    return newGeneration;
+}
+
 FitnessFunctionConstraints<int> *EvolutionChamber::getConstraints() const {
     return constraints;
 }
@@ -197,6 +218,6 @@ void EvolutionChamber::setConstraints(FitnessFunctionConstraints<int> *constrain
     EvolutionChamber::constraints = constraints;
 }
 
-Generation *EvolutionChamber::executeHybridization(Generation *generation) {
+Generation *EvolutionChamber::executeBreeding(Generation *generation) {
     return nullptr;
 }

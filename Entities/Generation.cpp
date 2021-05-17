@@ -113,8 +113,8 @@ void Generation::statPrintout() {
 BinaryChromosome *Generation::eject(int index) {
     BinaryChromosome* ret = Generation::individuals.at(index);
     Generation::individuals.erase(Generation::individuals.begin() + index);
-    if(!individualsEstimation.empty())
-        Generation::individualsEstimation.erase(Generation::individualsEstimation.begin() + index);
+    if(!estimations.empty())
+        Generation::estimations.erase(Generation::estimations.begin() + index);
     return ret;
 }
 
@@ -143,28 +143,29 @@ void Generation::foreach(std::function<void(BinaryChromosome *)> transformation)
     }
 }
 
-void Generation::estimate(std::function<double(double)> fitnessFunction) {
-    Generation::individualsEstimation.clear();
+void Generation::estimate(std::function<double(double)> estimationFunction) {
+    Generation::estimations.clear();
     for(BinaryChromosome* individual : Generation::individuals){
-        Generation::individualsEstimation.push_back(fitnessFunction(std::round(individual->getDecimal())));
+        Generation::estimations.push_back(estimationFunction(std::round(individual->getDecimal())));
     }
 }
+
 
 void Generation::printoutEstimation() {
     std::cout << "Estimation:{\n";
     for(int i = 0; i < Generation::individuals.size(); i++){
         std::cout << "  f(" << Generation::getIndividuals().at(i)->getDecimal();
-        std::cout << ") = " << Generation::individualsEstimation.at(i) << ",\n";
+        std::cout << ") = " << Generation::estimations.at(i) << ",\n";
     }
     std::cout << "}\n\n";
 }
 
 const std::vector<double> &Generation::getIndividualsEstimation() const {
-    return individualsEstimation;
+    return estimations;
 }
 
 void Generation::setIndividualsEstimation(const std::vector<double> &individualsEstimation) {
-    Generation::individualsEstimation = individualsEstimation;
+    Generation::estimations = individualsEstimation;
 }
 
 void Generation::eject(BinaryChromosome *individual) {
@@ -172,7 +173,7 @@ void Generation::eject(BinaryChromosome *individual) {
         if(individual->getUniqueIdentifier() ==
         Generation::individuals.at(i)->getUniqueIdentifier()){
             Generation::individuals.erase(Generation::individuals.begin() + i);
-            Generation::individualsEstimation.erase(Generation::individualsEstimation.begin() + i);
+            Generation::estimations.erase(Generation::estimations.begin() + i);
             break;
         }
     }
@@ -243,6 +244,27 @@ bool Generation::contains(BinaryChromosome* chromosome) {
     }
     return false;
 }
+
+BinaryChromosome *Generation::getWithMaxEstimation(std::function<double(double)> estimationFunction) {
+
+    this->estimate(estimationFunction);
+
+    double max = estimations.front();
+    int maxIndex = 0;
+
+    int index = 0;
+    for(double estimation : Generation::estimations){
+        if (estimation > max) {
+            max = estimation;
+            maxIndex = index;
+        }
+        index++;
+    }
+
+    return Generation::get(maxIndex);
+}
+
+
 
 
 
