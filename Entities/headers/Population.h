@@ -29,9 +29,10 @@ public:
     void add(Generation* generation);
     Generation* eject(int index);
     void eject(Generation* generation);
+    int getSize();
 
     Generation* getAsGeneration();
-
+    Generation* getLastGeneration();
 };
 
 

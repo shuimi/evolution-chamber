@@ -44,6 +44,7 @@ public:
     void add(Generation* generation);
 
     BinaryChromosome* get(int index);
+    int getSize();
     void set(int index, BinaryChromosome* chromosome);
     BinaryChromosome* eject(int index);
     void eject(BinaryChromosome* individual);

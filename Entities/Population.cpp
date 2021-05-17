@@ -68,3 +68,11 @@ Generation *Population::getAsGeneration() {
     });
     return out;
 }
+
+Generation *Population::getLastGeneration() {
+    return Population::get(Population::generations.size() - 1);
+}
+
+int Population::getSize() {
+    return Population::generations.size();
+}

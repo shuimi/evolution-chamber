@@ -14,7 +14,7 @@
 class EvolutionChamber{
 private:
     std::function<double(double)> fitnessFunction;
-    Population* population;
+    Population* population = new Population();
     Generation* initialGeneration;
     MorphingFactor* morphingFactor;
 
@@ -37,23 +37,22 @@ public:
                            std::function<double(double)> fitnessFunction,
                            std::function<bool(double)> selectionCondition);
 
-    static std::tuple<BinaryChromosome*, BinaryChromosome*>
-            selectRandomPair(Generation* population);
+    static std::tuple<BinaryChromosome*, BinaryChromosome*> selectRandomPair(Generation* population);
 
-    Population *getPopulation() const;
+    Population *getPopulation();
     void setPopulation(Population *population);
 
-    Generation *getInitialGeneration() const;
+    Generation *getInitialGeneration();
     void setInitialGeneration(Generation *initialGeneration);
 
-    MorphingFactor *getMorphingFactor() const;
+    MorphingFactor *getMorphingFactor();
     void setMorphingFactor(MorphingFactor *morphingFactor);
 
-    static Generation* breedingRandom(Generation* generation);
+    Generation* breedingRandom(Generation* generation);
 
-    static Generation* breedingInbreedingGenSimilarityDriven(Generation* generation);
+    Generation* breedingInbreedingGenSimilarityDriven(Generation* generation);
 
-    static Generation* breedingInbreedingElite(Generation* generation);
+    Generation* breedingInbreedingElite(Generation* generation);
 
     Generation* getNextGeneration();
 

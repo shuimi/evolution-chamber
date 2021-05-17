@@ -12,11 +12,6 @@ int main() {
     double crossingProbability = 0.7;
     double mutationProbability = 0.3;
 
-    GenerationFactory::getUsingCovering(
-            leftBound,
-            rightBound
-    )->printout();
-
     EvolutionChamber* evolution = new EvolutionChamber([](double x){
             return x * x + 0.1 * x - 23;
         },
@@ -38,9 +33,26 @@ int main() {
     }
 
 
-//    Generation* testPopulationFocus =
-//            GenerationFactory::getUsingFocusing(11, 3, 10);
+//    //TESTS: Generations factoring:
 //
+//    GenerationFactory::getUsingCovering(
+//            leftBound,
+//            rightBound
+//    )->printout();
+//
+//    GenerationFactory::getUsingFocusing(
+//            leftBound,
+//            rightBound,
+//            initialIndividualsAmount
+//    )->printout();
+//
+//    GenerationFactory::getUsingShotgun(
+//            leftBound,
+//            rightBound,
+//            initialIndividualsAmount
+//    )->printout();
+
+
 //    testPopulationFocus->printout();
 //    testPopulationFocus->statPrintout();
 //    testPopulationFocus->estimate(evolution->getFitnessFunction());
