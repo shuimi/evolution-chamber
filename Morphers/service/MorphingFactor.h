@@ -13,6 +13,12 @@ private:
     double crossProbability;
     double mutationProbability;
 
+    static int fibonacci(int number) {
+        if (number == 0) return 0;
+        if (number == 1) return 1;
+        return fibonacci(number - 1) + fibonacci(number - 2);
+    }
+
 public:
 
     MorphingFactor(double crossProbability, double mutationProbability);
@@ -31,15 +37,16 @@ public:
 
     static Generation *GoldenRatio(BinaryChromosome *, BinaryChromosome *);
 
-    static Generation *mutateSwapFibonacci(BinaryChromosome *);
+    static BinaryChromosome* mutateSwapFibonacci (BinaryChromosome* individual);
 
-    static Generation *mutateInversion(BinaryChromosome *);
+    static BinaryChromosome* mutateInversion (BinaryChromosome* individual);
 
-    static Generation *mutateSimple(BinaryChromosome *);
+    static BinaryChromosome* mutateSimple (BinaryChromosome* individual);
 
-    static Generation *mutateTransposition(BinaryChromosome *);
+    static BinaryChromosome* mutateTranspose (BinaryChromosome* individual);
 
     static std::vector<int> fibbonachi(int n);
+
     static int getSingleFibonacci(int n);
 
     //has 0 and last rows

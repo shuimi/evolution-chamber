@@ -49,7 +49,7 @@ public:
 
     static int getHammingDistance(BinaryChromosome* A, BinaryChromosome* B);
 
-    static double normalizedDistance(BinaryChromosome* A, BinaryChromosome* B);
+    static double getNormalizedHammingDistance(BinaryChromosome* A, BinaryChromosome* B);
 
     BinaryChromosome* getCopy();
 

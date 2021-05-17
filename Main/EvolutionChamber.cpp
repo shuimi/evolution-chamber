@@ -45,6 +45,21 @@ Generation *EvolutionChamber::selectionElite(Generation *population, std::functi
     return population;
 }
 
+template<typename T>
+Generation *EvolutionChamber::selection(Generation *population, std::function<bool(T)> selectionCondition) {
+
+    population->estimate(EvolutionChamber::getFitnessFunction());
+
+    for(int i = 0; i < population->getIndividuals().size();){
+        if(!selectionCondition(population->getIndividuals().at(i))) {
+            population->eject(i);
+        }
+        else i++;
+    }
+
+    return population;
+}
+
 std::tuple<BinaryChromosome*, BinaryChromosome*> EvolutionChamber::selectRandomPair(Generation *population) {
     BinaryChromosome *A, *B;
     A = population->getRandomIndividual();
@@ -57,9 +72,11 @@ std::tuple<BinaryChromosome*, BinaryChromosome*> EvolutionChamber::selectRandomP
 
 EvolutionChamber::EvolutionChamber(
         std::function<double(double)> fitnessFunction,
+        FitnessFunctionConstraints<int>* constraints,
         Generation *initialGeneration,
         MorphingFactor *morphingFactor
 ) : fitnessFunction(std::move(fitnessFunction)),
+    constraints(constraints),
     initialGeneration(initialGeneration),
     morphingFactor(morphingFactor)
 {
@@ -101,27 +118,85 @@ Generation *EvolutionChamber::getNextGeneration() {
 
 Generation *EvolutionChamber::breedingRandom(Generation *generation) {
 
-    Generation* previousGeneration =
-            EvolutionChamber::getPopulation()->getLastGeneration();
-    Generation* newGeneration =
-            new Generation(previousGeneration->getIndex() + 1);
+    Generation* generationCopy = generation->getCopy();
+    Generation* newGeneration = new Generation(generation->getIndex() + 1);
+    int hybridizationCasesAmount = rand() % generation->getSize();
 
-    int hybridizationCasesAmount = rand() % previousGeneration->getSize();
+    while(hybridizationCasesAmount != 0){
 
-    for(int i = 0; i < hybridizationCasesAmount; i++){
+        int currentIndex = rand() % generationCopy->getSize();
+        newGeneration->add(generationCopy->get(currentIndex));
+        generationCopy->eject(currentIndex);
 
-        std::tuple<BinaryChromosome*, BinaryChromosome*> pairToHybridize =
-            EvolutionChamber::selectRandomPair(previousGeneration);
-
-        BinaryChromosome* parentA = std::get<0>(pairToHybridize);
-        BinaryChromosome* parentB = std::get<1>(pairToHybridize);
-
-        Generation* temp = new Generation(0);
-        temp->addIndividual(parentA);
-        temp->addIndividual(parentB);
-
-        newGeneration->add(EvolutionChamber::getMorphingFactor()->morph(temp));
+        hybridizationCasesAmount--;
     }
 
     return newGeneration;
+}
+
+Generation *EvolutionChamber::breedingInbreedingElite(Generation *parents, Generation *descendants) {
+
+    Generation* parentsCopy = parents->getCopy();
+    Generation* descendantsCopy = descendants->getCopy();
+
+    Generation* newGeneration = new Generation(descendants->getIndex() + 1);
+
+    newGeneration->add(selectionElite(parentsCopy, [this](double estimationValue){
+        return (estimationValue >= EvolutionChamber::executeFitnessFunction(
+                EvolutionChamber::getConstraints()->getMean())
+        );
+    }));
+    newGeneration->add(selectionElite(descendantsCopy, [this](double estimationValue){
+        return (estimationValue >= EvolutionChamber::executeFitnessFunction(
+                EvolutionChamber::getConstraints()->getMean())
+        );
+    }));
+
+    return newGeneration;
+}
+
+Generation *EvolutionChamber::breedingInbreedingGenSimilarityDriven(Generation *parents, Generation *descendants) {
+
+    Generation* parentsCopy = parents->getCopy();
+    Generation* descendantsCopy = descendants->getCopy();
+
+    Generation* newGeneration = new Generation(descendants->getIndex() + 1);
+
+    Generation* temp = parentsCopy->getCopy();
+    temp->add(descendantsCopy);
+
+    double minNormalizedHammingDistance = Generation::getMinNormalizedHammingDistance(temp);
+    double maxNormalizedHammingDistance = Generation::getMaxNormalizedHammingDistance(temp);
+
+    FitnessFunctionConstraints<double>* estimation
+            = new FitnessFunctionConstraints<double>(minNormalizedHammingDistance,maxNormalizedHammingDistance);
+
+    double mean = estimation->getMean();
+
+    for (int i = 0; i < temp->getSize() - 1; i++){
+        for (int j = i + 1; j < temp->getSize(); j++){
+            if(temp->get(i) != temp->get(j)){
+                if (BinaryChromosome::getNormalizedHammingDistance(temp->get(i), temp->get(j)) < mean){
+                    if (!newGeneration->contains(temp->get(i)))
+                        newGeneration->add(temp->get(i));
+                    if (!newGeneration->contains(temp->get(j)))
+                        newGeneration->add(temp->get(j));
+                }
+            }
+        }
+    }
+
+    return newGeneration;
+}
+
+FitnessFunctionConstraints<int> *EvolutionChamber::getConstraints() const {
+    return constraints;
+}
+
+void EvolutionChamber::setConstraints(FitnessFunctionConstraints<int> *constraints) {
+    EvolutionChamber::constraints = constraints;
+}
+
+Generation *EvolutionChamber::executeHybridization(Generation *generation) {
+    return nullptr;
 }

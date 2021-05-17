@@ -21,7 +21,7 @@ void Generation::setIndividuals(const std::vector<BinaryChromosome *> &individua
     Generation::individuals = individuals;
 }
 
-void Generation::addIndividual(BinaryChromosome *ind) {
+void Generation::add(BinaryChromosome *ind) {
     Generation::individuals.push_back(ind);
 }
 
@@ -67,6 +67,7 @@ void Generation::printout() {
     std::cout
     << "Generation #" << Generation::getIndex() << "\n"
     << "Unique Identifier: " << Generation::getUniqueIdentifier() << "\n"
+    << "Size: " << Generation::getSize() << "\n"
     << "Decimals: " << Generation::getIndividualsAsDecimalsString() << "\n"
     << "Binaries: " << Generation::getIndividualsAsBinariesString() << "\n\n";
 }
@@ -112,8 +113,16 @@ void Generation::statPrintout() {
 BinaryChromosome *Generation::eject(int index) {
     BinaryChromosome* ret = Generation::individuals.at(index);
     Generation::individuals.erase(Generation::individuals.begin() + index);
-    Generation::individualsEstimation.erase(Generation::individualsEstimation.begin() + index);
+    if(!individualsEstimation.empty())
+        Generation::individualsEstimation.erase(Generation::individualsEstimation.begin() + index);
     return ret;
+}
+
+template<typename R>
+void Generation::foreach(std::function<R(BinaryChromosome*)> transformation) {
+    for(BinaryChromosome* individual : Generation::individuals){
+        transformation(individual);
+    }
 }
 
 void Generation::foreach(std::function<int(int)> decimalTransformation) {
@@ -175,12 +184,64 @@ BinaryChromosome* Generation::getRandomIndividual() {
 
 void Generation::add(Generation* generation) {
     generation->foreach([this](BinaryChromosome* c){
-        this->addIndividual(c);
+        this->add(c);
     });
 }
 
 int Generation::getSize() {
     return Generation::individuals.size();
+}
+
+Generation *Generation::getCopy() {
+    return new Generation(this);
+}
+
+double Generation::getMinNormalizedHammingDistance(Generation *generation) {
+
+     double min = BinaryChromosome::getNormalizedHammingDistance(
+        generation->getFirst(),
+        generation->getLast()
+    );
+
+    for(BinaryChromosome* a : generation->getIndividuals())
+        for(BinaryChromosome* b : generation->getIndividuals()){
+            if(a != b){
+                double current = BinaryChromosome::getNormalizedHammingDistance(a, b);
+                if (current < min) min = current;
+            }
+        }
+
+    return min;
+}
+
+double Generation::getMaxNormalizedHammingDistance(Generation *generation) {
+
+    double max = 0.0;
+
+    for(BinaryChromosome* a : generation->getIndividuals())
+        for(BinaryChromosome* b : generation->getIndividuals()){
+            if(a != b){
+                double current = BinaryChromosome::getNormalizedHammingDistance(a, b);
+                if (current > max) max = current;
+            }
+        }
+
+    return max;
+}
+
+BinaryChromosome *Generation::getFirst() {
+    return Generation::individuals.front();
+}
+
+BinaryChromosome *Generation::getLast() {
+    return Generation::individuals.back();
+}
+
+bool Generation::contains(BinaryChromosome* chromosome) {
+    for (BinaryChromosome* c : Generation::individuals){
+        if (chromosome == c) return true;
+    }
+    return false;
 }
 
 

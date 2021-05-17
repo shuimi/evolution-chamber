@@ -3,6 +3,8 @@
 
 int main() {
 
+    srand(time(NULL));
+
     double leftBound = 9;
     double rightBound = 14;
 
@@ -15,23 +17,46 @@ int main() {
     EvolutionChamber* evolution = new EvolutionChamber([](double x){
             return x * x + 0.1 * x - 23;
         },
+        new FitnessFunctionConstraints<int>(leftBound, rightBound),
         GenerationFactory::getUsingShotgun(
-            9,
-            14,
-            10
+            leftBound,
+            rightBound,
+            initialIndividualsAmount
         ),
         new MorphingFactor(
-            0.7,
-            0.3
-        ),
-        50
+            crossingProbability,
+            mutationProbability
+        )
     );
+//
+//    evolution->getInitialGeneration()->printout();
 
-    evolution->getInitialGeneration()->printout();
 
-    for(int i = 0; i < generationsAmount; i++){
-        evolution->getNextGeneration()->printout();
-    }
+    Generation* a = GenerationFactory::getUsingShotgun(
+            leftBound,
+            rightBound,
+            initialIndividualsAmount,
+            0
+    );
+    Generation* b = GenerationFactory::getUsingShotgun(
+            leftBound,
+            rightBound,
+            initialIndividualsAmount,
+            1
+    );
+    a->printout();
+    b->printout();
+
+    evolution->breedingInbreedingGenSimilarityDriven(a, b)->printout();
+
+//    evolution->breedingInbreedingElite(a, b)->printout();
+//
+//    evolution->breedingRandom(a)->printout();
+//
+
+//    for(int i = 0; i < generationsAmount; i++){
+//        evolution->getNextGeneration()->printout();
+//    }
 
 
 //    //TESTS: Generations factoring:
@@ -70,6 +95,6 @@ int main() {
 //    BinaryChromosome* a = new BinaryChromosome(17);
 //    BinaryChromosome* b = new BinaryChromosome(12);
 //
-//    std::cout << BinaryChromosome::normalizedDistance(a, b);
+//    std::cout << BinaryChromosome::getNormalizedHammingDistance(a, b);
 
 }

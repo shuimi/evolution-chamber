@@ -97,7 +97,7 @@ int BinaryChromosome::getHammingDistance(BinaryChromosome *A, BinaryChromosome *
     return amountOfEqualPositions;
 }
 
-double BinaryChromosome::normalizedDistance(BinaryChromosome *A, BinaryChromosome *B) {
+double BinaryChromosome::getNormalizedHammingDistance(BinaryChromosome *A, BinaryChromosome *B) {
 
     int hammingDist = BinaryChromosome::getHammingDistance(A, B);
     int maxSize;

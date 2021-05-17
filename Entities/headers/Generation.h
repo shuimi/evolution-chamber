@@ -29,7 +29,7 @@ public:
     std::vector<BinaryChromosome *> &getIndividuals();
     void setIndividuals(const std::vector<BinaryChromosome *> &individuals);
 
-    void addIndividual(BinaryChromosome* ind);
+    void add(BinaryChromosome* ind);
 
     int getUniqueIdentifier() const;
 
@@ -54,6 +54,7 @@ public:
 
     void statPrintout();
 
+    template<typename R> void foreach(std::function<R(BinaryChromosome*)> transformation);
     void foreach(std::function<int(int)> decimalTransformation);
     void Generation::foreach(std::function<BinaryChromosome*(BinaryChromosome*)> transformation);
     void Generation::foreach(std::function<void(BinaryChromosome*)> transformation);
@@ -67,6 +68,16 @@ public:
     void setIndividualsEstimation(const std::vector<double> &individualsEstimation);
 
     BinaryChromosome* getRandomIndividual();
+
+    Generation* getCopy();
+
+    static double getMinNormalizedHammingDistance(Generation* generation);
+    static double getMaxNormalizedHammingDistance(Generation* generation);
+
+    BinaryChromosome* getFirst();
+    BinaryChromosome* getLast();
+
+    bool contains(BinaryChromosome* chromosome);
 
 };
 

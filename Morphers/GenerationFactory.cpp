@@ -27,7 +27,7 @@ Generation *GenerationFactory::getUsingShotgun(int leftBound, int rightBound,
     Generation* population = new Generation(initIndex);
 
     for(int i = 0; i < individualsAmount + 1; i++){
-        population->addIndividual(
+        population->add(
                 new BinaryChromosome(
                         constantDistribution(generator)
                 )
@@ -47,13 +47,13 @@ Generation *GenerationFactory::getUsingFocusing(int focusPoint, int range,
     Generation* population = new Generation(initIndex);
 
     for (int i = 0; i < individualsAmount; i++) {
-        population->addIndividual(
+        population->add(
                 new BinaryChromosome(
                         normalDistribution(generator)
                 )
         );
     }
-    population->addIndividual(new BinaryChromosome(focusPoint));
+    population->add(new BinaryChromosome(focusPoint));
 
     return population;
 }
@@ -61,7 +61,7 @@ Generation *GenerationFactory::getUsingFocusing(int focusPoint, int range,
 Generation *GenerationFactory::getUsingCovering(int leftBound, int rightBound, int initIndex) {
     Generation* generation = new Generation(initIndex);
     for(int i = leftBound; i <= rightBound; i++){
-        generation->addIndividual(new BinaryChromosome(i));
+        generation->add(new BinaryChromosome(i));
     }
     return generation;
 }
