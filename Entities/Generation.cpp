@@ -179,5 +179,9 @@ void Generation::add(Generation* generation) {
     });
 }
 
+int Generation::getSize() {
+    return Generation::individuals.size();
+}
+
 
 

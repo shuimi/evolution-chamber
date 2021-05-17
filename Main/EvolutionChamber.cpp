@@ -56,16 +56,22 @@ std::tuple<BinaryChromosome*, BinaryChromosome*> EvolutionChamber::selectRandomP
 }
 
 EvolutionChamber::EvolutionChamber(
-    std::function<double(double)> fitnessFunction, Generation *initialGeneration, MorphingFactor *morphingFactor
-) : fitnessFunction(std::move(fitnessFunction)), initialGeneration(initialGeneration), morphingFactor(morphingFactor) {
-
+        std::function<double(double)> fitnessFunction,
+        Generation *initialGeneration,
+        MorphingFactor *morphingFactor
+) : fitnessFunction(std::move(fitnessFunction)),
+    initialGeneration(initialGeneration),
+    morphingFactor(morphingFactor)
+{
+    EvolutionChamber::getInitialGeneration()->setIndex(0);
+    EvolutionChamber::population->add(EvolutionChamber::getInitialGeneration());
 }
 
 EvolutionChamber::~EvolutionChamber() {
 
 }
 
-Population *EvolutionChamber::getPopulation() const {
+Population *EvolutionChamber::getPopulation() {
     return population;
 }
 
@@ -73,7 +79,7 @@ void EvolutionChamber::setPopulation(Population *population) {
     EvolutionChamber::population = population;
 }
 
-Generation *EvolutionChamber::getInitialGeneration() const {
+Generation *EvolutionChamber::getInitialGeneration() {
     return initialGeneration;
 }
 
@@ -81,7 +87,7 @@ void EvolutionChamber::setInitialGeneration(Generation *initialGeneration) {
     EvolutionChamber::initialGeneration = initialGeneration;
 }
 
-MorphingFactor *EvolutionChamber::getMorphingFactor() const {
+MorphingFactor *EvolutionChamber::getMorphingFactor() {
     return morphingFactor;
 }
 
@@ -91,4 +97,31 @@ void EvolutionChamber::setMorphingFactor(MorphingFactor *morphingFactor) {
 
 Generation *EvolutionChamber::getNextGeneration() {
     return new Generation(0);
+}
+
+Generation *EvolutionChamber::breedingRandom(Generation *generation) {
+
+    Generation* previousGeneration =
+            EvolutionChamber::getPopulation()->getLastGeneration();
+    Generation* newGeneration =
+            new Generation(previousGeneration->getIndex() + 1);
+
+    int hybridizationCasesAmount = rand() % previousGeneration->getSize();
+
+    for(int i = 0; i < hybridizationCasesAmount; i++){
+
+        std::tuple<BinaryChromosome*, BinaryChromosome*> pairToHybridize =
+            EvolutionChamber::selectRandomPair(previousGeneration);
+
+        BinaryChromosome* parentA = std::get<0>(pairToHybridize);
+        BinaryChromosome* parentB = std::get<1>(pairToHybridize);
+
+        Generation* temp = new Generation(0);
+        temp->addIndividual(parentA);
+        temp->addIndividual(parentB);
+
+        newGeneration->add(EvolutionChamber::getMorphingFactor()->morph(temp));
+    }
+
+    return newGeneration;
 }
