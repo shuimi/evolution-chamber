@@ -187,3 +187,37 @@ BinaryChromosome *MorphingFactor::mutateTranspose(BinaryChromosome *individual) 
     individual->insert(std::rand() % individual->getSize(), erased);
     return individual;
 }
+
+
+int MorphingFactor::getGoldenRatioSeparationPoint(int l, int r, double error){
+    for(int s = l; s <= r; s++){
+        double a = (double)s - (double)l;
+        double b = (double)r - (double)s;
+        double ratio = a / b;
+        if(ratio < 1.61 + error && ratio > 1.61 - error){
+            return s;
+        }
+    }
+}
+
+Generation *MorphingFactor::crossGoldenRatio(BinaryChromosome* parentA, BinaryChromosome* parentB) {
+
+    BinaryChromosome::complementChromosome(parentA, parentB);
+    std::vector<bool> childA, childB;
+    int separationPoint = MorphingFactor::getGoldenRatioSeparationPoint(0, parentA->getSize(), 0.3);
+
+    for (int i = 0; i < separationPoint; i++) {
+        childA.push_back(parentA->get().at(i));
+        childB.push_back(parentB->get().at(i));
+    }
+    for (int i = separationPoint; i < parentA->get().size(); i++) {
+        childA.push_back(parentB->get().at(i));
+        childB.push_back(parentA->get().at(i));
+    }
+
+    std::vector<BinaryChromosome*> children = {
+            new BinaryChromosome(childA), new BinaryChromosome(childB)
+    };
+    return new Generation(children);
+}
+

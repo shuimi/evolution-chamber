@@ -43,13 +43,13 @@ public:
     static Generation *crossGoldenRatio(BinaryChromosome *, BinaryChromosome *);
 
 
-    static BinaryChromosome* mutateSwapFibonacci (BinaryChromosome* individual);
+    static BinaryChromosome *mutateSwapFibonacci(BinaryChromosome *individual);
 
-    static BinaryChromosome* mutateInversion (BinaryChromosome* individual);
+    static BinaryChromosome *mutateInversion(BinaryChromosome *individual);
 
-    static BinaryChromosome* mutateSimple (BinaryChromosome* individual);
+    static BinaryChromosome *mutateSimple(BinaryChromosome *individual);
 
-    static BinaryChromosome* mutateTranspose (BinaryChromosome* individual);
+    static BinaryChromosome *mutateTranspose(BinaryChromosome *individual);
 
 
     static std::vector<int> getFibonacciVector(int numbersAmount);
@@ -58,7 +58,8 @@ public:
     static std::vector<std::vector<bool>> makeBinaryNumbersTable(int n);
 
     static std::vector<BinaryChromosome *> makeParentParts(BinaryChromosome *parentA, int n);
+
+    static int getGoldenRatioSeparationPoint(int l, int r, double error);
+
 };
-
-
 #endif //GENETIC_ALGS_MORPHINGFACTOR_H
