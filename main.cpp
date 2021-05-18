@@ -29,22 +29,30 @@ int main() {
         )
     );
 
-    Generation* a = GenerationFactory::getUsingShotgun(
-            leftBound,
-            rightBound,
-            initialIndividualsAmount,
-            0
-    );
-    Generation* b = GenerationFactory::getUsingShotgun(
-            leftBound,
-            rightBound,
-            initialIndividualsAmount,
-            1
-    );
+    BinaryChromosome* a = new BinaryChromosome(124256);
+    BinaryChromosome* b = new BinaryChromosome(842516);
     a->printout();
+    b->printout();
+    MorphingFactor::crossCX(a, b)->printout();
+
+
+//    Generation* a = GenerationFactory::getUsingShotgun(
+//            leftBound,
+//            rightBound,
+//            initialIndividualsAmount,
+//            0
+//    );
+//    Generation* b = GenerationFactory::getUsingShotgun(
+//            leftBound,
+//            rightBound,
+//            initialIndividualsAmount,
+//            1
+//    );
+//
+//    a->printout();
 //    b->printout();
 
-    evolution->breedingWithEstimation(a, 0.5)->printout();
+//    evolution->breedingWithEstimation(a, 0.5)->printout();
 
 //    evolution->breedingInbreedingGenSimilarityDriven(a, b)->printout();
 

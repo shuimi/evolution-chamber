@@ -36,8 +36,11 @@ public:
     void setGen(int index, bool gen);
     bool getGen(int index);
     void addGen(bool gen);
+    void addGen(int number);
+    void addGenDecimalBitwise(int number);
     void glue(BinaryChromosome* anotherChromosome);
     void reverse(int startIndex, int endIndex);
+    void reverse();
     BinaryChromosome* erase(int startIndex, int endIndex);
     void swap(int aIndex, int bIndex);
     static BinaryChromosome* concatenate(BinaryChromosome* a, BinaryChromosome* b);
@@ -54,7 +57,11 @@ public:
     BinaryChromosome* getCopy();
 
     static BinaryChromosome addZeroes(BinaryChromosome *A, int n);
+    static std::vector<short> addZeroes(std::vector<short> &A, int n);
     static void complementChromosome(BinaryChromosome *A, BinaryChromosome *B);
+    static void complementChromosome(std::vector<short> &A, std::vector<short> &B);
+
+    std::vector<short> getBitwiseDecimal();
 
 };
 
