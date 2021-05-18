@@ -26,7 +26,7 @@ Generation *GenerationFactory::getUsingShotgun(int leftBound, int rightBound,
 
     Generation* population = new Generation(initIndex);
 
-    for(int i = 0; i < individualsAmount + 1; i++){
+    for(int i = 0; i < individualsAmount; i++){
         population->add(
                 new BinaryChromosome(
                         constantDistribution(generator)

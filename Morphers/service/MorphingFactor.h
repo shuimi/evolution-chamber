@@ -23,19 +23,25 @@ public:
 
     MorphingFactor(double crossProbability, double mutationProbability);
 
+
     Generation *morph(Generation *generation);
 
-    static Generation *crossoverTwoPoint(BinaryChromosome *, BinaryChromosome *);
+    static Generation *crossTwoPoint(BinaryChromosome *, BinaryChromosome *);
 
-    static Generation *crossoverCycle(BinaryChromosome *, BinaryChromosome *);
+    //TODO: crossCX
+    static Generation *crossCX(BinaryChromosome *, BinaryChromosome *);
 
-    static Generation *crossoverFibonacci(BinaryChromosome *, BinaryChromosome *);
+    static Generation *crossFibonacci(BinaryChromosome *, BinaryChromosome *);
 
-    static Generation *crossoverPartlyOrdered(BinaryChromosome *, BinaryChromosome *);
+    //TODO: crossPMX
+    static Generation *crossPMX(BinaryChromosome *, BinaryChromosome *);
 
-    static Generation *crossoverOrdered(BinaryChromosome *, BinaryChromosome *);
+    //TODO: crossOX
+    static Generation *crossOX(BinaryChromosome *, BinaryChromosome *);
 
-    static Generation *GoldenRatio(BinaryChromosome *, BinaryChromosome *);
+    //TODO: crossGoldenRatio
+    static Generation *crossGoldenRatio(BinaryChromosome *, BinaryChromosome *);
+
 
     static BinaryChromosome* mutateSwapFibonacci (BinaryChromosome* individual);
 
@@ -45,9 +51,8 @@ public:
 
     static BinaryChromosome* mutateTranspose (BinaryChromosome* individual);
 
-    static std::vector<int> fibbonachi(int n);
 
-    static int getSingleFibonacci(int n);
+    static std::vector<int> getFibonacciVector(int numbersAmount);
 
     //has 0 and last rows
     static std::vector<std::vector<bool>> makeBinaryNumbersTable(int n);
