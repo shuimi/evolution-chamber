@@ -32,6 +32,10 @@ public:
     const double executeFitnessFunction(double arg);
 
 
+    ///selections
+    ///selections
+    ///selections
+
 
     Generation* selection(Generation* population, std::function<bool(double)> selectionCondition);
 
@@ -39,10 +43,13 @@ public:
                                  std::function<double(double)> fitnessFunction,
                                  std::function<bool(double)> selectionCondition);
 
-
-
     static std::tuple<BinaryChromosome*, BinaryChromosome*> selectRandomPair(Generation* population);
 
+    Generation *selectionCustomEstimation(Generation *population, std::function<bool(double)> selectionCondition);
+
+    ///getters, setters
+    ///getters, setters
+    ///getters, setters
 
 
     const std::function<double(double)> &getFitnessFunction() const;
@@ -61,22 +68,28 @@ public:
     void setConstraints(FitnessFunctionConstraints<int> *constraints);
 
 
+    ///breeding operators
+    ///breeding operators
+    ///breeding operators
 
     Generation* breedingRandom(Generation* generation);
 
     Generation* breedingInbreedingGenSimilarityDriven(Generation* parents, Generation* descendants);
 
-    Generation* breedingInbreedingElite(Generation* parents, Generation* descendants);
+    Generation* breedingInbreedingElite(Generation* parents, Generation* descendants,
+                                        std::function<bool(double)> selectionCondition);
 
-    Generation* breedingWithEstimation(Generation* generation, double normalizedEstimationThreshold);
+    Generation* breedingWithEstimation(Generation* generation,
+                                       std::function<double(double)> estimationFunction,
+                                       double normalizedEstimationSelectionThreshold);
 
     Generation* executeBreeding(Generation* generation);
 
 
+    ///main API
 
     Generation* getNextGeneration();
 
-    Generation *selectionCustomEstimation(Generation *population, std::function<bool(double)> selectionCondition);
 };
 
 

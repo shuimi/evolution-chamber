@@ -29,81 +29,53 @@ int main() {
         )
     );
 
-    BinaryChromosome* a = new BinaryChromosome(124256);
-    BinaryChromosome* b = new BinaryChromosome(842516);
-    a->printout();
-    b->printout();
-    MorphingFactor::crossCX(a, b)->printout();
-  
-//    Generation* a = GenerationFactory::getUsingShotgun(
-//            leftBound,
-//            rightBound,
-//            initialIndividualsAmount,
-//            0
-//    );
-//    Generation* b = GenerationFactory::getUsingShotgun(
-//            leftBound,
-//            rightBound,
-//            initialIndividualsAmount,
-//            1
-//    );
 
+//    BinaryChromosome* a = new BinaryChromosome(124256);
+//    BinaryChromosome* b = new BinaryChromosome(842516);
 //    a->printout();
 //    b->printout();
+//    MorphingFactor::crossCX(a, b)->printout();
 
-//    evolution->breedingWithEstimation(a, 0.5)->printout();
+  
+    Generation* generationA = GenerationFactory::getUsingShotgun(
+            leftBound,
+            rightBound,
+            initialIndividualsAmount,
+            0
+    );
+    Generation* generationB = GenerationFactory::getUsingShotgun(
+            leftBound,
+            rightBound,
+            initialIndividualsAmount,
+            1
+    );
 
-//    evolution->breedingInbreedingGenSimilarityDriven(a, b)->printout();
-
-//    evolution->breedingInbreedingElite(a, b)->printout();
-//
-//    evolution->breedingRandom(a)->printout();
-//
-
-//    for(int i = 0; i < generationsAmount; i++){
-//        evolution->getNextGeneration()->printout();
-//    }
-
-
-//    //TESTS: Generations factoring:
-//
-//    GenerationFactory::getUsingCovering(
-//            leftBound,
-//            rightBound
-//    )->printout();
-//
-//    GenerationFactory::getUsingFocusing(
-//            leftBound,
-//            rightBound,
-//            initialIndividualsAmount
-//    )->printout();
-//
-//    GenerationFactory::getUsingShotgun(
-//            leftBound,
-//            rightBound,
-//            initialIndividualsAmount
-//    )->printout();
+    generationA->printout();
+    generationA->printout();
 
 
-//    testPopulationFocus->printout();
-//    testPopulationFocus->statPrintout();
-//    testPopulationFocus->estimate(evolution->getFitnessFunction());
-//    testPopulationFocus->printoutEstimation();
-//    std::cout << evolution->executeFitnessFunction(10) << "\n\n";
-//
-//    evolution->selection(testPopulationFocus, [evolution](double estimationValue){
-//        return (estimationValue >= evolution->executeFitnessFunction(11));
-//    });
-//
-//    testPopulationFocus->printout();
-//    testPopulationFocus->statPrintout();
-//
-//     BinaryChromosome* a = new BinaryChromosome(17);
-//     BinaryChromosome* b = new BinaryChromosome(12);
+    evolution->breedingRandom(generationA)->printout();
 
-//     Generation g = MorphingFactor::crossOX(a,b);
-//     g.printout();
-//
-//    std::cout << BinaryChromosome::getNormalizedHammingDistance(a, b);
+    evolution->breedingInbreedingGenSimilarityDriven(generationA, generationB)->printout();
+
+    evolution->breedingInbreedingElite(generationA, generationB,[evolution](double estimationValue) {
+        return (estimationValue >= evolution->executeFitnessFunction(
+                evolution->getConstraints()->getMean())
+        );
+    })->printout();
+
+    evolution->breedingWithEstimation(
+            generationA,
+            [evolution, generationA](int decimal){
+                return ((double)evolution->executeFitnessFunction(decimal) / (
+                    evolution->executeFitnessFunction(
+                        generationA->getWithMaxEstimation(
+                            evolution->getFitnessFunction())->getDecimal()
+                        )
+                    )
+                );
+            },
+            0.5
+    )->printout();
 
 }
