@@ -133,23 +133,16 @@ Generation *EvolutionChamber::breedingRandom(Generation *generation) {
     return newGeneration;
 }
 
-Generation *EvolutionChamber::breedingInbreedingElite(Generation *parents, Generation *descendants) {
+Generation *EvolutionChamber::breedingInbreedingElite(Generation *parents, Generation *descendants,
+                                                      std::function<bool(double)> selectionCondition) {
 
     Generation* parentsCopy = parents->getCopy();
     Generation* descendantsCopy = descendants->getCopy();
 
     Generation* newGeneration = new Generation(descendants->getIndex() + 1);
 
-    newGeneration->add(selection(parentsCopy, [this](double estimationValue) {
-        return (estimationValue >= EvolutionChamber::executeFitnessFunction(
-                EvolutionChamber::getConstraints()->getMean())
-        );
-    }));
-    newGeneration->add(selection(descendantsCopy, [this](double estimationValue) {
-        return (estimationValue >= EvolutionChamber::executeFitnessFunction(
-                EvolutionChamber::getConstraints()->getMean())
-        );
-    }));
+    newGeneration->add(selection(parentsCopy, selectionCondition));
+    newGeneration->add(selection(descendantsCopy, selectionCondition));
 
     return newGeneration;
 }
@@ -188,22 +181,19 @@ Generation *EvolutionChamber::breedingInbreedingGenSimilarityDriven(Generation *
     return newGeneration;
 }
 
-Generation *EvolutionChamber::breedingWithEstimation(Generation *generation, double normalizedEstimationThreshold) {
+Generation *EvolutionChamber::breedingWithEstimation(Generation *generation,
+                                                     std::function<double(double)> estimationFunction,
+                                                     double normalizedEstimationSelectionThreshold) {
+
     Generation* generationCopy = generation->getCopy();
     Generation* newGeneration = new Generation(generation->getIndex() + 1);
 
-    double maxEstimation = EvolutionChamber::executeFitnessFunction(
-            generationCopy->getWithMaxEstimation(
-                    EvolutionChamber::getFitnessFunction())->getDecimal());
-
-    generationCopy->estimate([this, maxEstimation](int decimal){
-        return (double)EvolutionChamber::executeFitnessFunction(decimal) / maxEstimation;
-    });
+    generationCopy->estimate(estimationFunction);
 
     newGeneration->add(
         selectionCustomEstimation(generationCopy,
-        [normalizedEstimationThreshold](double estimationValue) {
-            return (estimationValue > normalizedEstimationThreshold);
+        [normalizedEstimationSelectionThreshold](double estimationValue) {
+            return (estimationValue > normalizedEstimationSelectionThreshold);
         })
     );
 

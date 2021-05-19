@@ -32,7 +32,19 @@ public:
     T getMean(){
         return (rightBound + leftBound) / 2;
     }
+
+    Generation* reduceGenerationToInterval(Generation* generation);
+
 };
+
+template<typename T>
+Generation *FitnessFunctionConstraints<T>::reduceGenerationToInterval(Generation *generation) {
+    Generation* output = generation->getCopy();
+    output->reduce([this](BinaryChromosome* chromosome){
+        return !(chromosome->getDecimal() >= leftBound && chromosome->getDecimal() <= rightBound);
+    });
+    return output;
+}
 
 
 #endif //GENETIC_ALGS_FITNESSFUNCTIONCONSTRAINTS_H
