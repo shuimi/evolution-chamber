@@ -173,7 +173,8 @@ void Generation::eject(BinaryChromosome *individual) {
         if(individual->getUniqueIdentifier() ==
         Generation::individuals.at(i)->getUniqueIdentifier()){
             Generation::individuals.erase(Generation::individuals.begin() + i);
-            Generation::estimations.erase(Generation::estimations.begin() + i);
+            if(!Generation::estimations.empty())
+                Generation::estimations.erase(Generation::estimations.begin() + i);
             break;
         }
     }
@@ -262,6 +263,13 @@ BinaryChromosome *Generation::getWithMaxEstimation(std::function<double(double)>
     }
 
     return Generation::get(maxIndex);
+}
+
+void Generation::reduce(std::function<bool(BinaryChromosome *)> condition) {
+    for (int i = 0; i < Generation::getSize(); ){
+        if (condition(Generation::get(i))) Generation::eject(i);
+        else i++;
+    }
 }
 
 

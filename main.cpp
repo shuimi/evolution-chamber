@@ -78,4 +78,9 @@ int main() {
             0.5
     )->printout();
 
+
+    Generation* test = GenerationFactory::getUsingFocusing(10, 10, 15, 0);
+    test->printout();
+    FitnessFunctionConstraints<int>(0, 5).reduceGenerationToInterval(test)->printout();
+
 }

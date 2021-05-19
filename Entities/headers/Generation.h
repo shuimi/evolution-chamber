@@ -59,6 +59,9 @@ public:
     void Generation::foreach(std::function<BinaryChromosome*(BinaryChromosome*)> transformation);
     void Generation::foreach(std::function<void(BinaryChromosome*)> transformation);
 
+
+    void Generation::reduce(std::function<bool(BinaryChromosome*)> condition);
+
     void estimate(std::function<double(double)> estimationFunction);
 
     void printoutEstimation();
