@@ -28,7 +28,6 @@ public:
 
     static Generation *crossTwoPoint(BinaryChromosome *, BinaryChromosome *);
 
-    //TODO: crossCX
     static Generation *crossCX(BinaryChromosome *, BinaryChromosome *);
 
     static Generation *crossFibonacci(BinaryChromosome *, BinaryChromosome *);
@@ -36,10 +35,8 @@ public:
     //TODO: crossPMX
     static Generation *crossPMX(BinaryChromosome *, BinaryChromosome *);
 
-    //TODO: crossOX
     static Generation *crossOX(BinaryChromosome *, BinaryChromosome *);
 
-    //TODO: crossGoldenRatio
     static Generation *crossGoldenRatio(BinaryChromosome *, BinaryChromosome *, double);
 
 

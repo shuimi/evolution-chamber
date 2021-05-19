@@ -164,11 +164,11 @@ int MorphingFactor::getGoldenRatioSeparationPoint(int l, int r, double error) {
     }
 }
 
-Generation *MorphingFactor::crossGoldenRatio(BinaryChromosome *parentA, BinaryChromosome *parentB) {
+Generation *MorphingFactor::crossGoldenRatio(BinaryChromosome *parentA, BinaryChromosome *parentB, double error) {
 
     BinaryChromosome::complementChromosome(parentA, parentB);
     std::vector<bool> childA, childB;
-    int separationPoint = MorphingFactor::getGoldenRatioSeparationPoint(0, parentA->getSize(), 0.3);
+    int separationPoint = MorphingFactor::getGoldenRatioSeparationPoint(0, parentA->getSize(), error);
 
     for (int i = 0; i < separationPoint; i++) {
         childA.push_back(parentA->get().at(i));
