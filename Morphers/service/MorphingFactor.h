@@ -58,5 +58,13 @@ public:
 
     static int getGoldenRatioSeparationPoint(int l, int r, double error);
 
+    static short indexOfValueInsideChromosome(int l, int r, std::vector<short> c, short valueToFind);
+
+    static int insertAppropriateValueChildA(std::vector<short> parentA, std::vector<short> parentB,
+                                            int idxParentB, int separationPoint);
+
+    static int insertAppropriateValueChildB(std::vector<short> parentA, std::vector<short> parentB,
+                                            int idxParentB, int separationPoint);
 };
+
 #endif //GENETIC_ALGS_MORPHINGFACTOR_H

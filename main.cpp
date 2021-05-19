@@ -14,27 +14,27 @@ int main() {
     double crossingProbability = 0.7;
     double mutationProbability = 0.3;
 
-    EvolutionChamber* evolution = new EvolutionChamber([](double x){
-            return x * x + 0.1 * x - 23;
-        },
-        new FitnessFunctionConstraints<int>(leftBound, rightBound),
-        GenerationFactory::getUsingShotgun(
-            leftBound,
-            rightBound,
-            initialIndividualsAmount
-        ),
-        new MorphingFactor(
-            crossingProbability,
-            mutationProbability
-        )
+    EvolutionChamber *evolution = new EvolutionChamber([](double x) {
+                                                           return x * x + 0.1 * x - 23;
+                                                       },
+                                                       new FitnessFunctionConstraints<int>(leftBound, rightBound),
+                                                       GenerationFactory::getUsingShotgun(
+                                                               leftBound,
+                                                               rightBound,
+                                                               initialIndividualsAmount
+                                                       ),
+                                                       new MorphingFactor(
+                                                               crossingProbability,
+                                                               mutationProbability
+                                                       )
     );
 
-    BinaryChromosome* a = new BinaryChromosome(124256);
-    BinaryChromosome* b = new BinaryChromosome(842516);
-    a->printout();
-    b->printout();
-    MorphingFactor::crossCX(a, b)->printout();
-  
+//    BinaryChromosome* a = new BinaryChromosome(124256);
+//    BinaryChromosome* b = new BinaryChromosome(842516);
+//    a->printout();
+//    b->printout();
+//    MorphingFactor::crossCX(a, b)->printout();
+
 //    Generation* a = GenerationFactory::getUsingShotgun(
 //            leftBound,
 //            rightBound,
@@ -98,11 +98,13 @@ int main() {
 //    testPopulationFocus->printout();
 //    testPopulationFocus->statPrintout();
 //
-//     BinaryChromosome* a = new BinaryChromosome(17);
-//     BinaryChromosome* b = new BinaryChromosome(12);
+    BinaryChromosome *ca = new BinaryChromosome(4603);
+    BinaryChromosome *cb = new BinaryChromosome(2013);
+    ca->printout();
+    cb->printout();
 
-//     Generation g = MorphingFactor::crossOX(a,b);
-//     g.printout();
+    Generation g = MorphingFactor::crossPMX(ca, cb);
+    g.printout();
 //
 //    std::cout << BinaryChromosome::getNormalizedHammingDistance(a, b);
 

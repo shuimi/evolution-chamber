@@ -71,7 +71,7 @@ void BinaryChromosome::invert() {
 void BinaryChromosome::printout() {
     std::cout << "C_" << BinaryChromosome::getUniqueIdentifier() << ":{DEC:";
     std::cout << BinaryChromosome::getDecimal() << ",BIN:";
-    std::cout << BinaryChromosome::getBinaryString() << "}";
+    std::cout << BinaryChromosome::getBinaryString() << "}\n";
 }
 
 int BinaryChromosome::getHammingDistance(BinaryChromosome *A, BinaryChromosome *B) {
