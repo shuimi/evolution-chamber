@@ -40,7 +40,7 @@ public:
     static Generation *crossOX(BinaryChromosome *, BinaryChromosome *);
 
     //TODO: crossGoldenRatio
-    static Generation *crossGoldenRatio(BinaryChromosome *, BinaryChromosome *);
+    static Generation *crossGoldenRatio(BinaryChromosome *, BinaryChromosome *, double);
 
 
     static BinaryChromosome *mutateSwapFibonacci(BinaryChromosome *individual);

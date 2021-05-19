@@ -189,3 +189,42 @@ void BinaryChromosome::insert(int startIndex, BinaryChromosome *anotherChromosom
     }
 }
 
+void BinaryChromosome::reverse() {
+    std::reverse(BinaryChromosome::genes.begin(), BinaryChromosome::genes.end());
+}
+
+std::vector<short> BinaryChromosome::getBitwiseDecimal() {
+
+    std::vector<short> out;
+    int decimal = BinaryChromosome::getDecimal();
+
+    while(decimal != 0){
+        out.push_back(decimal % 10);
+        decimal /= 10;
+    }
+
+    std::reverse(out.begin(), out.end());
+
+    return out;
+}
+
+void BinaryChromosome::complementChromosome(std::vector<short> &A, std::vector<short> &B) {
+    int n = A.size() - B.size();
+    if (n > 0) addZeroes(B, n);
+    else addZeroes(A, abs(n));
+}
+
+std::vector<short> BinaryChromosome::addZeroes(std::vector<short> &A, int n) {
+    std::vector<short> T;
+    for (int i = 0; i < n; i++) T.push_back(0);
+    for(short gen : A) T.push_back(gen);
+    return T;
+}
+
+void BinaryChromosome::addGen(int gen) {
+    BinaryChromosome::setDecimal(gen + BinaryChromosome::getDecimal());
+}
+
+void BinaryChromosome::addGenDecimalBitwise(int number) {
+    BinaryChromosome::setDecimal(number + 10 * BinaryChromosome::getDecimal());
+}

@@ -104,27 +104,6 @@ Generation *MorphingFactor::crossFibonacci(BinaryChromosome *parentA, BinaryChro
     return new Generation(children);
 }
 
-Generation *MorphingFactor::crossGoldenRatio(BinaryChromosome *parentA, BinaryChromosome *parentB) {
-
-    BinaryChromosome::complementChromosome(parentA, parentB);
-    std::vector<bool> childA, childB;
-    int separationPoint = MorphingFactor::getGoldenRatioSeparationPoint(0, parentA->getSize(), 0.3);
-
-    for (int i = 0; i < separationPoint; i++) {
-        childA.push_back(parentA->get().at(i));
-        childB.push_back(parentB->get().at(i));
-    }
-    for (int i = separationPoint; i < parentA->get().size(); i++) {
-        childA.push_back(parentB->get().at(i));
-        childB.push_back(parentA->get().at(i));
-    }
-
-    std::vector<BinaryChromosome *> children = {
-            new BinaryChromosome(childA), new BinaryChromosome(childB)
-    };
-    return new Generation(children);
-}
-
 std::vector<int> MorphingFactor::getFibonacciVector(int numbersAmount) {
     std::vector<int> output;
     for (int i = 0; i < numbersAmount; i++) {
@@ -185,6 +164,27 @@ int MorphingFactor::getGoldenRatioSeparationPoint(int l, int r, double error) {
     }
 }
 
+Generation *MorphingFactor::crossGoldenRatio(BinaryChromosome *parentA, BinaryChromosome *parentB) {
+
+    BinaryChromosome::complementChromosome(parentA, parentB);
+    std::vector<bool> childA, childB;
+    int separationPoint = MorphingFactor::getGoldenRatioSeparationPoint(0, parentA->getSize(), 0.3);
+
+    for (int i = 0; i < separationPoint; i++) {
+        childA.push_back(parentA->get().at(i));
+        childB.push_back(parentB->get().at(i));
+    }
+    for (int i = separationPoint; i < parentA->get().size(); i++) {
+        childA.push_back(parentB->get().at(i));
+        childB.push_back(parentA->get().at(i));
+    }
+
+    std::vector<BinaryChromosome *> children = {
+            new BinaryChromosome(childA), new BinaryChromosome(childB)
+    };
+    return new Generation(children);
+}
+
 //won't work with BIN chromosome
 Generation *MorphingFactor::crossPMX(BinaryChromosome *parentA, BinaryChromosome *parentB) {
     return nullptr;
@@ -221,6 +221,56 @@ Generation *MorphingFactor::crossOX(BinaryChromosome *parentA, BinaryChromosome 
     return new Generation(children);
 }
 
+
+Generation* MorphingFactor::crossCX(BinaryChromosome* parentA, BinaryChromosome* parentB) {
+
+    std::vector<short> A = parentA->getBitwiseDecimal();
+    std::vector<short> B = parentB->getBitwiseDecimal();
+
+    BinaryChromosome::complementChromosome(A, B);
+
+    BinaryChromosome* fullSequence = new BinaryChromosome();
+    Generation* out = new Generation(0);
+
+    std::vector<bool> parentAMarked;
+    parentAMarked.assign(A.size(), false);
+
+    bool flagOfTurn = false;
+    for(int i = 0; i < A.size() && fullSequence->getBitwiseDecimal().size() < A.size(); ){
+
+        int startPoint = i;
+        if(!flagOfTurn) fullSequence->addGenDecimalBitwise((int)A.at(i));
+        flagOfTurn = false;
+
+        if(parentAMarked.at(i)) {
+            i++;
+        }
+        else {
+
+            fullSequence->addGenDecimalBitwise((int)B.at(i));
+            parentAMarked.at(i) = true;
+
+            for(int j = i + 1; j < A.size(); j++){
+                if(A.at(j) == B.at(i)){
+                    i = j;
+                    flagOfTurn = true;
+                    break;
+                }
+                if(j == A.size() - 1) j = 0;
+                if(j == startPoint) {
+                    i++;
+                    parentAMarked.assign(A.size(), false);
+                    break;
+                }
+            }
+        }
+    }
+
+    out->add(fullSequence);
+    return out;
+}
+
+
 /// mutations
 /// mutations
 /// mutations
@@ -255,9 +305,3 @@ BinaryChromosome *MorphingFactor::mutateTranspose(BinaryChromosome *individual) 
     individual->insert(std::rand() % individual->getSize(), erased);
     return individual;
 }
-
-
-
-
-
-
