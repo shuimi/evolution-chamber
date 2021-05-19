@@ -13,9 +13,77 @@ Generation *MorphingFactor::morph(Generation *generation) {
     return nullptr;
 }
 
+
+///service methods
+///service methods
+///service methods
+
+
+std::vector<int> MorphingFactor::getFibonacciVector(int numbersAmount) {
+    std::vector<int> output;
+    for (int i = 0; i < numbersAmount; i++) {
+        output.push_back(MorphingFactor::fibonacci(i));
+    }
+    return output;
+}
+
+std::vector<std::vector<bool>> MorphingFactor::makeBinaryNumbersTable(int n) {
+    int rowsAmount = pow(2, n);
+    std::vector<std::vector<bool>> table;
+    for (int i = 0; i < rowsAmount; i++) {
+        std::vector<bool> row;
+        int temp_i = i;
+        do {
+            row.push_back(temp_i % 2);
+            temp_i /= 2;
+        } while (temp_i > 0);
+
+        while (row.size() < n)
+            row.push_back(0);
+
+        std::reverse(row.begin(), row.end());
+        table.push_back(row);
+    }
+    return table;
+}
+
+std::vector<BinaryChromosome *> MorphingFactor::makeParentParts(BinaryChromosome *parent, int n) {
+    int t = 1;
+    while (n > fibonacci(t)) { t++; }
+    std::vector<int> fibNumbers = getFibonacciVector(t);
+    std::vector<BinaryChromosome *> parentParts;
+
+    //separately push first(left) part
+    parentParts.push_back(new BinaryChromosome(std::vector<bool>(1, parent->get().at(0))));
+
+    for (int i = 0; i < fibNumbers.size() - 1; i++) {
+        BinaryChromosome *tempChromosome = parent->getSubsequence(fibNumbers.at(i), fibNumbers.at(i + 1) - 1);
+        parentParts.push_back(tempChromosome);
+    }
+
+    //separately push last(right) part
+    BinaryChromosome *tempChromosome = parent->getSubsequence(fibNumbers.back(), parent->get().size() - 1);
+    if (!tempChromosome->get().empty()) parentParts.push_back(tempChromosome);
+
+    return parentParts;
+}
+
+int MorphingFactor::getGoldenRatioSeparationPoint(int l, int r, double error) {
+    for (int s = l; s <= r; s++) {
+        double a = (double) s - (double) l;
+        double b = (double) r - (double) s;
+        double ratio = a / b;
+        if (ratio < 1.61 + error && ratio > 1.61 - error) {
+            return s;
+        }
+    }
+}
+
+
 /// crossovers
 /// crossovers
 /// crossovers
+
 
 Generation *MorphingFactor::crossTwoPoint(BinaryChromosome *parentA, BinaryChromosome *parentB) {
 
@@ -104,66 +172,6 @@ Generation *MorphingFactor::crossFibonacci(BinaryChromosome *parentA, BinaryChro
     return new Generation(children);
 }
 
-std::vector<int> MorphingFactor::getFibonacciVector(int numbersAmount) {
-    std::vector<int> output;
-    for (int i = 0; i < numbersAmount; i++) {
-        output.push_back(MorphingFactor::fibonacci(i));
-    }
-    return output;
-}
-
-std::vector<std::vector<bool>> MorphingFactor::makeBinaryNumbersTable(int n) {
-    int rowsAmount = pow(2, n);
-    std::vector<std::vector<bool>> table;
-    for (int i = 0; i < rowsAmount; i++) {
-        std::vector<bool> row;
-        int temp_i = i;
-        do {
-            row.push_back(temp_i % 2);
-            temp_i /= 2;
-        } while (temp_i > 0);
-
-        while (row.size() < n)
-            row.push_back(0);
-
-        std::reverse(row.begin(), row.end());
-        table.push_back(row);
-    }
-    return table;
-}
-
-std::vector<BinaryChromosome *> MorphingFactor::makeParentParts(BinaryChromosome *parent, int n) {
-    int t = 1;
-    while (n > fibonacci(t)) { t++; }
-    std::vector<int> fibNumbers = getFibonacciVector(t);
-    std::vector<BinaryChromosome *> parentParts;
-
-    //separately push first(left) part
-    parentParts.push_back(new BinaryChromosome(std::vector<bool>(1, parent->get().at(0))));
-
-    for (int i = 0; i < fibNumbers.size() - 1; i++) {
-        BinaryChromosome *tempChromosome = parent->getSubsequence(fibNumbers.at(i), fibNumbers.at(i + 1) - 1);
-        parentParts.push_back(tempChromosome);
-    }
-
-    //separately push last(right) part
-    BinaryChromosome *tempChromosome = parent->getSubsequence(fibNumbers.back(), parent->get().size() - 1);
-    if (!tempChromosome->get().empty()) parentParts.push_back(tempChromosome);
-
-    return parentParts;
-}
-
-int MorphingFactor::getGoldenRatioSeparationPoint(int l, int r, double error) {
-    for (int s = l; s <= r; s++) {
-        double a = (double) s - (double) l;
-        double b = (double) r - (double) s;
-        double ratio = a / b;
-        if (ratio < 1.61 + error && ratio > 1.61 - error) {
-            return s;
-        }
-    }
-}
-
 Generation *MorphingFactor::crossGoldenRatio(BinaryChromosome *parentA, BinaryChromosome *parentB, double error) {
 
     BinaryChromosome::complementChromosome(parentA, parentB);
@@ -185,7 +193,7 @@ Generation *MorphingFactor::crossGoldenRatio(BinaryChromosome *parentA, BinaryCh
     return new Generation(children);
 }
 
-//won't work with BIN chromosome
+//TODO: crossPMX
 Generation *MorphingFactor::crossPMX(BinaryChromosome *parentA, BinaryChromosome *parentB) {
     return nullptr;
 }
@@ -220,7 +228,6 @@ Generation *MorphingFactor::crossOX(BinaryChromosome *parentA, BinaryChromosome 
     };
     return new Generation(children);
 }
-
 
 Generation* MorphingFactor::crossCX(BinaryChromosome* parentA, BinaryChromosome* parentB) {
 
@@ -274,6 +281,7 @@ Generation* MorphingFactor::crossCX(BinaryChromosome* parentA, BinaryChromosome*
 /// mutations
 /// mutations
 /// mutations
+
 
 BinaryChromosome *MorphingFactor::mutateSimple(BinaryChromosome *individual) {
     int index = std::rand() % individual->getSize();
