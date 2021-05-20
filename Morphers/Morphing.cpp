@@ -2,16 +2,7 @@
 // Created by Vladimir on 15.05.2021.
 //
 
-#include "MorphingFactor.h"
-
-
-MorphingFactor::MorphingFactor(double crossProbability, double mutationProbability) :
-        crossProbability(crossProbability), mutationProbability(mutationProbability) {}
-
-//TODO: morph method
-Generation *MorphingFactor::morph(Generation *generation) {
-    return nullptr;
-}
+#include "Morphing.h"
 
 
 ///service methods
@@ -19,15 +10,15 @@ Generation *MorphingFactor::morph(Generation *generation) {
 ///service methods
 
 
-std::vector<int> MorphingFactor::getFibonacciVector(int numbersAmount) {
+std::vector<int> Morphing::getFibonacciVector(int numbersAmount) {
     std::vector<int> output;
     for (int i = 0; i < numbersAmount; i++) {
-        output.push_back(MorphingFactor::fibonacci(i));
+        output.push_back(Morphing::fibonacci(i));
     }
     return output;
 }
 
-std::vector<std::vector<bool>> MorphingFactor::makeBinaryNumbersTable(int n) {
+std::vector<std::vector<bool>> Morphing::makeBinaryNumbersTable(int n) {
     int rowsAmount = pow(2, n);
     std::vector<std::vector<bool>> table;
     for (int i = 0; i < rowsAmount; i++) {
@@ -47,7 +38,7 @@ std::vector<std::vector<bool>> MorphingFactor::makeBinaryNumbersTable(int n) {
     return table;
 }
 
-std::vector<BinaryChromosome *> MorphingFactor::makeParentParts(BinaryChromosome *parent, int n) {
+std::vector<BinaryChromosome *> Morphing::makeParentParts(BinaryChromosome *parent, int n) {
     int t = 1;
     while (n > fibonacci(t)) { t++; }
     std::vector<int> fibNumbers = getFibonacciVector(t);
@@ -68,7 +59,7 @@ std::vector<BinaryChromosome *> MorphingFactor::makeParentParts(BinaryChromosome
     return parentParts;
 }
 
-int MorphingFactor::getGoldenRatioSeparationPoint(int l, int r, double error) {
+int Morphing::getGoldenRatioSeparationPoint(int l, int r, double error) {
     for (int s = l; s <= r; s++) {
         double a = (double) s - (double) l;
         double b = (double) r - (double) s;
@@ -79,7 +70,7 @@ int MorphingFactor::getGoldenRatioSeparationPoint(int l, int r, double error) {
     }
 }
 
-short MorphingFactor::indexOfValueInsideChromosome(int l, int r, std::vector<short> c, short valueToFind) {
+short Morphing::indexOfValueInsideChromosome(int l, int r, std::vector<short> c, short valueToFind) {
     int valueInsideSwathIndex = -1;
     for (int j = l; j < r; ++j)
         if (c.size() == valueToFind) {
@@ -89,19 +80,38 @@ short MorphingFactor::indexOfValueInsideChromosome(int l, int r, std::vector<sho
     return valueInsideSwathIndex;
 }
 
-int MorphingFactor::insertAppropriateValueChildA(std::vector<short> parentA, std::vector<short> parentB,
-                                                 int idxParentB, int separationPoint) {
-    short specialValueParentA = parentB.at(idxParentB);
-    int locatedSameValueIndexParentB = indexOfValueInsideChromosome(0, parentB.size(), parentB, specialValueParentA);
+int Morphing::insertAppropriateValueChildA(
+    std::vector<short> parentA,
+    std::vector<short> parentB,
+    int indexParentB,
+    int separationPoint
+) {
+    short specialValueParentA = parentB.at(indexParentB);
+    int locatedSameValueIndexParentB = indexOfValueInsideChromosome(
+        0,
+        parentB.size(),
+        parentB,
+        specialValueParentA
+    );
 
-    srand(time(NULL));
-    if (locatedSameValueIndexParentB >= 0 && locatedSameValueIndexParentB < separationPoint)
-        insertAppropriateValueChildA(parentA, parentB, locatedSameValueIndexParentB, separationPoint);
-    else return idxParentB;
+    if (locatedSameValueIndexParentB >= 0 && locatedSameValueIndexParentB < separationPoint){
+        insertAppropriateValueChildA(
+                parentA,
+                parentB,
+                locatedSameValueIndexParentB,
+                separationPoint
+        );
+    }
+
+    else return indexParentB;
 }
 
-int MorphingFactor::insertAppropriateValueChildB(std::vector<short> parentA, std::vector<short> parentB,
-                                                 int idxParentA, int separationPoint) {
+int Morphing::insertAppropriateValueChildB(
+    std::vector<short> parentA,
+    std::vector<short> parentB,
+    int idxParentA,
+    int separationPoint
+) {
     short specialValueParentB = parentA.at(idxParentA);
     int locatedSameValueIndexParentA = indexOfValueInsideChromosome(0, parentB.size(), parentB, specialValueParentB);
 
@@ -117,7 +127,7 @@ int MorphingFactor::insertAppropriateValueChildB(std::vector<short> parentA, std
 /// crossovers
 
 
-Generation *MorphingFactor::crossTwoPoint(BinaryChromosome *parentA, BinaryChromosome *parentB) {
+Generation *Morphing::crossTwoPoint(BinaryChromosome *parentA, BinaryChromosome *parentB) {
 
     BinaryChromosome::complementChromosome(parentA, parentB);
 
@@ -159,7 +169,7 @@ Generation *MorphingFactor::crossTwoPoint(BinaryChromosome *parentA, BinaryChrom
     return new Generation(children);
 }
 
-Generation *MorphingFactor::crossFibonacci(BinaryChromosome *parentA, BinaryChromosome *parentB) {
+Generation *Morphing::crossFibonacci(BinaryChromosome *parentA, BinaryChromosome *parentB) {
 
     BinaryChromosome::complementChromosome(parentA, parentB);
 
@@ -204,11 +214,11 @@ Generation *MorphingFactor::crossFibonacci(BinaryChromosome *parentA, BinaryChro
     return new Generation(children);
 }
 
-Generation *MorphingFactor::crossGoldenRatio(BinaryChromosome *parentA, BinaryChromosome *parentB, double error) {
+Generation *Morphing::crossGoldenRatio(BinaryChromosome *parentA, BinaryChromosome *parentB, double error) {
 
     BinaryChromosome::complementChromosome(parentA, parentB);
     std::vector<bool> childA, childB;
-    int separationPoint = MorphingFactor::getGoldenRatioSeparationPoint(0, parentA->getSize(), error);
+    int separationPoint = Morphing::getGoldenRatioSeparationPoint(0, parentA->getSize(), error);
 
     for (int i = 0; i < separationPoint; i++) {
         childA.push_back(parentA->get().at(i));
@@ -225,8 +235,7 @@ Generation *MorphingFactor::crossGoldenRatio(BinaryChromosome *parentA, BinaryCh
     return new Generation(children);
 }
 
-//TODO: crossPMX
-Generation *MorphingFactor::crossPMX(BinaryChromosome *parentA, BinaryChromosome *parentB) {
+Generation *Morphing::crossPMX(BinaryChromosome *parentA, BinaryChromosome *parentB) {
     std::vector<short> A = parentA->getBitwiseDecimal();
     std::vector<short> B = parentB->getBitwiseDecimal();
     BinaryChromosome::complementChromosome(A, B);
@@ -294,7 +303,7 @@ Generation *MorphingFactor::crossPMX(BinaryChromosome *parentA, BinaryChromosome
     return new Generation(children);
 }
 
-Generation *MorphingFactor::crossOX(BinaryChromosome *parentA, BinaryChromosome *parentB) {
+Generation *Morphing::crossOX(BinaryChromosome *parentA, BinaryChromosome *parentB) {
     BinaryChromosome::complementChromosome(parentA, parentB);
 
     int separationPoint = rand() % parentA->getSize();
@@ -325,7 +334,7 @@ Generation *MorphingFactor::crossOX(BinaryChromosome *parentA, BinaryChromosome 
     return new Generation(children);
 }
 
-Generation *MorphingFactor::crossCX(BinaryChromosome *parentA, BinaryChromosome *parentB) {
+Generation *Morphing::crossCX(BinaryChromosome *parentA, BinaryChromosome *parentB) {
 
     std::vector<short> A = parentA->getBitwiseDecimal();
     std::vector<short> B = parentB->getBitwiseDecimal();
@@ -378,13 +387,13 @@ Generation *MorphingFactor::crossCX(BinaryChromosome *parentA, BinaryChromosome 
 /// mutations
 
 
-BinaryChromosome *MorphingFactor::mutateSimple(BinaryChromosome *individual) {
+BinaryChromosome *Morphing::mutateSimple(BinaryChromosome *individual) {
     int index = std::rand() % individual->getSize();
     individual->setGen(index, !individual->getGen(index));
     return individual;
 }
 
-BinaryChromosome *MorphingFactor::mutateInversion(BinaryChromosome *individual) {
+BinaryChromosome *Morphing::mutateInversion(BinaryChromosome *individual) {
     int startIndex = std::rand() % individual->getSize();
     int endIndex = std::rand() % individual->getSize();
     while (startIndex >= endIndex) endIndex = std::rand() % individual->getSize();
@@ -392,15 +401,15 @@ BinaryChromosome *MorphingFactor::mutateInversion(BinaryChromosome *individual) 
     return individual;
 }
 
-BinaryChromosome *MorphingFactor::mutateSwapFibonacci(BinaryChromosome *individual) {
-    int a = MorphingFactor::fibonacci(std::rand());
-    int b = MorphingFactor::fibonacci(std::rand());
-    while (b == a) b = MorphingFactor::fibonacci(std::rand());
+BinaryChromosome *Morphing::mutateSwapFibonacci(BinaryChromosome *individual) {
+    int a = Morphing::fibonacci(std::rand());
+    int b = Morphing::fibonacci(std::rand());
+    while (b == a) b = Morphing::fibonacci(std::rand());
     individual->swap(a, b);
     return individual;
 }
 
-BinaryChromosome *MorphingFactor::mutateTranspose(BinaryChromosome *individual) {
+BinaryChromosome *Morphing::mutateTranspose(BinaryChromosome *individual) {
     int startIndex = std::rand() % individual->getSize();
     int endIndex = std::rand() % individual->getSize();
     while (startIndex >= endIndex) endIndex = std::rand() % individual->getSize();

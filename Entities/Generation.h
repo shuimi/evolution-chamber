@@ -44,7 +44,7 @@ public:
     void add(Generation* generation);
 
     BinaryChromosome* get(int index);
-    int getSize();
+    int size();
     void set(int index, BinaryChromosome* chromosome);
     BinaryChromosome* eject(int index);
     void eject(BinaryChromosome* individual);
@@ -61,24 +61,26 @@ public:
 
 
     void Generation::reduce(std::function<bool(BinaryChromosome*)> condition);
+    void Generation::reduce(std::function<bool(double)> condition);
 
     void estimate(std::function<double(double)> estimationFunction);
 
     void printoutEstimation();
 
-    const std::vector<double> &getIndividualsEstimation() const;
+    const std::vector<double> &getEstimation() const;
+    double getEstimation(int index);
 
     void setIndividualsEstimation(const std::vector<double> &individualsEstimation);
 
     BinaryChromosome* getRandomIndividual();
 
-    Generation* getCopy();
+    Generation* copy();
 
     static double getMinNormalizedHammingDistance(Generation* generation);
     static double getMaxNormalizedHammingDistance(Generation* generation);
 
-    BinaryChromosome* getFirst();
-    BinaryChromosome* getLast();
+    BinaryChromosome* first();
+    BinaryChromosome* last();
     BinaryChromosome* getWithMaxEstimation(std::function<double(double)> estimationFunction);
 
     bool contains(BinaryChromosome* chromosome);

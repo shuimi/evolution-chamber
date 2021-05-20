@@ -1,5 +1,6 @@
 #include <iostream>
-#include "Main/headers/EvolutionChamber.h"
+#include "Main/EvolutionChamber.h"
+#include "Breeding.h"
 
 int main() {
 
@@ -14,27 +15,29 @@ int main() {
     double crossingProbability = 0.7;
     double mutationProbability = 0.3;
 
-    EvolutionChamber* evolution = new EvolutionChamber([](double x){
-            return x * x + 0.1 * x - 23;
-        },
-        new FitnessFunctionConstraints<int>(leftBound, rightBound),
-        GenerationFactory::getUsingShotgun(
-            leftBound,
-            rightBound,
-            initialIndividualsAmount
-        ),
-        new MorphingFactor(
-            crossingProbability,
-            mutationProbability
-        )
-    );
+    auto fitnessFunction = [](double x){
+        return x * x + 0.1 * x - 23;
+    };
+
+    auto constraints = new FunctionConstraints<int>(leftBound, rightBound);
+
+
+//    EvolutionChamber* evolution = new EvolutionChamber(
+//        fitnessFunction,
+//        new FunctionConstraints<int>(leftBound, rightBound),
+//        GenerationFactory::getUsingShotgun(
+//            leftBound,
+//            rightBound,
+//            initialIndividualsAmount
+//        )
+//    );
 
 
 //    BinaryChromosome* a = new BinaryChromosome(124256);
 //    BinaryChromosome* b = new BinaryChromosome(842516);
 //    a->printout();
 //    b->printout();
-//    MorphingFactor::crossCX(a, b)->printout();
+//    Morphing::crossCX(a, b)->printout();
 
   
     Generation* generationA = GenerationFactory::getUsingShotgun(
@@ -54,23 +57,31 @@ int main() {
     generationA->printout();
 
 
-    evolution->breedingRandom(generationA)->printout();
+    Breeding::random(generationA)->printout();
 
-    evolution->breedingInbreedingGenSimilarityDriven(generationA, generationB)->printout();
 
-    evolution->breedingInbreedingElite(generationA, generationB,[evolution](double estimationValue) {
-        return (estimationValue >= evolution->executeFitnessFunction(
-                evolution->getConstraints()->getMean())
-        );
-    })->printout();
+    Breeding::inbreeding(
+            generationA, generationB
+    )->printout();
 
-    evolution->breedingWithEstimation(
+
+    Breeding::inbreeding(
+            generationA, generationB,
+            [=](double estimationValue) {
+                return (estimationValue >= fitnessFunction(constraints->getMean()));
+            },
+            fitnessFunction
+    )->printout();
+
+
+    Breeding::scaleBased(
             generationA,
-            [evolution, generationA](int decimal){
-                return ((double)evolution->executeFitnessFunction(decimal) / (
-                    evolution->executeFitnessFunction(
+            [=](int decimal){
+                return ((double)fitnessFunction(decimal) / (
+                    fitnessFunction(
                         generationA->getWithMaxEstimation(
-                            evolution->getFitnessFunction())->getDecimal()
+                                fitnessFunction
+                            )->getDecimal()
                         )
                     )
                 );
@@ -81,6 +92,6 @@ int main() {
 
     Generation* test = GenerationFactory::getUsingFocusing(10, 10, 15, 0);
     test->printout();
-    FitnessFunctionConstraints<int>(0, 5).reduceGenerationToInterval(test)->printout();
+    FunctionConstraints<int>(0, 5).reduceGenerationToInterval(test)->printout();
 
 }

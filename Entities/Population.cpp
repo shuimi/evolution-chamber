@@ -2,7 +2,7 @@
 // Created by Vladimir on 16.05.2021.
 //
 
-#include "headers/Population.h"
+#include "Population.h"
 
 std::vector<Generation *> &Population::getGenerations() {
     return generations;

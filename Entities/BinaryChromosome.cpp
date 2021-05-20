@@ -3,7 +3,7 @@
 //
 
 #include <iostream>
-#include "headers/BinaryChromosome.h"
+#include "BinaryChromosome.h"
 
 int BinaryChromosome::getDecimal() {
     int rank = 1, result = 0;
@@ -42,11 +42,12 @@ BinaryChromosome::~BinaryChromosome() {
 }
 
 std::string BinaryChromosome::getBinaryString() {
+    if (BinaryChromosome::genes.empty()) return "0";
     std::string output;
     for (bool gen : BinaryChromosome::genes) {
         output += std::to_string(gen);
     }
-    //std::reverse(output.begin(), output.end());
+    std::reverse(output.begin(), output.end());
     return output;
 }
 

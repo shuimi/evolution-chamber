@@ -3,4 +3,4 @@ project(Genetic_Algs)
 
 set(CMAKE_CXX_STANDARD 14)
 
-add_executable(Genetic_Algs main.cpp Main/headers/EvolutionChamber.h Main/EvolutionChamber.cpp Entities/BinaryChromosome.cpp Entities/headers/BinaryChromosome.h Entities/Generation.cpp Entities/headers/Generation.h Morphers/GenerationFactory.cpp Morphers/headers/GenerationFactory.h Morphers/service/MorphingFactor.cpp Morphers/service/MorphingFactor.h Entities/Population.cpp Entities/headers/Population.h Morphers/service/FitnessFunctionConstraints.h)
+add_executable(Genetic_Algs main.cpp Main/EvolutionChamber.h Main/EvolutionChamber.cpp Entities/BinaryChromosome.cpp Entities/BinaryChromosome.h Entities/Generation.cpp Entities/Generation.h Morphers/GenerationFactory.cpp Morphers/GenerationFactory.h Morphers/Morphing.cpp Morphers/Morphing.h Entities/Population.cpp Entities/Population.h Morphers/FunctionConstraints.h Breeding.cpp Breeding.h)

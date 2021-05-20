@@ -13,7 +13,9 @@
 class BinaryChromosome{
 private:
     int uniqueIdentifier;
+
     std::vector<bool> genes;
+
 public:
 
     BinaryChromosome();

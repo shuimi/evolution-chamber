@@ -2,23 +2,23 @@
 // Created by Vladimir on 17.05.2021.
 //
 
-#ifndef GENETIC_ALGS_FITNESSFUNCTIONCONSTRAINTS_H
-#define GENETIC_ALGS_FITNESSFUNCTIONCONSTRAINTS_H
+#ifndef GENETIC_ALGS_FUNCTIONCONSTRAINTS_H
+#define GENETIC_ALGS_FUNCTIONCONSTRAINTS_H
 
 template <typename T>
-class FitnessFunctionConstraints {
+class FunctionConstraints {
 private:
     T leftBound;
     T rightBound;
 public:
-    FitnessFunctionConstraints(T leftBound, T rightBound) : leftBound(leftBound), rightBound(rightBound) {}
+    FunctionConstraints(T leftBound, T rightBound) : leftBound(leftBound), rightBound(rightBound) {}
 
     T getLeftBound() const {
         return leftBound;
     }
 
     void setLeftBound(T leftBound) {
-        FitnessFunctionConstraints::leftBound = leftBound;
+        FunctionConstraints::leftBound = leftBound;
     }
 
     T getRightBound() const {
@@ -26,7 +26,7 @@ public:
     }
 
     void setRightBound(T rightBound) {
-        FitnessFunctionConstraints::rightBound = rightBound;
+        FunctionConstraints::rightBound = rightBound;
     }
 
     T getMean(){
@@ -38,8 +38,8 @@ public:
 };
 
 template<typename T>
-Generation *FitnessFunctionConstraints<T>::reduceGenerationToInterval(Generation *generation) {
-    Generation* output = generation->getCopy();
+Generation *FunctionConstraints<T>::reduceGenerationToInterval(Generation *generation) {
+    Generation* output = generation->copy();
     output->reduce([this](BinaryChromosome* chromosome){
         return !(chromosome->getDecimal() >= leftBound && chromosome->getDecimal() <= rightBound);
     });
@@ -47,4 +47,4 @@ Generation *FitnessFunctionConstraints<T>::reduceGenerationToInterval(Generation
 }
 
 
-#endif //GENETIC_ALGS_FITNESSFUNCTIONCONSTRAINTS_H
+#endif //GENETIC_ALGS_FUNCTIONCONSTRAINTS_H

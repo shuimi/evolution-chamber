@@ -3,7 +3,7 @@
 //
 
 #include <iostream>
-#include "headers/Generation.h"
+#include "Generation.h"
 
 Generation::Generation(std::vector<BinaryChromosome *> &individuals) : individuals(individuals) {
     Generation::uniqueIdentifier = reinterpret_cast<int>(this);
@@ -55,9 +55,7 @@ std::string Generation::getIndividualsAsBinariesString() {
 
     std::string output = "[";
     for(int i = 0; i < Generation::individuals.size() - 1; i++){
-        if(!Generation::individuals.empty())
-            output.append(Generation::individuals.at(i)->getBinaryString());
-        output.append("0");
+        output.append(Generation::individuals.at(i)->getBinaryString());
         output.append(", ");
     }
     output.append(Generation::individuals.at(Generation::individuals.size() - 1)->getBinaryString());
@@ -69,7 +67,7 @@ void Generation::printout() {
     std::cout
     << "Generation #" << Generation::getIndex() << "\n"
     << "Unique Identifier: " << Generation::getUniqueIdentifier() << "\n"
-    << "Size: " << Generation::getSize() << "\n"
+    << "Size: " << Generation::size() << "\n"
     << "Decimals: " << Generation::getIndividualsAsDecimalsString() << "\n"
     << "Binaries: " << Generation::getIndividualsAsBinariesString() << "\n\n";
 }
@@ -162,7 +160,7 @@ void Generation::printoutEstimation() {
     std::cout << "}\n\n";
 }
 
-const std::vector<double> &Generation::getIndividualsEstimation() const {
+const std::vector<double> &Generation::getEstimation() const {
     return estimations;
 }
 
@@ -192,19 +190,19 @@ void Generation::add(Generation* generation) {
     });
 }
 
-int Generation::getSize() {
+int Generation::size() {
     return Generation::individuals.size();
 }
 
-Generation *Generation::getCopy() {
+Generation *Generation::copy() {
     return new Generation(this);
 }
 
 double Generation::getMinNormalizedHammingDistance(Generation *generation) {
 
      double min = BinaryChromosome::getNormalizedHammingDistance(
-        generation->getFirst(),
-        generation->getLast()
+             generation->first(),
+             generation->last()
     );
 
     for(BinaryChromosome* a : generation->getIndividuals())
@@ -233,11 +231,11 @@ double Generation::getMaxNormalizedHammingDistance(Generation *generation) {
     return max;
 }
 
-BinaryChromosome *Generation::getFirst() {
+BinaryChromosome *Generation::first() {
     return Generation::individuals.front();
 }
 
-BinaryChromosome *Generation::getLast() {
+BinaryChromosome *Generation::last() {
     return Generation::individuals.back();
 }
 
@@ -268,10 +266,21 @@ BinaryChromosome *Generation::getWithMaxEstimation(std::function<double(double)>
 }
 
 void Generation::reduce(std::function<bool(BinaryChromosome *)> condition) {
-    for (int i = 0; i < Generation::getSize(); ){
+    for (int i = 0; i < Generation::size(); ){
         if (condition(Generation::get(i))) Generation::eject(i);
         else i++;
     }
+}
+
+void Generation::reduce(std::function<bool(double)> condition) {
+    for (int i = 0; i < Generation::size(); ){
+        if (condition(Generation::getEstimation(i))) Generation::eject(i);
+        else i++;
+    }
+}
+
+double Generation::getEstimation(int index) {
+    return Generation::estimations.at(index);
 }
 
 

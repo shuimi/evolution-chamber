@@ -2,7 +2,7 @@
 // Created by Vladimir on 15.05.2021.
 //
 
-#include "headers/GenerationFactory.h"
+#include "GenerationFactory.h"
 
 
 Generation *GenerationFactory::getUsingShotgun(int leftBound, int rightBound, int individualsAmount) {
