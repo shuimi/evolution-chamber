@@ -79,6 +79,38 @@ int MorphingFactor::getGoldenRatioSeparationPoint(int l, int r, double error) {
     }
 }
 
+short MorphingFactor::indexOfValueInsideChromosome(int l, int r, std::vector<short> c, short valueToFind) {
+    int valueInsideSwathIndex = -1;
+    for (int j = l; j < r; ++j)
+        if (c.size() == valueToFind) {
+            valueInsideSwathIndex = j;
+            break;
+        }
+    return valueInsideSwathIndex;
+}
+
+int MorphingFactor::insertAppropriateValueChildA(std::vector<short> parentA, std::vector<short> parentB,
+                                                 int idxParentB, int separationPoint) {
+    short specialValueParentA = parentB.at(idxParentB);
+    int locatedSameValueIndexParentB = indexOfValueInsideChromosome(0, parentB.size(), parentB, specialValueParentA);
+
+    srand(time(NULL));
+    if (locatedSameValueIndexParentB >= 0 && locatedSameValueIndexParentB < separationPoint)
+        insertAppropriateValueChildA(parentA, parentB, locatedSameValueIndexParentB, separationPoint);
+    else return idxParentB;
+}
+
+int MorphingFactor::insertAppropriateValueChildB(std::vector<short> parentA, std::vector<short> parentB,
+                                                 int idxParentA, int separationPoint) {
+    short specialValueParentB = parentA.at(idxParentA);
+    int locatedSameValueIndexParentA = indexOfValueInsideChromosome(0, parentB.size(), parentB, specialValueParentB);
+
+    srand(time(NULL));
+    if (locatedSameValueIndexParentA >= 0 && locatedSameValueIndexParentA < separationPoint && rand() % 100 < 5)
+        insertAppropriateValueChildB(parentA, parentB, locatedSameValueIndexParentA, separationPoint);
+    else return idxParentA;
+}
+
 
 /// crossovers
 /// crossovers
@@ -195,7 +227,71 @@ Generation *MorphingFactor::crossGoldenRatio(BinaryChromosome *parentA, BinaryCh
 
 //TODO: crossPMX
 Generation *MorphingFactor::crossPMX(BinaryChromosome *parentA, BinaryChromosome *parentB) {
-    return nullptr;
+    std::vector<short> A = parentA->getBitwiseDecimal();
+    std::vector<short> B = parentB->getBitwiseDecimal();
+    BinaryChromosome::complementChromosome(A, B);
+
+    int separationPoint = rand() % parentA->getSize();
+    while (separationPoint <= 0 || separationPoint >= A.size() - 1) {
+        srand(time(NULL));
+        separationPoint = rand() % parentA->getSize();
+    }
+
+    std::vector<short> childA, childB;
+    for (int i = 0; i < separationPoint; i++) {
+        childA.push_back(A.at(i));
+        childB.push_back(B.at(i));
+    }
+
+    //-----------------------------------------------------------CHILD A
+    //search for unique values in swath's indexes in parentB
+    std::vector<short> uniqueIndexesParentB;
+    for (short i = 0; i < separationPoint; i++) {
+        if (indexOfValueInsideChromosome(0, separationPoint, childA, B.at(i)) < 0)
+            uniqueIndexesParentB.push_back(i);
+    }
+
+    //making special inserts
+    for (int i = 0; i < uniqueIndexesParentB.size(); ++i) {
+        if (childA.size() < B.size()) {
+            int indexToInsert = insertAppropriateValueChildA(A, B, uniqueIndexesParentB.at(i), separationPoint);
+            childA.push_back(B.at(indexToInsert) + rand() % 2);
+        }
+    }
+    //remained inserts
+    for (int i = childA.size(); i < B.size() && childA.size() < B.size();) {
+        childA.push_back(B.at(i));
+    }
+
+    //-----------------------------------------------------------CHILD B
+    //search for unique values in swath's indexes in parentB
+    std::vector<short> uniqueIndexesParentA;
+    for (short i = 0; i < separationPoint; i++) {
+        if (indexOfValueInsideChromosome(0, separationPoint, childB, A.at(i)) < 0)
+            uniqueIndexesParentA.push_back(i);
+    }
+
+    //making special inserts
+    for (int i = 0; i < uniqueIndexesParentA.size(); ++i) {
+        if (childB.size() < A.size()) {
+            int indexToInsert = insertAppropriateValueChildB(A, B, uniqueIndexesParentA.at(i), separationPoint);
+            childB.push_back(A.at(indexToInsert));
+        }
+    }
+    //remained inserts
+    for (int i = childB.size(); i < A.size() && childB.size() < A.size();) {
+        childB.push_back(A.at(i));
+    }
+
+    BinaryChromosome *a = new BinaryChromosome();
+    BinaryChromosome *b = new BinaryChromosome();
+
+    for (int i = 0; i < childA.size() && i < childB.size(); ++i) {
+        a->addGenDecimalBitwise((int) childA.at(i));
+        b->addGenDecimalBitwise((int) childB.at(i));
+    }
+    std::vector<BinaryChromosome *> children = {a, b};
+    return new Generation(children);
 }
 
 Generation *MorphingFactor::crossOX(BinaryChromosome *parentA, BinaryChromosome *parentB) {
@@ -229,42 +325,41 @@ Generation *MorphingFactor::crossOX(BinaryChromosome *parentA, BinaryChromosome 
     return new Generation(children);
 }
 
-Generation* MorphingFactor::crossCX(BinaryChromosome* parentA, BinaryChromosome* parentB) {
+Generation *MorphingFactor::crossCX(BinaryChromosome *parentA, BinaryChromosome *parentB) {
 
     std::vector<short> A = parentA->getBitwiseDecimal();
     std::vector<short> B = parentB->getBitwiseDecimal();
 
     BinaryChromosome::complementChromosome(A, B);
 
-    BinaryChromosome* fullSequence = new BinaryChromosome();
-    Generation* out = new Generation(0);
+    BinaryChromosome *fullSequence = new BinaryChromosome();
+    Generation *out = new Generation(0);
 
     std::vector<bool> parentAMarked;
     parentAMarked.assign(A.size(), false);
 
     bool flagOfTurn = false;
-    for(int i = 0; i < A.size() && fullSequence->getBitwiseDecimal().size() < A.size(); ){
+    for (int i = 0; i < A.size() && fullSequence->getBitwiseDecimal().size() < A.size();) {
 
         int startPoint = i;
-        if(!flagOfTurn) fullSequence->addGenDecimalBitwise((int)A.at(i));
+        if (!flagOfTurn) fullSequence->addGenDecimalBitwise((int) A.at(i));
         flagOfTurn = false;
 
-        if(parentAMarked.at(i)) {
+        if (parentAMarked.at(i)) {
             i++;
-        }
-        else {
+        } else {
 
-            fullSequence->addGenDecimalBitwise((int)B.at(i));
+            fullSequence->addGenDecimalBitwise((int) B.at(i));
             parentAMarked.at(i) = true;
 
-            for(int j = i + 1; j < A.size(); j++){
-                if(A.at(j) == B.at(i)){
+            for (int j = i + 1; j < A.size(); j++) {
+                if (A.at(j) == B.at(i)) {
                     i = j;
                     flagOfTurn = true;
                     break;
                 }
-                if(j == A.size() - 1) j = 0;
-                if(j == startPoint) {
+                if (j == A.size() - 1) j = 0;
+                if (j == startPoint) {
                     i++;
                     parentAMarked.assign(A.size(), false);
                     break;
@@ -313,3 +408,4 @@ BinaryChromosome *MorphingFactor::mutateTranspose(BinaryChromosome *individual) 
     individual->insert(std::rand() % individual->getSize(), erased);
     return individual;
 }
+
