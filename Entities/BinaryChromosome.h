@@ -48,7 +48,7 @@ public:
     static BinaryChromosome* concatenate(BinaryChromosome* a, BinaryChromosome* b);
     BinaryChromosome* getSubsequence(int startIndex, int endIndex);
     void insert(int startIndex, BinaryChromosome* anotherChromosome);
-    int getSize();
+    int size();
 
     int getUniqueIdentifier() const;
 

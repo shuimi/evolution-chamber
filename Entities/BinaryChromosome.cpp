@@ -121,7 +121,7 @@ void BinaryChromosome::complementChromosome(BinaryChromosome *A, BinaryChromosom
     else addZeroes(A, abs(n));
 }
 
-int BinaryChromosome::getSize() {
+int BinaryChromosome::size() {
     return BinaryChromosome::genes.size();
 }
 

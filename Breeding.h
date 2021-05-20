@@ -7,7 +7,7 @@
 
 
 #include "Entities/Generation.h"
-#include "Morphers/FunctionConstraints.h"
+#include "Main/FunctionConstraints.h"
 
 class Breeding {
 public:
@@ -25,14 +25,14 @@ public:
     );
 
     /// [description] This selection operator is random-driven.
-    /// It selectEstimationBased individuals randomly.
+    /// It select individuals randomly.
     /// @return Generation that contains individuals selected randomly
     static Generation* random(
         Generation* generation ///<[in] Parents Generation
     );
 
     /// [description] This selection operator is gen-similarity-driven.
-    /// It selectEstimationBased individuals with genome that most similar to most popular.
+    /// It select individuals with genome that most similar to most popular.
     /// It is based on normalized Hamming distance.
     /// @return Generation that contains individuals satisfying selection conditions
     static Generation* inbreeding(
@@ -43,7 +43,7 @@ public:
     );
 
     /// [description] This selection operator is elite-selection-driven.
-    /// It selectEstimationBased individuals with genome that most satisfying to selection conditions.
+    /// It select individuals with genome that most satisfying to selection conditions.
     /// @return Generation that contains individuals satisfying selection conditions
     static Generation* inbreeding(
         Generation* parents,
@@ -51,7 +51,7 @@ public:
         Generation* descendants,
         ///<[in] Descendants Generation
         std::function<bool(double)> selectionCondition,
-        ///<[in] Defines how operator selectEstimationBased individuals
+        ///<[in] Defines how operator select individuals
         std::function<double(double)> fitnessFunction
         ///<[in] Fitness function
     );
@@ -64,13 +64,13 @@ public:
         Generation* generation,
         ///<[in] Parents Generation
         std::function<double(double)> estimationFunction,
-        ///<[in] Defines how operator selectEstimationBased individuals
+        ///<[in] Defines how operator select individuals
         double lowThreshold
         ///<[in] Defines lowest acceptable estimation for individuals to be added to new Generation
     );
 
     /// [description] This is service method.
-    /// \return tuple of random individuals
+    /// @return tuple of random individuals
     static std::tuple<BinaryChromosome*, BinaryChromosome*> selectRandomPair(
         Generation* generation ///<[in] Source Generation
     );

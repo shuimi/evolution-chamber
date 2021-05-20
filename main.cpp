@@ -1,6 +1,7 @@
 #include <iostream>
-#include "Main/EvolutionChamber.h"
+
 #include "Breeding.h"
+#include "Morphing/GenerationFactory.h"
 
 int main() {
 
@@ -21,23 +22,11 @@ int main() {
 
     auto constraints = new FunctionConstraints<int>(leftBound, rightBound);
 
-
-//    EvolutionChamber* evolution = new EvolutionChamber(
-//        fitnessFunction,
-//        new FunctionConstraints<int>(leftBound, rightBound),
-//        GenerationFactory::getUsingShotgun(
-//            leftBound,
-//            rightBound,
-//            initialIndividualsAmount
-//        )
-//    );
-
-
 //    BinaryChromosome* a = new BinaryChromosome(124256);
 //    BinaryChromosome* b = new BinaryChromosome(842516);
 //    a->printout();
 //    b->printout();
-//    Morphing::crossCX(a, b)->printout();
+//    Crossover::CX(a, b)->printout();
 
   
     Generation* generationA = GenerationFactory::getUsingShotgun(
