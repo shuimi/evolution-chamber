@@ -55,7 +55,9 @@ std::string Generation::getIndividualsAsBinariesString() {
 
     std::string output = "[";
     for(int i = 0; i < Generation::individuals.size() - 1; i++){
-        output.append(Generation::individuals.at(i)->getBinaryString());
+        if(!Generation::individuals.empty())
+            output.append(Generation::individuals.at(i)->getBinaryString());
+        output.append("0");
         output.append(", ");
     }
     output.append(Generation::individuals.at(Generation::individuals.size() - 1)->getBinaryString());
