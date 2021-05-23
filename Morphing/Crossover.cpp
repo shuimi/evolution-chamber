@@ -39,22 +39,22 @@ std::vector<std::vector<bool>> Crossover::makeBinaryNumbersTable(int n) {
     return table;
 }
 
-std::vector<BinaryChromosome *> Crossover::makeParentParts(BinaryChromosome *parent, int n) {
+std::vector<Chromosome *> Crossover::makeParentParts(Chromosome *parent, int n) {
     int t = 1;
     while (n > Maths::fibonacci(t)) { t++; }
     std::vector<int> fibNumbers = getFibonacciVector(t);
-    std::vector<BinaryChromosome *> parentParts;
+    std::vector<Chromosome *> parentParts;
 
     //separately push first(left) part
-    parentParts.push_back(new BinaryChromosome(std::vector<bool>(1, parent->get().at(0))));
+    parentParts.push_back(new Chromosome(std::vector<bool>(1, parent->get().at(0))));
 
     for (int i = 0; i < fibNumbers.size() - 1; i++) {
-        BinaryChromosome *tempChromosome = parent->getSubsequence(fibNumbers.at(i), fibNumbers.at(i + 1) - 1);
+        Chromosome *tempChromosome = parent->getSubsequence(fibNumbers.at(i), fibNumbers.at(i + 1) - 1);
         parentParts.push_back(tempChromosome);
     }
 
     //separately push last(right) part
-    BinaryChromosome *tempChromosome = parent->getSubsequence(fibNumbers.back(), parent->get().size() - 1);
+    Chromosome *tempChromosome = parent->getSubsequence(fibNumbers.back(), parent->get().size() - 1);
     if (!tempChromosome->get().empty()) parentParts.push_back(tempChromosome);
 
     return parentParts;
@@ -129,11 +129,11 @@ int Crossover::insertAppropriateValueChildB(
 
 
 Generation *Crossover::doublePoint(
-BinaryChromosome* parentA,
-BinaryChromosome* parentB
+Chromosome* parentA,
+Chromosome* parentB
 ) {
 
-    BinaryChromosome::complementChromosome(parentA, parentB);
+    Chromosome::complementChromosome(parentA, parentB);
 
     int leftBound = rand() % parentA->get().size();
     int rightBound = rand() % parentA->get().size();
@@ -166,31 +166,34 @@ BinaryChromosome* parentB
         childF.push_back(parentA->get().at(i));
     }
 
-    std::vector<BinaryChromosome *> children = {
-            new BinaryChromosome(childA), new BinaryChromosome(childB), new BinaryChromosome(childC),
-            new BinaryChromosome(childD), new BinaryChromosome(childE), new BinaryChromosome(childF)
+    std::vector<Chromosome *> children = {
+            new Chromosome(childA), new Chromosome(childB), new Chromosome(childC),
+            new Chromosome(childD), new Chromosome(childE), new Chromosome(childF)
     };
     return new Generation(children);
 }
 
-Generation *Crossover::fibonacci(BinaryChromosome *parentA, BinaryChromosome *parentB) {
+Generation *Crossover::fibonacci(
+Chromosome *parentA,
+Chromosome *parentB
+) {
 
-    BinaryChromosome::complementChromosome(parentA, parentB);
+    Chromosome::complementChromosome(parentA, parentB);
 
     std::vector<int>
             fibNumbers = getFibonacciVector(parentA->size());
     std::vector<std::vector<bool>>
             binaryTable = makeBinaryNumbersTable(parentA->size()); //A->0, B->1
 
-    std::vector<BinaryChromosome *>
+    std::vector<Chromosome *>
             partsParentA = makeParentParts(parentA, fibNumbers.size());
-    std::vector<BinaryChromosome *>
+    std::vector<Chromosome *>
             partsParentB = makeParentParts(parentB, fibNumbers.size());
 
-    std::vector<BinaryChromosome *> children;
+    std::vector<Chromosome *> children;
 
     for (int i = 1; i < binaryTable.size() - 1; i++) {
-        BinaryChromosome *child = new BinaryChromosome();
+        Chromosome *child = new Chromosome();
 
         for (int j = 0; j < parentA->size() - 1; j++) {
             if (!binaryTable[i][j]) child->glue(partsParentA.at(j));
@@ -218,9 +221,13 @@ Generation *Crossover::fibonacci(BinaryChromosome *parentA, BinaryChromosome *pa
     return new Generation(children);
 }
 
-Generation *Crossover::goldenRatio(BinaryChromosome *parentA, BinaryChromosome *parentB, double errorThreshold) {
+Generation *Crossover::goldenRatio(
+Chromosome *parentA,
+Chromosome *parentB,
+double errorThreshold
+) {
 
-    BinaryChromosome::complementChromosome(parentA, parentB);
+    Chromosome::complementChromosome(parentA, parentB);
     std::vector<bool> childA, childB;
     int separationPoint = Crossover::getGoldenRatioSeparationPoint(0, parentA->size(), errorThreshold);
 
@@ -233,16 +240,19 @@ Generation *Crossover::goldenRatio(BinaryChromosome *parentA, BinaryChromosome *
         childB.push_back(parentA->get().at(i));
     }
 
-    std::vector<BinaryChromosome *> children = {
-            new BinaryChromosome(childA), new BinaryChromosome(childB)
+    std::vector<Chromosome *> children = {
+            new Chromosome(childA), new Chromosome(childB)
     };
     return new Generation(children);
 }
 
-Generation *Crossover::PMX(BinaryChromosome *parentA, BinaryChromosome *parentB) {
+Generation *Crossover::PMX(
+Chromosome *parentA,
+Chromosome *parentB
+) {
     std::vector<short> A = parentA->getBitwiseDecimal();
     std::vector<short> B = parentB->getBitwiseDecimal();
-    BinaryChromosome::complementChromosome(A, B);
+    Chromosome::complementChromosome(A, B);
 
     int separationPoint = rand() % parentA->size();
     while (separationPoint <= 0 || separationPoint >= A.size() - 1) {
@@ -296,19 +306,22 @@ Generation *Crossover::PMX(BinaryChromosome *parentA, BinaryChromosome *parentB)
         childB.push_back(A.at(i));
     }
 
-    BinaryChromosome *a = new BinaryChromosome();
-    BinaryChromosome *b = new BinaryChromosome();
+    Chromosome *a = new Chromosome();
+    Chromosome *b = new Chromosome();
 
     for (int i = 0; i < childA.size() && i < childB.size(); ++i) {
         a->addGenDecimalBitwise((int) childA.at(i));
         b->addGenDecimalBitwise((int) childB.at(i));
     }
-    std::vector<BinaryChromosome *> children = {a, b};
+    std::vector<Chromosome *> children = {a, b};
     return new Generation(children);
 }
 
-Generation *Crossover::OX(BinaryChromosome *parentA, BinaryChromosome *parentB) {
-    BinaryChromosome::complementChromosome(parentA, parentB);
+Generation *Crossover::OX(
+Chromosome *parentA,
+Chromosome *parentB
+) {
+    Chromosome::complementChromosome(parentA, parentB);
 
     int separationPoint = rand() % parentA->size();
     while (separationPoint == 0 || separationPoint == parentA->size()) {
@@ -331,21 +344,24 @@ Generation *Crossover::OX(BinaryChromosome *parentA, BinaryChromosome *parentB) 
         i++;
     }
 
-    std::vector<BinaryChromosome *> children = {
-            new BinaryChromosome(childA),
-            new BinaryChromosome(childB)
+    std::vector<Chromosome *> children = {
+            new Chromosome(childA),
+            new Chromosome(childB)
     };
     return new Generation(children);
 }
 
-Generation *Crossover::CX(BinaryChromosome *parentA, BinaryChromosome *parentB) {
+Generation *Crossover::CX(
+Chromosome *parentA,
+Chromosome *parentB
+) {
 
     std::vector<short> A = parentA->getBitwiseDecimal();
     std::vector<short> B = parentB->getBitwiseDecimal();
 
-    BinaryChromosome::complementChromosome(A, B);
+    Chromosome::complementChromosome(A, B);
 
-    BinaryChromosome *fullSequence = new BinaryChromosome();
+    Chromosome *fullSequence = new Chromosome();
     Generation *out = new Generation(0);
 
     std::vector<bool> parentAMarked;
@@ -383,5 +399,9 @@ Generation *Crossover::CX(BinaryChromosome *parentA, BinaryChromosome *parentB) 
 
     out->add(fullSequence);
     return out;
+}
+
+Generation *Crossover::goldenRatio(Chromosome *parentA, Chromosome *parentB) {
+    return goldenRatio(parentA, parentB, Crossover::STANDARD_GOLDEN_RATIO_ERROR_THRESHOLD);
 }
 

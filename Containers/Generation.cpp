@@ -5,7 +5,7 @@
 #include <iostream>
 #include "Generation.h"
 
-Generation::Generation(std::vector<BinaryChromosome *> &individuals) : individuals(individuals) {
+Generation::Generation(std::vector<Chromosome *> &individuals) : individuals(individuals) {
     Generation::uniqueIdentifier = reinterpret_cast<int>(this);
 }
 
@@ -13,15 +13,15 @@ Generation::~Generation() {
 
 }
 
-std::vector<BinaryChromosome *> &Generation::getIndividuals() {
+std::vector<Chromosome *> &Generation::getIndividuals() {
     return individuals;
 }
 
-void Generation::setIndividuals(const std::vector<BinaryChromosome *> &individuals) {
+void Generation::setIndividuals(const std::vector<Chromosome *> &individuals) {
     Generation::individuals = individuals;
 }
 
-void Generation::add(BinaryChromosome *ind) {
+void Generation::add(Chromosome *ind) {
     Generation::individuals.push_back(ind);
 }
 
@@ -91,17 +91,17 @@ Generation::Generation(Generation *anotherPopulation) {
     Generation::index = anotherPopulation->getIndex();
 }
 
-BinaryChromosome *Generation::get(int index) {
+Chromosome *Generation::get(int index) {
     return Generation::getIndividuals().at(index);
 }
 
-void Generation::set(int index, BinaryChromosome *chromosome) {
+void Generation::set(int index, Chromosome *chromosome) {
     Generation::getIndividuals().at(index) = chromosome;
 }
 
 void Generation::statPrintout() {
     std::map<int, int> stat{};
-    for(BinaryChromosome* individual : Generation::individuals){
+    for(Chromosome* individual : Generation::individuals){
         ++stat[individual->getDecimal()];
     }
     for(auto p : stat) {
@@ -110,8 +110,8 @@ void Generation::statPrintout() {
     std::cout << "\n";
 }
 
-BinaryChromosome *Generation::eject(int index) {
-    BinaryChromosome* ret = Generation::individuals.at(index);
+Chromosome *Generation::eject(int index) {
+    Chromosome* ret = Generation::individuals.at(index);
     Generation::individuals.erase(Generation::individuals.begin() + index);
     if(!estimations.empty())
         Generation::estimations.erase(Generation::estimations.begin() + index);
@@ -119,33 +119,33 @@ BinaryChromosome *Generation::eject(int index) {
 }
 
 template<typename R>
-void Generation::foreach(std::function<R(BinaryChromosome*)> transformation) {
-    for(BinaryChromosome* individual : Generation::individuals){
+void Generation::foreach(std::function<R(Chromosome*)> transformation) {
+    for(Chromosome* individual : Generation::individuals){
         transformation(individual);
     }
 }
 
 void Generation::foreach(std::function<int(int)> decimalTransformation) {
-    for(BinaryChromosome* individual : Generation::individuals){
+    for(Chromosome* individual : Generation::individuals){
         individual->setDecimal(decimalTransformation(individual->getDecimal()));
     }
 }
 
-void Generation::foreach(std::function<BinaryChromosome*(BinaryChromosome*)> transformation) {
-    for(BinaryChromosome* individual : Generation::individuals){
+void Generation::foreach(std::function<Chromosome*(Chromosome*)> transformation) {
+    for(Chromosome* individual : Generation::individuals){
         individual = transformation(individual);
     }
 }
 
-void Generation::foreach(std::function<void(BinaryChromosome *)> transformation) {
-    for(BinaryChromosome* individual : Generation::individuals){
+void Generation::foreach(std::function<void(Chromosome *)> transformation) {
+    for(Chromosome* individual : Generation::individuals){
         transformation(individual);
     }
 }
 
 void Generation::estimate(std::function<double(double)> estimationFunction) {
     Generation::estimations.clear();
-    for(BinaryChromosome* individual : Generation::individuals){
+    for(Chromosome* individual : Generation::individuals){
         Generation::estimations.push_back(estimationFunction(std::round(individual->getDecimal())));
     }
 }
@@ -168,7 +168,7 @@ void Generation::setIndividualsEstimation(const std::vector<double> &individuals
     Generation::estimations = individualsEstimation;
 }
 
-void Generation::eject(BinaryChromosome *individual) {
+void Generation::eject(Chromosome *individual) {
     for(int i = 0; i < Generation::individuals.size(); i++){
         if(individual->getUniqueIdentifier() ==
         Generation::individuals.at(i)->getUniqueIdentifier()){
@@ -180,12 +180,12 @@ void Generation::eject(BinaryChromosome *individual) {
     }
 }
 
-BinaryChromosome* Generation::getRandomIndividual() {
+Chromosome* Generation::getRandomIndividual() {
     return get(std::rand() % Generation::individuals.size());
 }
 
 void Generation::add(Generation* generation) {
-    generation->foreach([this](BinaryChromosome* c){
+    generation->foreach([this](Chromosome* c){
         this->add(c);
     });
 }
@@ -200,15 +200,15 @@ Generation *Generation::copy() {
 
 double Generation::getMinNormalizedHammingDistance(Generation *generation) {
 
-     double min = BinaryChromosome::getNormalizedHammingDistance(
+     double min = Chromosome::getNormalizedHammingDistance(
              generation->first(),
              generation->last()
     );
 
-    for(BinaryChromosome* a : generation->getIndividuals())
-        for(BinaryChromosome* b : generation->getIndividuals()){
+    for(Chromosome* a : generation->getIndividuals())
+        for(Chromosome* b : generation->getIndividuals()){
             if(a != b){
-                double current = BinaryChromosome::getNormalizedHammingDistance(a, b);
+                double current = Chromosome::getNormalizedHammingDistance(a, b);
                 if (current < min) min = current;
             }
         }
@@ -220,10 +220,10 @@ double Generation::getMaxNormalizedHammingDistance(Generation *generation) {
 
     double max = 0.0;
 
-    for(BinaryChromosome* a : generation->getIndividuals())
-        for(BinaryChromosome* b : generation->getIndividuals()){
+    for(Chromosome* a : generation->getIndividuals())
+        for(Chromosome* b : generation->getIndividuals()){
             if(a != b){
-                double current = BinaryChromosome::getNormalizedHammingDistance(a, b);
+                double current = Chromosome::getNormalizedHammingDistance(a, b);
                 if (current > max) max = current;
             }
         }
@@ -231,22 +231,22 @@ double Generation::getMaxNormalizedHammingDistance(Generation *generation) {
     return max;
 }
 
-BinaryChromosome *Generation::first() {
+Chromosome *Generation::first() {
     return Generation::individuals.front();
 }
 
-BinaryChromosome *Generation::last() {
+Chromosome *Generation::last() {
     return Generation::individuals.back();
 }
 
-bool Generation::contains(BinaryChromosome* chromosome) {
-    for (BinaryChromosome* c : Generation::individuals){
+bool Generation::contains(Chromosome* chromosome) {
+    for (Chromosome* c : Generation::individuals){
         if (chromosome == c) return true;
     }
     return false;
 }
 
-BinaryChromosome *Generation::getWithMaxEstimation(std::function<double(double)> estimationFunction) {
+Chromosome *Generation::getWithMaxEstimation(std::function<double(double)> estimationFunction) {
 
     this->estimate(estimationFunction);
 
@@ -265,7 +265,7 @@ BinaryChromosome *Generation::getWithMaxEstimation(std::function<double(double)>
     return Generation::get(maxIndex);
 }
 
-void Generation::reduce(std::function<bool(BinaryChromosome *)> condition) {
+void Generation::reduce(std::function<bool(Chromosome *)> condition) {
     for (int i = 0; i < Generation::size(); ){
         if (condition(Generation::get(i))) Generation::eject(i);
         else i++;

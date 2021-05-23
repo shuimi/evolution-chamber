@@ -5,7 +5,7 @@
 #ifndef GENETIC_ALGS_GENERATIONFACTORY_H
 #define GENETIC_ALGS_GENERATIONFACTORY_H
 
-#include "../Entities/Generation.h"
+#include "../Containers/Generation.h"
 #include <random>
 
 class GenerationFactory {

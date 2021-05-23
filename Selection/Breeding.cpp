@@ -24,8 +24,8 @@ Generation* Breeding::select(
     return generation;
 }
 
-std::tuple<BinaryChromosome*, BinaryChromosome*> Breeding::selectRandomPair(Generation *generation) {
-    BinaryChromosome *A, *B;
+std::tuple<Chromosome*, Chromosome*> Breeding::selectRandomPair(Generation *generation) {
+    Chromosome *A, *B;
     A = generation->getRandomIndividual();
     B = generation->getRandomIndividual();
     while(A == B){
@@ -109,7 +109,7 @@ Generation* descendants
     for (int i = 0; i < temp->size() - 1; i++){
         for (int j = i + 1; j < temp->size(); j++){
             if(temp->get(i) != temp->get(j)){
-                if (BinaryChromosome::getNormalizedHammingDistance(temp->get(i), temp->get(j)) < mean){
+                if (Chromosome::getNormalizedHammingDistance(temp->get(i), temp->get(j)) < mean){
                     if (!newGeneration->contains(temp->get(i)))
                         newGeneration->add(temp->get(i));
                     if (!newGeneration->contains(temp->get(j)))

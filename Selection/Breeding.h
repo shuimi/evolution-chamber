@@ -6,8 +6,8 @@
 #define GENETIC_ALGS_BREEDING_H
 
 
-#include "Entities/Generation.h"
-#include "Main/FunctionConstraints.h"
+#include "../Containers/Generation.h"
+#include "../Service/FunctionConstraints.h"
 
 class Breeding {
 public:
@@ -71,7 +71,7 @@ public:
 
     /// [description] This is service method.
     /// @return tuple of random individuals
-    static std::tuple<BinaryChromosome*, BinaryChromosome*> selectRandomPair(
+    static std::tuple<Chromosome*, Chromosome*> selectRandomPair(
         Generation* generation ///<[in] Source Generation
     );
 

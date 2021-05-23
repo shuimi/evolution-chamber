@@ -6,10 +6,12 @@
 #define GENETIC_ALGS_CROSSOVER_H
 
 
-#include "../Entities/Generation.h"
+#include "../Containers/Generation.h"
 
 class Crossover {
 private:
+
+    constexpr static const double STANDARD_GOLDEN_RATIO_ERROR_THRESHOLD = 0.3;
 
     static std::vector<int> getFibonacciVector(
         int numbersAmount
@@ -19,8 +21,8 @@ private:
         int n
     );
 
-    static std::vector<BinaryChromosome *> makeParentParts(
-        BinaryChromosome *parentA,
+    static std::vector<Chromosome *> makeParentParts(
+        Chromosome *parentA,
         int n
     );
 
@@ -53,35 +55,43 @@ private:
 
 public:
 
+    /// static Generation* XXX(Chromosome*, Chromosome*) is standard declaration
+    /// which is required to use Mating
+
     static Generation* doublePoint(
-        BinaryChromosome* parentA,
-        BinaryChromosome* parentB
+        Chromosome* parentA,
+        Chromosome* parentB
     );
 
     static Generation* CX(
-        BinaryChromosome* parentA,
-        BinaryChromosome* parentB
+        Chromosome* parentA,
+        Chromosome* parentB
     );
 
     static Generation* fibonacci(
-        BinaryChromosome* parentA,
-        BinaryChromosome* parentB
+        Chromosome* parentA,
+        Chromosome* parentB
     );
 
     static Generation* PMX(
-        BinaryChromosome* parentA,
-        BinaryChromosome* parentB
+        Chromosome* parentA,
+        Chromosome* parentB
     );
 
     static Generation* OX(
-        BinaryChromosome* parentA,
-        BinaryChromosome* parentB
+        Chromosome* parentA,
+        Chromosome* parentB
     );
 
     static Generation *goldenRatio(
-        BinaryChromosome* parentA,
-        BinaryChromosome* parentB,
+        Chromosome* parentA,
+        Chromosome* parentB,
         double errorThreshold
+    );
+
+    static Generation *goldenRatio(
+            Chromosome* parentA,
+            Chromosome* parentB
     );
 
 };

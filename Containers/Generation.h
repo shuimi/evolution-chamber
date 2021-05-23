@@ -9,27 +9,27 @@
 #include <map>
 #include <ostream>
 #include <functional>
-#include "BinaryChromosome.h"
+#include "Chromosome.h"
 
 class Generation {
 private:
     int uniqueIdentifier;
     int index;
-    std::vector<BinaryChromosome*> individuals;
+    std::vector<Chromosome*> individuals;
     std::vector<double> estimations;
 
 public:
 
     Generation(Generation* anotherPopulation);
     Generation(int index);
-    Generation(std::vector<BinaryChromosome *> &individuals);
+    Generation(std::vector<Chromosome *> &individuals);
 
     virtual ~Generation();
 
-    std::vector<BinaryChromosome *> &getIndividuals();
-    void setIndividuals(const std::vector<BinaryChromosome *> &individuals);
+    std::vector<Chromosome *> &getIndividuals();
+    void setIndividuals(const std::vector<Chromosome *> &individuals);
 
-    void add(BinaryChromosome* ind);
+    void add(Chromosome* ind);
 
     int getUniqueIdentifier() const;
 
@@ -43,24 +43,24 @@ public:
 
     void add(Generation* generation);
 
-    BinaryChromosome* get(int index);
+    Chromosome* get(int index);
     int size();
-    void set(int index, BinaryChromosome* chromosome);
-    BinaryChromosome* eject(int index);
-    void eject(BinaryChromosome* individual);
+    void set(int index, Chromosome* chromosome);
+    Chromosome* eject(int index);
+    void eject(Chromosome* individual);
 
     bool operator==(const Generation &rhs) const;
     bool operator!=(const Generation &rhs) const;
 
     void statPrintout();
 
-    template<typename R> void foreach(std::function<R(BinaryChromosome*)> transformation);
+    template<typename R> void foreach(std::function<R(Chromosome*)> transformation);
     void foreach(std::function<int(int)> decimalTransformation);
-    void Generation::foreach(std::function<BinaryChromosome*(BinaryChromosome*)> transformation);
-    void Generation::foreach(std::function<void(BinaryChromosome*)> transformation);
+    void Generation::foreach(std::function<Chromosome*(Chromosome*)> transformation);
+    void Generation::foreach(std::function<void(Chromosome*)> transformation);
 
 
-    void Generation::reduce(std::function<bool(BinaryChromosome*)> condition);
+    void Generation::reduce(std::function<bool(Chromosome*)> condition);
     void Generation::reduce(std::function<bool(double)> condition);
 
     void estimate(std::function<double(double)> estimationFunction);
@@ -72,18 +72,18 @@ public:
 
     void setIndividualsEstimation(const std::vector<double> &individualsEstimation);
 
-    BinaryChromosome* getRandomIndividual();
+    Chromosome* getRandomIndividual();
 
     Generation* copy();
 
     static double getMinNormalizedHammingDistance(Generation* generation);
     static double getMaxNormalizedHammingDistance(Generation* generation);
 
-    BinaryChromosome* first();
-    BinaryChromosome* last();
-    BinaryChromosome* getWithMaxEstimation(std::function<double(double)> estimationFunction);
+    Chromosome* first();
+    Chromosome* last();
+    Chromosome* getWithMaxEstimation(std::function<double(double)> estimationFunction);
 
-    bool contains(BinaryChromosome* chromosome);
+    bool contains(Chromosome* chromosome);
 
 };
 

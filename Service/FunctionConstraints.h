@@ -5,6 +5,8 @@
 #ifndef GENETIC_ALGS_FUNCTIONCONSTRAINTS_H
 #define GENETIC_ALGS_FUNCTIONCONSTRAINTS_H
 
+#include "../Containers/Generation.h"
+
 template <typename T>
 class FunctionConstraints {
 private:
@@ -40,7 +42,7 @@ public:
 template<typename T>
 Generation *FunctionConstraints<T>::reduceGenerationToInterval(Generation *generation) {
     Generation* output = generation->copy();
-    output->reduce([this](BinaryChromosome* chromosome){
+    output->reduce([this](Chromosome* chromosome){
         return !(chromosome->getDecimal() >= leftBound && chromosome->getDecimal() <= rightBound);
     });
     return output;
