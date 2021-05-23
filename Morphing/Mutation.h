@@ -6,6 +6,7 @@
 #define GENETIC_ALGS_MUTATION_H
 
 
+#include <functional>
 #include "../Containers/Chromosome.h"
 
 class Mutation {

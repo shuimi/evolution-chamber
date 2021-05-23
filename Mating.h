@@ -7,6 +7,7 @@
 
 
 #include "Containers/Generation.h"
+#include "Main/Subscriptions.h"
 
 class Mating {
 private:
@@ -19,8 +20,8 @@ private:
     /// static Chromosome* XXX(Chromosome*) is standard declaration
     /// which is required to use Mating
 
-    std::vector<std::function<Generation*(Chromosome*, Chromosome*)>> crossOperators;
-    std::vector<std::function<Chromosome*(Chromosome*)>> mutationOperators;
+    std::vector<crossFunction> crossOperators;
+    std::vector<mutationFunction> mutationOperators;
 
 public:
     Mating(double crossProbability, double mutationProbability);
@@ -37,8 +38,10 @@ public:
 
     void setMutationProbability(double mutationProbability);
 
-    void add(std::function<Generation*(Chromosome*, Chromosome*)> crossOperator);
-    void add(std::function<Chromosome*(Chromosome*)> mutationOperator);
+    void add(crossFunction crossOperator);
+    void add(std::vector<crossFunction> crossOperators);
+    void add(mutationFunction mutationOperator);
+    void add(std::vector<mutationFunction> mutationOperators);
 
     Generation* execute(Generation* generation);
 

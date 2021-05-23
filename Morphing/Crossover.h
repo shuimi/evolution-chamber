@@ -83,7 +83,7 @@ public:
         Chromosome* parentB
     );
 
-    static Generation *goldenRatio(
+    static Generation *goldenRatio_(
         Chromosome* parentA,
         Chromosome* parentB,
         double errorThreshold

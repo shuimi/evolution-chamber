@@ -3,6 +3,7 @@
 //
 
 #include <iostream>
+#include <algorithm>
 #include "Generation.h"
 
 Generation::Generation(std::vector<Chromosome *> &individuals) : individuals(individuals) {
@@ -281,6 +282,23 @@ void Generation::reduce(std::function<bool(double)> condition) {
 
 double Generation::getEstimation(int index) {
     return Generation::estimations.at(index);
+}
+
+void Generation::makeUnique() {
+    std::sort(Generation::individuals.begin(), Generation::individuals.end(),
+    [](Chromosome* a, Chromosome* b){
+        return a->getDecimal() > b->getDecimal();
+    });
+    Generation::individuals.erase(
+        std::unique(
+            Generation::individuals.begin(),
+            Generation::individuals.end(),
+            [](Chromosome* a, Chromosome* b){
+                return a->getDecimal() == b->getDecimal();
+            }
+        ),
+        Generation::individuals.end()
+    );
 }
 
 

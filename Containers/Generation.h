@@ -85,6 +85,8 @@ public:
 
     bool contains(Chromosome* chromosome);
 
+    void makeUnique();
+
 };
 
 

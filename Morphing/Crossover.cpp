@@ -134,39 +134,49 @@ Chromosome* parentB
 ) {
 
     Chromosome::complementChromosome(parentA, parentB);
+    if(parentA->size() <= 2){
+        auto result = new Generation(-1);
+        result->add(parentA);
+        result->add(parentB);
+        return result;
+    }
 
-    int leftBound = rand() % parentA->get().size();
-    int rightBound = rand() % parentA->get().size();
-    while (rightBound <= leftBound) rightBound = rand() % parentA->get().size();
+    int parentsSize = parentA->size();
+
+    int leftBound = rand() % (parentsSize - 2);
+    int rightBound = rand() % (parentsSize - 1);
+
+    while (rightBound <= leftBound)
+        rightBound = rand() % parentA->get().size();
 
     std::vector<bool> childA, childB, childC, childD, childE, childF;
 
     for (int i = 0; i < leftBound; i++) {
-        childA.push_back(parentA->get().at(i));
-        childB.push_back(parentA->get().at(i));
-        childC.push_back(parentA->get().at(i));
-        childD.push_back(parentB->get().at(i));
-        childE.push_back(parentB->get().at(i));
-        childF.push_back(parentB->get().at(i));
+        childA.push_back(parentA->getGen(i));
+        childB.push_back(parentA->getGen(i));
+        childC.push_back(parentA->getGen(i));
+        childD.push_back(parentB->getGen(i));
+        childE.push_back(parentB->getGen(i));
+        childF.push_back(parentB->getGen(i));
     }
     for (int i = leftBound; i < rightBound; i++) {
-        childA.push_back(parentA->get().at(i));
-        childB.push_back(parentB->get().at(i));
-        childC.push_back(parentB->get().at(i));
-        childD.push_back(parentA->get().at(i));
-        childE.push_back(parentA->get().at(i));
-        childF.push_back(parentB->get().at(i));
+        childA.push_back(parentA->getGen(i));
+        childB.push_back(parentB->getGen(i));
+        childC.push_back(parentB->getGen(i));
+        childD.push_back(parentA->getGen(i));
+        childE.push_back(parentA->getGen(i));
+        childF.push_back(parentB->getGen(i));
     }
-    for (int i = rightBound; i < parentA->get().size(); i++) {
-        childA.push_back(parentB->get().at(i));
-        childB.push_back(parentA->get().at(i));
-        childC.push_back(parentB->get().at(i));
-        childD.push_back(parentA->get().at(i));
-        childE.push_back(parentB->get().at(i));
-        childF.push_back(parentA->get().at(i));
+    for (int i = rightBound; i < parentsSize; i++) {
+        childA.push_back(parentB->getGen(i));
+        childB.push_back(parentA->getGen(i));
+        childC.push_back(parentB->getGen(i));
+        childD.push_back(parentA->getGen(i));
+        childE.push_back(parentB->getGen(i));
+        childF.push_back(parentA->getGen(i));
     }
 
-    std::vector<Chromosome *> children = {
+    std::vector<Chromosome*> children = {
             new Chromosome(childA), new Chromosome(childB), new Chromosome(childC),
             new Chromosome(childD), new Chromosome(childE), new Chromosome(childF)
     };
@@ -221,7 +231,7 @@ Chromosome *parentB
     return new Generation(children);
 }
 
-Generation *Crossover::goldenRatio(
+Generation *Crossover::goldenRatio_(
 Chromosome *parentA,
 Chromosome *parentB,
 double errorThreshold
@@ -402,6 +412,6 @@ Chromosome *parentB
 }
 
 Generation *Crossover::goldenRatio(Chromosome *parentA, Chromosome *parentB) {
-    return goldenRatio(parentA, parentB, Crossover::STANDARD_GOLDEN_RATIO_ERROR_THRESHOLD);
+    return goldenRatio_(parentA, parentB, Crossover::STANDARD_GOLDEN_RATIO_ERROR_THRESHOLD);
 }
 

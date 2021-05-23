@@ -108,11 +108,9 @@ double Chromosome::getNormalizedHammingDistance(Chromosome *A, Chromosome *B) {
     return (double) hammingDist / (double) maxSize;
 }
 
-Chromosome Chromosome::addZeroes(Chromosome *A, int n) {
-    Chromosome &T = *A;
+void Chromosome::addZeroes(Chromosome *A, int n) {
     for (int i = 0; i < n; i++)
-        T.get().push_back(0);
-    return T;
+        A->get().push_back(0);
 }
 
 void Chromosome::complementChromosome(Chromosome *A, Chromosome *B) {
@@ -229,3 +227,4 @@ void Chromosome::addGen(int gen) {
 void Chromosome::addGenDecimalBitwise(int number) {
     Chromosome::setDecimal(number + 10 * Chromosome::getDecimal());
 }
+

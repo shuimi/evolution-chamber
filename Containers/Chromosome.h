@@ -58,7 +58,7 @@ public:
 
     Chromosome* getCopy();
 
-    static Chromosome addZeroes(Chromosome *A, int n);
+    static void addZeroes(Chromosome *A, int n);
     static std::vector<short> addZeroes(std::vector<short> &A, int n);
     static void complementChromosome(Chromosome *A, Chromosome *B);
     static void complementChromosome(std::vector<short> &A, std::vector<short> &B);

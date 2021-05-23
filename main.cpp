@@ -1,5 +1,6 @@
 #include <iostream>
 
+#include "Main/Subscriptions.h"
 #include "Selection/Breeding.h"
 #include "Factoring/GenerationFactory.h"
 #include "Morphing/Crossover.h"
@@ -67,22 +68,38 @@ int main() {
         );
     };
 
+
     Mating* mating = new Mating(0.7, 0.3);
-    mating->add(Crossover::doublePoint);
-    mating->add(Crossover::CX);
-    mating->add(Crossover::fibonacci);
-    mating->add(Mutation::swapFibonacci);
-    mating->add(Mutation::inversion);
 
-//    for(int generationIndex = 0; generationIndex < generationsAmount; generationIndex++){
-//        currentGeneration = mating->execute(currentGeneration);
-//        currentGeneration = constraints->reduceGenerationToInterval(currentGeneration);
-//        currentGeneration->printout();
-//    }
+    std::vector<crossFunction> myCrossOperatorsSet = {
+            Crossover::doublePoint,
+//            Crossover::CX,
+//            Crossover::fibonacci
+    };
+    std::vector<mutationFunction> myMutationOperatorsSet = {
+//            Mutation::swapFibonacci,
+//            Mutation::inversion
+    };
 
+    std::vector<crossFunction> maxCrossOperatorsSet = {
+//            Crossover::PMX,
+//            Crossover::OX,
+//            Crossover::goldenRatio
+    };
+    std::vector<mutationFunction> maxMutationOperatorsSet = {
+//            Mutation::transpose,
+//            Mutation::simple
+    };
+
+    mating->add(myCrossOperatorsSet);
+    mating->add(myMutationOperatorsSet);
+
+    for(int generationIndex = 0; generationIndex < 50; generationIndex++){
         currentGeneration = mating->execute(currentGeneration);
         currentGeneration = constraints->reduceGenerationToInterval(currentGeneration);
+        currentGeneration->makeUnique();
         currentGeneration->printout();
+    }
 
 
 //    Breeding::random(initialGeneration)->printout();

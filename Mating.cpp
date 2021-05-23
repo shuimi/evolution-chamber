@@ -24,16 +24,16 @@ void Mating::setMutationProbability(double mutationProbability) {
 }
 
 Mating::Mating(double crossProbability, double mutationProbability,
-               const std::vector<std::function<Generation *(Chromosome *, Chromosome *)>> &crossOperators,
-               const std::vector<std::function<Chromosome *(Chromosome *)>> &mutationOperators) : crossProbability(
+               const std::vector<crossFunction> &crossOperators,
+               const std::vector<mutationFunction> &mutationOperators) : crossProbability(
         crossProbability), mutationProbability(mutationProbability), crossOperators(crossOperators), mutationOperators(
         mutationOperators) {}
 
-void Mating::add(std::function<Generation *(Chromosome *, Chromosome *)> crossOperator) {
+void Mating::add(crossFunction crossOperator) {
     Mating::crossOperators.push_back(crossOperator);
 }
 
-void Mating::add(std::function<Chromosome *(Chromosome *)> mutationOperator) {
+void Mating::add(mutationFunction mutationOperator) {
     Mating::mutationOperators.push_back(mutationOperator);
 }
 
@@ -41,9 +41,10 @@ Generation *Mating::execute(Generation *generation) {
 
     int crossOperatorsAmount = Mating::crossOperators.size();
     int mutationOperatorsAmount = Mating::mutationOperators.size();
+    int h;
+    Generation* result = new Generation(generation->getIndex() + 1);
 
-    Generation* result = new Generation(generation->getIndex());
-
+    if(!Mating::crossOperators.empty())
     for(int i = 0; i < generation->size(); i++){
         Chromosome* A = generation->get(i);
         for(int j = i + 1; j < generation->size(); j++){
@@ -54,21 +55,22 @@ Generation *Mating::execute(Generation *generation) {
                 //random pairing
                 if(rand() % 1000 < Mating::crossProbability * 1000){
 
+                    h = rand() % crossOperatorsAmount;
                     //random cross operator choice
                     result->add(
                         Mating::crossOperators.at(
-                            rand() % crossOperatorsAmount
+                            h
                         )(A, B)
                     );
 
                 }
 
             }
-            result->printout();
         }
     }
 
     //random mutation
+    if(!Mating::mutationOperators.empty())
     for(Chromosome* A : result->getIndividuals()){
         if(rand() % 1000 < Mating::mutationProbability * 1000){
             Mating::mutationOperators.at(rand() % mutationOperatorsAmount)(A);
@@ -76,4 +78,16 @@ Generation *Mating::execute(Generation *generation) {
     }
 
     return result;
+}
+
+void Mating::add(std::vector<crossFunction> crossOperators) {
+    for(std::function<Generation *(Chromosome *, Chromosome *)> function : crossOperators){
+        Mating::add(function);
+    }
+}
+
+void Mating::add(std::vector<mutationFunction> mutationOperators) {
+    for(std::function<Chromosome *(Chromosome *)> function : mutationOperators){
+        Mating::add(function);
+    }
 }
