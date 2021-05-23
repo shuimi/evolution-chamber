@@ -284,7 +284,7 @@ double Generation::getEstimation(int index) {
     return Generation::estimations.at(index);
 }
 
-void Generation::makeUnique() {
+void Generation::reduceToUnique() {
     std::sort(Generation::individuals.begin(), Generation::individuals.end(),
     [](Chromosome* a, Chromosome* b){
         return a->getDecimal() > b->getDecimal();

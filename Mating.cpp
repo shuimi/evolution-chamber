@@ -42,7 +42,7 @@ Generation *Mating::execute(Generation *generation) {
     int crossOperatorsAmount = Mating::crossOperators.size();
     int mutationOperatorsAmount = Mating::mutationOperators.size();
     int h;
-    Generation* result = new Generation(generation->getIndex() + 1);
+    Generation* result = new Generation(generation->getIndex());
 
     if(!Mating::crossOperators.empty())
     for(int i = 0; i < generation->size(); i++){

@@ -20,8 +20,10 @@ std::vector<int> Crossover::getFibonacciVector(int numbersAmount) {
 }
 
 std::vector<std::vector<bool>> Crossover::makeBinaryNumbersTable(int n) {
+
     int rowsAmount = pow(2, n);
     std::vector<std::vector<bool>> table;
+
     for (int i = 0; i < rowsAmount; i++) {
         std::vector<bool> row;
         int temp_i = i;

@@ -49,9 +49,15 @@ Chromosome* Mutation::swap(Chromosome* individual, int aGenIndex, int bGenIndex)
 }
 
 Chromosome* Mutation::swapFibonacci(Chromosome* individual) {
-    int a = Maths::fibonacci(std::rand());
-    int b = Maths::fibonacci(std::rand());
-    while (b == a) b = Maths::fibonacci(std::rand());
+
+    int maxFibonacci = 0;
+    for(int i = 0; i < individual->size() && Maths::fibonacci(i) < individual->size(); i++){
+        maxFibonacci = i;
+    }
+
+    int a = Maths::fibonacci(std::rand() % (maxFibonacci - 1));
+    int b = Maths::fibonacci(std::rand() % maxFibonacci);
+    while (b == a) b = Maths::fibonacci(std::rand() % maxFibonacci);
 
     Mutation::swap(individual, a, b);
     return individual;

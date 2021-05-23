@@ -9,6 +9,9 @@
 
 int main() {
 
+
+    //INITIALIZATION
+
     srand(time(NULL));
 
     double leftBound = 9;
@@ -58,74 +61,101 @@ int main() {
     initialGeneration->printout();
 
     Generation* currentGeneration = initialGeneration->copy();
+    Generation* previousGeneration = initialGeneration->copy();
 
     auto customEstimation = [=](int decimal){
         return ((double)fitnessFunction(decimal) / (
                 fitnessFunction(
-                        initialGeneration->getWithMaxEstimation(fitnessFunction)->getDecimal()
+                        currentGeneration->getWithMaxEstimation(fitnessFunction)->getDecimal()
                 )
-        )
+            )
         );
     };
 
+    //SETTING UP MATING CONFIG
 
     Mating* mating = new Mating(0.7, 0.3);
 
     std::vector<crossFunction> myCrossOperatorsSet = {
             Crossover::doublePoint,
-//            Crossover::CX,
-//            Crossover::fibonacci
+            Crossover::CX,
+            Crossover::fibonacci
     };
     std::vector<mutationFunction> myMutationOperatorsSet = {
 //            Mutation::swapFibonacci,
-//            Mutation::inversion
+            Mutation::inversion
     };
 
-    std::vector<crossFunction> maxCrossOperatorsSet = {
+//    std::vector<crossFunction> maxCrossOperatorsSet = {
 //            Crossover::PMX,
 //            Crossover::OX,
 //            Crossover::goldenRatio
-    };
-    std::vector<mutationFunction> maxMutationOperatorsSet = {
+//    };
+//    std::vector<mutationFunction> maxMutationOperatorsSet = {
 //            Mutation::transpose,
 //            Mutation::simple
-    };
+//    };
 
     mating->add(myCrossOperatorsSet);
     mating->add(myMutationOperatorsSet);
 
-    for(int generationIndex = 0; generationIndex < 50; generationIndex++){
+    //EVOLUTION
+
+    for(int generationIndex = 0; generationIndex < generationsAmount; generationIndex++){
+
+        previousGeneration = currentGeneration->copy();
+
+        dice = rand() % 3;
+
+        //BREEDING SECTION
+
+        if(dice == 0)
+        currentGeneration = Breeding::random(currentGeneration);
+        else if(dice == 1)
+        currentGeneration = Breeding::inbreeding(
+                initialGeneration,
+                previousGeneration
+        );
+        else if(dice == 2)
+        currentGeneration = Breeding::inbreeding(
+                initialGeneration,
+                previousGeneration,
+                condition,
+                fitnessFunction
+        );
+
+        //MATING SECTION
+
         currentGeneration = mating->execute(currentGeneration);
         currentGeneration = constraints->reduceGenerationToInterval(currentGeneration);
-        currentGeneration->makeUnique();
+
+        //SELECTION SECTION
+
+        currentGeneration->reduceToUnique();
+        currentGeneration = Breeding::select(
+            currentGeneration,
+            customEstimation,
+            fitnessFunction
+        );
+
+        //PRINTOUTS
+
         currentGeneration->printout();
     }
 
+//    for(int generationIndex = 0; generationIndex < 5000; generationIndex++){
+//        currentGeneration = GenerationFactory::getUsingShotgun(
+//                leftBound,
+//                rightBound,
+//                initialIndividualsAmount,
+//                0
+//        );
+//        currentGeneration = mating->execute(currentGeneration);
+//        currentGeneration = constraints->reduceGenerationToInterval(currentGeneration);
+//        currentGeneration->reduceToUnique();
+//        currentGeneration->printout();
+//    }
 
-//    Breeding::random(initialGeneration)->printout();
-//
-//
-//    Breeding::inbreeding(
-//            initialGeneration, generationB
-//    )->printout();
-//
-//
-//    Breeding::inbreeding(
-//            initialGeneration, generationB,
-//            condition,
-//            fitnessFunction
-//    )->printout();
-//
-//
-//    Breeding::scaleBased(
-//            initialGeneration,
-//            customEstimation,
-//            0.5
-//    )->printout();
-
-//
-//    Generation* test = GenerationFactory::getUsingFocusing(10, 10, 15, 0);
-//    test->printout();
-//    FunctionConstraints<int>(0, 5).reduceGenerationToInterval(test)->printout();
+//    Breeding::scaleBased(initialGeneration,customEstimation,0.5);
 
 }
