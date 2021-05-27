@@ -285,6 +285,9 @@ double Generation::getEstimation(int index) {
 }
 
 void Generation::reduceToUnique() {
+
+    if(Generation::individuals.empty()) throw "EMPTY GENERATION REDUCTION";
+
     std::sort(Generation::individuals.begin(), Generation::individuals.end(),
     [](Chromosome* a, Chromosome* b){
         return a->getDecimal() > b->getDecimal();

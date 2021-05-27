@@ -8,6 +8,7 @@
 ///SERVICE FUNCTIONS
 
 std::pair<int, int> Mutation::getRandIndexCouple(int chromosomeSize) {
+    if(chromosomeSize < 2) throw "UNABLE TO CHOOSE INDEX COUPLE IN SEQUENCE WITH LENGTH LESS THAN 2";
     int startIndex = std::rand() % (chromosomeSize - 1);
     int endIndex = std::rand() % chromosomeSize;
     while (startIndex >= endIndex) endIndex = std::rand() % chromosomeSize;
@@ -39,6 +40,7 @@ Chromosome* Mutation::simple(Chromosome* individual) {
 }
 
 Chromosome* Mutation::inversion(Chromosome* individual) {
+    if(individual->size() < 2) throw "UNABLE TO INVERT CHROMOSOME WITH LENGTH LESS THAN 2";
     std::pair<int, int> pos = getRandIndexCouple(individual->size());
     return Mutation::inversion_(individual, pos.first, pos.second);
 }
@@ -64,6 +66,7 @@ Chromosome* Mutation::swapFibonacci(Chromosome* individual) {
 }
 
 Chromosome* Mutation::transpose(Chromosome* individual) {
+    if(individual->size() < 2) throw "UNABLE TO TRANSPOSE CHROMOSOME WITH LENGTH LESS THAN 2";
     std::pair<int, int> pos = getRandIndexCouple(individual->size());
     return transpose_(individual, pos.first, pos.second);
 }

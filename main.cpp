@@ -10,12 +10,12 @@
 int main() {
 
 
-    //INITIALIZATION
+//INITIALIZATION
 
     srand(time(NULL));
 
-    double leftBound = 9;
-    double rightBound = 14;
+    int leftBound = 9;
+    int rightBound = 14;
 
     int initialIndividualsAmount = 10;
     int generationsAmount = 50;
@@ -62,17 +62,18 @@ int main() {
 
     Generation* currentGeneration = initialGeneration->copy();
     Generation* previousGeneration = initialGeneration->copy();
+    Generation* preparedToMating = new Generation(-1);
 
     auto customEstimation = [=](int decimal){
         return ((double)fitnessFunction(decimal) / (
                 fitnessFunction(
-                        currentGeneration->getWithMaxEstimation(fitnessFunction)->getDecimal()
+                    currentGeneration->getWithMaxEstimation(fitnessFunction)->getDecimal()
                 )
             )
         );
     };
 
-    //SETTING UP MATING CONFIG
+//SETTING UP MATING CONFIG
 
     Mating* mating = new Mating(0.7, 0.3);
 
@@ -99,62 +100,83 @@ int main() {
     mating->add(myCrossOperatorsSet);
     mating->add(myMutationOperatorsSet);
 
-    //EVOLUTION
+//EVOLUTION
 
     for(int generationIndex = 0; generationIndex < generationsAmount; generationIndex++){
 
+        if (currentGeneration->size() < 2) break;
         previousGeneration = currentGeneration->copy();
 
-        dice = rand() % 3;
+//BREEDING SECTION
 
-        //BREEDING SECTION
+        while(preparedToMating->size() < 2){
 
-        if(dice == 0)
-        currentGeneration = Breeding::random(currentGeneration);
-        else if(dice == 1)
-        currentGeneration = Breeding::inbreeding(
-                initialGeneration,
-                previousGeneration
-        );
-        else if(dice == 2)
-        currentGeneration = Breeding::inbreeding(
-                initialGeneration,
-                previousGeneration,
-                condition,
-                fitnessFunction
-        );
+            if(generationIndex == 0){
+                preparedToMating = Breeding::random(currentGeneration, previousGeneration->size() / 2);
+                std::cout << "Breeding::random\n";
+            }
+            else{
 
-        //MATING SECTION
+                dice = rand() % 3;
 
-        currentGeneration = mating->execute(currentGeneration);
-        currentGeneration = constraints->reduceGenerationToInterval(currentGeneration);
+                if(dice == 0){
+                    preparedToMating = Breeding::random(currentGeneration, previousGeneration->size() / 2);
+                    std::cout << "Breeding::random\n";
+                }
+                else if(dice == 1){
+                    preparedToMating = Breeding::inbreeding(
+                            initialGeneration,
+                            previousGeneration
+                    );
+                    std::cout << "Breeding::inbreeding (gen-similarity)\n";
+                }
+                else{
+                    preparedToMating = Breeding::inbreeding(
+                            initialGeneration,
+                            previousGeneration,
+                            [=](double estimation){
+                                return estimation > fitnessFunction(constraints->getMean());
+                            },
+                            fitnessFunction
+                    );
+                    std::cout << "Breeding::inbreeding (elite)\n";
+                }
 
-        //SELECTION SECTION
+            }
 
-        currentGeneration->reduceToUnique();
+        }
+
+        std::cout << "BREEDING RESULT:\n";
+        currentGeneration->printout();
+        preparedToMating->printout();
+
+//MATING SECTION
+
+        preparedToMating = mating->executeSingle(preparedToMating);
+        currentGeneration->add(preparedToMating);
+        currentGeneration->setIndex(currentGeneration->getIndex() + 1);
+
+        std::cout << "MATING RESULT:\n";
+        currentGeneration->printout();
+
+//SELECTION SECTION
+
         currentGeneration = Breeding::select(
             currentGeneration,
-            customEstimation,
+            [=](double estimation){
+                return estimation > fitnessFunction(constraints->getMean());
+            },
             fitnessFunction
         );
+        currentGeneration = constraints->reduceGenerationToInterval(currentGeneration);
 
-        //PRINTOUTS
-
-        currentGeneration->printout();
-    }
-
-//    for(int generationIndex = 0; generationIndex < 5000; generationIndex++){
-//        currentGeneration = GenerationFactory::getUsingShotgun(
-//                leftBound,
-//                rightBound,
-//                initialIndividualsAmount,
-//                0
-//        );
-//        currentGeneration = mating->execute(currentGeneration);
-//        currentGeneration = constraints->reduceGenerationToInterval(currentGeneration);
+//        if(currentGeneration->size() != 0)
 //        currentGeneration->reduceToUnique();
-//        currentGeneration->printout();
-//    }
+
+        std::cout << "SELECTION RESULT:\n";
+        currentGeneration->printout();
+
+    }
 
 //    Breeding::scaleBased(initialGeneration,customEstimation,0.5);
 

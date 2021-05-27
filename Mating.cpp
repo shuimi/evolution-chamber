@@ -37,11 +37,11 @@ void Mating::add(mutationFunction mutationOperator) {
     Mating::mutationOperators.push_back(mutationOperator);
 }
 
-Generation *Mating::execute(Generation *generation) {
+Generation *Mating::executeForAll(Generation *generation) {
 
     int crossOperatorsAmount = Mating::crossOperators.size();
     int mutationOperatorsAmount = Mating::mutationOperators.size();
-    int h;
+
     Generation* result = new Generation(generation->getIndex());
 
     if(!Mating::crossOperators.empty())
@@ -55,11 +55,10 @@ Generation *Mating::execute(Generation *generation) {
                 //random pairing
                 if(rand() % 1000 < Mating::crossProbability * 1000){
 
-                    h = rand() % crossOperatorsAmount;
                     //random cross operator choice
                     result->add(
                         Mating::crossOperators.at(
-                            h
+                                rand() % crossOperatorsAmount
                         )(A, B)
                     );
 
@@ -80,6 +79,41 @@ Generation *Mating::execute(Generation *generation) {
     return result;
 }
 
+Generation *Mating::executeSingle(Generation *generation) {
+
+    if(generation->size() < 2) throw "MATING CALLED FOR GENERATION WITH LESS THAN 2 INDIVIDUALS";
+
+    int crossOperatorsAmount = Mating::crossOperators.size();
+    int mutationOperatorsAmount = Mating::mutationOperators.size();
+
+    std::tuple<Chromosome*, Chromosome*> pair = Breeding::selectRandomPair(generation);
+
+    Generation* result = generation->copy();
+
+    if(!Mating::crossOperators.empty()){
+        if(rand() % 1000 < Mating::crossProbability * 1000){
+
+            //random cross operator choice
+            result->add(
+                Mating::crossOperators.at(
+                    rand() % crossOperatorsAmount
+                )(std::get<0>(pair), std::get<1>(pair))
+            );
+        }
+    }
+    //random mutation
+    if(!Mating::mutationOperators.empty())
+        for(Chromosome* A : result->getIndividuals()){
+            if(rand() % 1000 < Mating::mutationProbability * 1000){
+                if(A->getDecimal() >= 2)
+                    Mating::mutationOperators.at(rand() % mutationOperatorsAmount)(A);
+            }
+        }
+
+    return result;
+}
+
+
 void Mating::add(std::vector<crossFunction> crossOperators) {
     for(std::function<Generation *(Chromosome *, Chromosome *)> function : crossOperators){
         Mating::add(function);
@@ -91,3 +125,4 @@ void Mating::add(std::vector<mutationFunction> mutationOperators) {
         Mating::add(function);
     }
 }
+

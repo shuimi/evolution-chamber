@@ -390,6 +390,9 @@ Chromosome *parentB
             i++;
         } else {
 
+            //TODO: this method throws exception if you remove this line
+            if(i >= B.size()) break;
+
             fullSequence->addGenDecimalBitwise((int) B.at(i));
             parentAMarked.at(i) = true;
 

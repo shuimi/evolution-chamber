@@ -13,6 +13,10 @@ Generation* Breeding::select(
     std::function<bool(double)> fitnessRange,
     std::function<double(double)> fitnessFunction
 ) {
+
+    if(generation->size() == 0)
+        throw "[BREEDING ERROR] EMPTY GENERATION AT INPUT";
+
     generation->estimate(fitnessFunction);
 
     for(int i = 0; i < generation->size();){
@@ -25,6 +29,10 @@ Generation* Breeding::select(
 }
 
 std::tuple<Chromosome*, Chromosome*> Breeding::selectRandomPair(Generation *generation) {
+
+    if(generation->size() < 2)
+        throw "[BREEDING ERROR] GENERATION SIZE IS LOWER THAN 2";
+
     Chromosome *A, *B;
     A = generation->getRandomIndividual();
     B = generation->getRandomIndividual();
@@ -43,20 +51,7 @@ std::tuple<Chromosome*, Chromosome*> Breeding::selectRandomPair(Generation *gene
 Generation *Breeding::random(
 Generation *generation
 ) {
-    Generation* generationCopy = generation->copy();
-    Generation* newGeneration = new Generation(generation->getIndex() + 1);
-    int hybridizationCasesAmount = rand() % generation->size();
-
-    while(hybridizationCasesAmount != 0){
-
-        int currentIndex = rand() % generationCopy->size();
-        newGeneration->add(generationCopy->get(currentIndex));
-        generationCopy->eject(currentIndex);
-
-        hybridizationCasesAmount--;
-    }
-
-    return newGeneration;
+    return Breeding::random(generation, 0);
 }
 
 Generation *Breeding::inbreeding(
@@ -64,6 +59,10 @@ Generation *Breeding::inbreeding(
     std::function<bool(double)> selectionCondition,
     std::function<double(double)> fitnessFunction
 ) {
+
+    if(parents->size() == 0 || descendants->size() == 0)
+        throw "[BREEDING ERROR] EMPTY GENERATION AT INPUT";
+
     Generation* parentsCopy = parents->copy();
     Generation* descendantsCopy = descendants->copy();
     Generation* newGeneration = new Generation(descendants->getIndex() + 1);
@@ -87,6 +86,10 @@ Generation *Breeding::inbreeding(
 Generation* parents,
 Generation* descendants
 ) {
+
+    if(parents->size() == 0 || descendants->size() == 0)
+        throw "[BREEDING ERROR] EMPTY GENERATION AT INPUT";
+
     Generation* parentsCopy = parents->copy();
     Generation* descendantsCopy = descendants->copy();
 
@@ -127,6 +130,10 @@ Generation *generation,
 std::function<double(double)> estimationFunction,
 double lowThreshold
 ) {
+
+    if(generation->size() == 0)
+        throw "[BREEDING ERROR] EMPTY GENERATION AT INPUT";
+
     Generation* generationCopy = generation->copy();
     Generation* newGeneration = new Generation(generation->getIndex() + 1);
 
@@ -135,6 +142,27 @@ double lowThreshold
         return (estimationValue > lowThreshold);
     });
     newGeneration->add(generationCopy);
+
+    return newGeneration;
+}
+
+Generation *Breeding::random(Generation *generation, int amountFloor) {
+
+    if(generation->size() == 0)
+        throw "[BREEDING ERROR] EMPTY GENERATION AT INPUT";
+
+    Generation* generationCopy = generation->copy();
+    Generation* newGeneration = new Generation(generation->getIndex() + 1);
+    int hybridizationCasesAmount = amountFloor + rand() % (generation->size() - amountFloor);
+
+    while(hybridizationCasesAmount != 0){
+
+        int currentIndex = rand() % generationCopy->size();
+        newGeneration->add(generationCopy->get(currentIndex));
+        generationCopy->eject(currentIndex);
+
+        hybridizationCasesAmount--;
+    }
 
     return newGeneration;
 }

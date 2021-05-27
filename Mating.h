@@ -8,6 +8,7 @@
 
 #include "Containers/Generation.h"
 #include "Main/Subscriptions.h"
+#include "Selection/Breeding.h"
 
 class Mating {
 private:
@@ -43,7 +44,8 @@ public:
     void add(mutationFunction mutationOperator);
     void add(std::vector<mutationFunction> mutationOperators);
 
-    Generation* execute(Generation* generation);
+    Generation* executeForAll(Generation* generation);
+    Generation* executeSingle(Generation* generation);
 
 };
 

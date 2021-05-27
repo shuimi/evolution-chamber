@@ -31,6 +31,14 @@ public:
         Generation* generation ///<[in] Parents Generation
     );
 
+    /// [description] This selection operator is random-driven.
+    /// It select individuals randomly.
+    /// @return Generation that contains individuals selected randomly
+    static Generation* random(
+        Generation* generation, ///<[in] Parents Generation
+        int amountFloor ///<[in] Minimum of descendants in output generation
+    );
+
     /// [description] This selection operator is gen-similarity-driven.
     /// It select individuals with genome that most similar to most popular.
     /// It is based on normalized Hamming distance.
