@@ -304,7 +304,27 @@ void Generation::reduceToUnique() {
     );
 }
 
+Generation* Generation::getUnique() {
 
+    if(Generation::individuals.empty()) throw "EMPTY GENERATION REDUCTION";
+
+    std::sort(Generation::individuals.begin(), Generation::individuals.end(),
+              [](Chromosome* a, Chromosome* b){
+                  return a->getDecimal() > b->getDecimal();
+              });
+    Generation::individuals.erase(
+            std::unique(
+                    Generation::individuals.begin(),
+                    Generation::individuals.end(),
+                    [](Chromosome* a, Chromosome* b){
+                        return a->getDecimal() == b->getDecimal();
+                    }
+            ),
+            Generation::individuals.end()
+    );
+
+    return this;
+}
 
 
 

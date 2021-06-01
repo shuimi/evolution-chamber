@@ -84,36 +84,34 @@ short Crossover::indexOfValueInsideChromosome(int l, int r, std::vector<short> c
 }
 
 int Crossover::insertAppropriateValueChildA(
-    std::vector<short> parentA,
-    std::vector<short> parentB,
-    int indexParentB,
-    int separationPoint
+        std::vector<short> parentA,
+        std::vector<short> parentB,
+        int indexParentB,
+        int separationPoint
 ) {
     short specialValueParentA = parentB.at(indexParentB);
     int locatedSameValueIndexParentB = indexOfValueInsideChromosome(
-        0,
-        parentB.size(),
-        parentB,
-        specialValueParentA
+            0,
+            parentB.size(),
+            parentB,
+            specialValueParentA
     );
 
-    if (locatedSameValueIndexParentB >= 0 && locatedSameValueIndexParentB < separationPoint){
+    if (locatedSameValueIndexParentB >= 0 && locatedSameValueIndexParentB < separationPoint) {
         insertAppropriateValueChildA(
                 parentA,
                 parentB,
                 locatedSameValueIndexParentB,
                 separationPoint
         );
-    }
-
-    else return indexParentB;
+    } else return indexParentB;
 }
 
 int Crossover::insertAppropriateValueChildB(
-    std::vector<short> parentA,
-    std::vector<short> parentB,
-    int idxParentA,
-    int separationPoint
+        std::vector<short> parentA,
+        std::vector<short> parentB,
+        int idxParentA,
+        int separationPoint
 ) {
     short specialValueParentB = parentA.at(idxParentA);
     int locatedSameValueIndexParentA = indexOfValueInsideChromosome(0, parentB.size(), parentB, specialValueParentB);
@@ -131,12 +129,12 @@ int Crossover::insertAppropriateValueChildB(
 
 
 Generation *Crossover::doublePoint(
-Chromosome* parentA,
-Chromosome* parentB
+        Chromosome *parentA,
+        Chromosome *parentB
 ) {
 
     Chromosome::complementChromosome(parentA, parentB);
-    if(parentA->size() <= 2){
+    if (parentA->size() <= 2) {
         auto result = new Generation(-1);
         result->add(parentA);
         result->add(parentB);
@@ -178,7 +176,7 @@ Chromosome* parentB
         childF.push_back(parentA->getGen(i));
     }
 
-    std::vector<Chromosome*> children = {
+    std::vector<Chromosome *> children = {
             new Chromosome(childA), new Chromosome(childB), new Chromosome(childC),
             new Chromosome(childD), new Chromosome(childE), new Chromosome(childF)
     };
@@ -186,8 +184,8 @@ Chromosome* parentB
 }
 
 Generation *Crossover::fibonacci(
-Chromosome *parentA,
-Chromosome *parentB
+        Chromosome *parentA,
+        Chromosome *parentB
 ) {
 
     Chromosome::complementChromosome(parentA, parentB);
@@ -208,8 +206,11 @@ Chromosome *parentB
         Chromosome *child = new Chromosome();
 
         for (int j = 0; j < parentA->size() - 1; j++) {
-            if (!binaryTable[i][j]) child->glue(partsParentA.at(j));
-            else child->glue(partsParentB.at(j));
+            if (!binaryTable[i][j] && j < partsParentA.size())
+                child->glue(partsParentA.at(j));
+            else if (j < partsParentB.size())
+                child->glue(partsParentB.at(j));
+
         }
 
         if (children.empty()) children.push_back(child);
@@ -234,9 +235,9 @@ Chromosome *parentB
 }
 
 Generation *Crossover::goldenRatio_(
-Chromosome *parentA,
-Chromosome *parentB,
-double errorThreshold
+        Chromosome *parentA,
+        Chromosome *parentB,
+        double errorThreshold
 ) {
 
     Chromosome::complementChromosome(parentA, parentB);
@@ -259,8 +260,8 @@ double errorThreshold
 }
 
 Generation *Crossover::PMX(
-Chromosome *parentA,
-Chromosome *parentB
+        Chromosome *parentA,
+        Chromosome *parentB
 ) {
     std::vector<short> A = parentA->getBitwiseDecimal();
     std::vector<short> B = parentB->getBitwiseDecimal();
@@ -330,8 +331,8 @@ Chromosome *parentB
 }
 
 Generation *Crossover::OX(
-Chromosome *parentA,
-Chromosome *parentB
+        Chromosome *parentA,
+        Chromosome *parentB
 ) {
     Chromosome::complementChromosome(parentA, parentB);
 
@@ -364,8 +365,8 @@ Chromosome *parentB
 }
 
 Generation *Crossover::CX(
-Chromosome *parentA,
-Chromosome *parentB
+        Chromosome *parentA,
+        Chromosome *parentB
 ) {
 
     std::vector<short> A = parentA->getBitwiseDecimal();
@@ -391,7 +392,7 @@ Chromosome *parentB
         } else {
 
             //TODO: this method throws exception if you remove this line
-            if(i >= B.size()) break;
+            if (i >= B.size()) break;
 
             fullSequence->addGenDecimalBitwise((int) B.at(i));
             parentAMarked.at(i) = true;

@@ -86,6 +86,7 @@ public:
     bool contains(Chromosome* chromosome);
 
     void reduceToUnique();
+    Generation* getUnique();
 
 };
 

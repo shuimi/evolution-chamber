@@ -57,9 +57,20 @@ Chromosome* Mutation::swapFibonacci(Chromosome* individual) {
         maxFibonacci = i;
     }
 
-    int a = Maths::fibonacci(std::rand() % (maxFibonacci - 1));
+    int a;
+    if (maxFibonacci - 1 != 0)
+        a = Maths::fibonacci(std::rand() % (maxFibonacci - 1));
+    else
+        a = 0;
+
     int b = Maths::fibonacci(std::rand() % maxFibonacci);
-    while (b == a) b = Maths::fibonacci(std::rand() % maxFibonacci);
+
+    if(individual->size() > 2)
+        while (b == a) b = Maths::fibonacci(std::rand() % maxFibonacci);
+    else {
+        a = 0;
+        b = 1;
+    }
 
     Mutation::swap(individual, a, b);
     return individual;
